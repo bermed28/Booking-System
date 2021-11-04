@@ -64,7 +64,7 @@ class BaseUser:
         upermission = json['upermission']
         uid = json['uid']
         dao = UserDAO()
-        updated_code = dao.updateUser(uid, username, uemail, upassword, ufirstname, ulastname, upermission)
+        updated_user = dao.updateUser(uid, username, uemail, upassword, ufirstname, ulastname, upermission)
         result = self.build_attr_dict(uid, username, uemail, upassword, ufirstname, ulastname, upermission)
         return jsonify(result), 200
 
