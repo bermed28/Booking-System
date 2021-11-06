@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 from controller.user import BaseUser
 from controller.room import BaseRoom
+from controller.reservation import BaseReservation
 
 app = Flask(__name__)
 #apply CORS
@@ -45,6 +46,23 @@ def handleRoomsbyId(rid):
         return BaseRoom().updateRoom(request.json)
     elif request.method == 'DELETE':
         return BaseRoom().deleteRoom(rid)
+
+@app.route('/UserApp/reservations', methods=['GET', 'POST'])
+def handleReservation():
+    if request.method == 'POST':
+        return BaseReservation().addNewReservation(request.json)
+    else:
+        return BaseReservation().getAllReservations()
+
+@app.route('/UserApp/reservations/<int:resid>', methods=['GET', 'PUT', 'DELETE'])
+def handleReservationbyId(resid):
+    if request.method == 'GET':
+        return BaseReservation().getReservationById(resid)
+    elif request.method == 'PUT':
+        return BaseReservation().updateReservation(request.json)
+    elif request.method == 'DELETE':
+        return BaseReservation().deleteReservation(resid)
+
 
 if __name__ == '__main__':
     app.run(debug=True)
