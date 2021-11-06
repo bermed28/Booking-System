@@ -20,8 +20,8 @@ class UserDAO:
 
     def getUserById(self, uid):
         cursor = self.conn.cursor()
-        query = "select uid, username, uemail, upassword, ufirstname, ulastname, upermission from public.user where uid = %s;" %(uid)
-        cursor.execute(query)
+        query = "select uid, username, uemail, upassword, ufirstname, ulastname, upermission from public.user where uid = %s;"
+        cursor.execute(query, (uid,))
         result = cursor.fetchone()
         return result
 
@@ -42,8 +42,8 @@ class UserDAO:
 
     def deleteUser(self, uid):
         cursor = self.conn.cursor()
-        query = "delete from public.user where uid=%s;" %(uid)
-        cursor.execute(query)
+        query = "delete from public.user where uid=%s;"
+        cursor.execute(query, (uid,))
         # determine affected rows
         affected_rows = cursor.rowcount
         self.conn.commit()
