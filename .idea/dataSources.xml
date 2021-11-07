@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="PostgreSQL - d7kp1lg9f4brbq@ec2-18-233-27-224.compute-1.amazonaws.com" uuid="0577234a-235f-41df-ad2e-4dab410c36bd">
+    <data-source source="LOCAL" name="Booking System" uuid="a9f4a047-9c77-4cea-a1b1-88b655c10493">
       <driver-ref>postgresql</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.postgresql.Driver</jdbc-driver>

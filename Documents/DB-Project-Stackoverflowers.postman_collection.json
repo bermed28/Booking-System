@@ -1,0 +1,357 @@
+{
+	"info": {
+		"_postman_id": "7d089bd3-41fb-47fd-9b81-562cf80c979b",
+		"name": "DB-Project-Stackoverflowers",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get all users",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://booking-system-stackoverflower.herokuapp.com/UserApp/users",
+					"protocol": "https",
+					"host": [
+						"booking-system-stackoverflower",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"UserApp",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get user by Id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://booking-system-stackoverflower.herokuapp.com/UserApp/users/5",
+					"protocol": "https",
+					"host": [
+						"booking-system-stackoverflower",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"UserApp",
+						"users",
+						"5"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update user info",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"uemail\": \"El2bleA@maybachmusic.com\",\n    \"ufirstname\": \"Anuel\",\n    \"uid\": 5,\n    \"ulastname\": \"AA\",\n    \"upassword\": \"realHastaLaMuerte\",\n    \"upermission\": \"Prophet\",\n    \"username\": \"El2bleA\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://booking-system-stackoverflower.herokuapp.com/UserApp/users/5",
+					"protocol": "https",
+					"host": [
+						"booking-system-stackoverflower",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"UserApp",
+						"users",
+						"5"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Insert new user",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n        \"uemail\": \"alpha-beta@gmail.com\",\n        \"ufirstname\": \"Testy\",\n        \"ulastname\": \"McTester\",\n        \"upassword\": \"testing1234\",\n        \"upermission\": \"QA Tester\",\n        \"username\": \"testerDelVerboProbar\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://booking-system-stackoverflower.herokuapp.com/UserApp/users",
+					"protocol": "https",
+					"host": [
+						"booking-system-stackoverflower",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"UserApp",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete user by Id",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "https://booking-system-stackoverflower.herokuapp.com/UserApp/users/6",
+					"protocol": "https",
+					"host": [
+						"booking-system-stackoverflower",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"UserApp",
+						"users",
+						"6"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get all rooms",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://booking-system-stackoverflower.herokuapp.com/UserApp/rooms",
+					"protocol": "https",
+					"host": [
+						"booking-system-stackoverflower",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"UserApp",
+						"rooms"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get room by Id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://booking-system-stackoverflower.herokuapp.com/UserApp/rooms/2",
+					"protocol": "https",
+					"host": [
+						"booking-system-stackoverflower",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"UserApp",
+						"rooms",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update room info",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"rbuildname\": \"Stefani\",\n    \"rcapacity\": 120,\n    \"rid\": 2,\n    \"rname\": \"Matadero\",\n    \"rpermission\": \"Any\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://booking-system-stackoverflower.herokuapp.com/UserApp/rooms/1",
+					"protocol": "https",
+					"host": [
+						"booking-system-stackoverflower",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"UserApp",
+						"rooms",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Insert new room",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n        \"rbuildname\": \"Stefani\",\n        \"rcapacity\": 30,\n        \"rname\": \"Amadeus\",\n        \"rpermission\": \"Rich student\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://booking-system-stackoverflower.herokuapp.com/UserApp/rooms",
+					"protocol": "https",
+					"host": [
+						"booking-system-stackoverflower",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"UserApp",
+						"rooms"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete room by Id",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "https://booking-system-stackoverflower.herokuapp.com/UserApp/rooms/4",
+					"protocol": "https",
+					"host": [
+						"booking-system-stackoverflower",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"UserApp",
+						"rooms",
+						"4"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get all reservations",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://booking-system-stackoverflower.herokuapp.com/UserApp/reservations",
+					"protocol": "https",
+					"host": [
+						"booking-system-stackoverflower",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"UserApp",
+						"reservations"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get reservation by Id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://booking-system-stackoverflower.herokuapp.com/UserApp/reservations/1",
+					"protocol": "https",
+					"host": [
+						"booking-system-stackoverflower",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"UserApp",
+						"reservations",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update reservation info",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "https://booking-system-stackoverflower.herokuapp.com/UserApp/reservations/1",
+					"protocol": "https",
+					"host": [
+						"booking-system-stackoverflower",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"UserApp",
+						"reservations",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Insert new reservation",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": null
+			},
+			"response": []
+		},
+		{
+			"name": "Delete reservation by Id",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "https://booking-system-stackoverflower.herokuapp.com/UserApp/reservations/2",
+					"protocol": "https",
+					"host": [
+						"booking-system-stackoverflower",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"UserApp",
+						"reservations",
+						"2"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
