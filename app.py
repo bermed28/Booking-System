@@ -1,8 +1,10 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from controller.user import BaseUser
+from controller.user_schedule import BaseUserSchedule
 from controller.room import BaseRoom
 from controller.reservation import BaseReservation
+from controller.room_schedule import BaseRoomSchedule
 
 app = Flask(__name__)
 #apply CORS
@@ -48,7 +50,7 @@ def handleRoomsbyId(rid):
         return BaseRoom().deleteRoom(rid)
 
 @app.route('/UserApp/reservations', methods=['GET', 'POST'])
-def handleReservation():
+def handleReservations():
     if request.method == 'POST':
         return BaseReservation().addNewReservation(request.json)
     else:
@@ -63,6 +65,38 @@ def handleReservationbyId(resid):
     elif request.method == 'DELETE':
         return BaseReservation().deleteReservation(resid)
 
+@app.route('/UserApp/user-schedule', methods=['GET', 'POST'])
+def handleUserSchedules():
+    if request.method == 'POST':
+        return BaseUserSchedule().addNewUserSchedule(request.json)
+    else:
+        return BaseUserSchedule().getAllUserSchedules()
+
+@app.route('/UserApp/user-schedule/<int:usid>', methods=['GET', 'PUT', 'DELETE'])
+def handleUserSchedulebyId(usid):
+    if request.method == 'GET':
+        return BaseUserSchedule().getUserScheduleById(usid)
+    elif request.method == 'PUT':
+        return BaseUserSchedule().updateUserSchedule(request.json)
+    elif request.method == 'DELETE':
+        return BaseUserSchedule().deleteUserSchedule(usid)
+
+
+@app.route('/UserApp/room-schedule', methods=['GET', 'POST'])
+def handleRoomSchedules():
+    if request.method == 'POST':
+        return BaseRoomSchedule().addNewRoomSchedule(request.json)
+    else:
+        return BaseRoomSchedule().getAllRoomSchedules()
+
+@app.route('/UserApp/room-schedule/<int:rsid>', methods=['GET', 'PUT', 'DELETE'])
+def handleRoomSchedulebyId(rsid):
+    if request.method == 'GET':
+        return BaseRoomSchedule().getRoomScheduleById(rsid)
+    elif request.method == 'PUT':
+        return BaseRoomSchedule().updateRoomSchedule(request.json)
+    elif request.method == 'DELETE':
+        return BaseRoomSchedule().deleteRoomSchedule(rsid)
 
 if __name__ == '__main__':
     app.run(debug=True)

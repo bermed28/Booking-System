@@ -23,9 +23,9 @@ class BaseReservation:
 
     def getAllReservations(self):
         dao = ReservationDAO()
-        user_list = dao.getAllReservations()
+        reservation_list = dao.getAllReservations()
         result_list = []
-        for row in user_list:
+        for row in reservation_list:
             obj = self.build_map_dict(row)
             result_list.append(obj)
         return jsonify(result_list)

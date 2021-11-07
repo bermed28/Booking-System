@@ -23,9 +23,9 @@ class BaseRoom:
 
     def getAllRooms(self):
         dao = RoomDAO()
-        user_list = dao.getAllRooms()
+        room_list = dao.getAllRooms()
         result_list = []
-        for row in user_list:
+        for row in room_list:
             obj = self.build_map_dict(row)
             result_list.append(obj)
         return jsonify(result_list)
