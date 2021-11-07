@@ -3,6 +3,7 @@ from flask_cors import CORS
 from controller.user import BaseUser
 from controller.room import BaseRoom
 from controller.reservation import BaseReservation
+from controller.time_slot import BaseTimeSlot
 
 app = Flask(__name__)
 #apply CORS
@@ -63,6 +64,22 @@ def handleReservationbyId(resid):
     elif request.method == 'DELETE':
         return BaseReservation().deleteReservation(resid)
 
+@app.route('/UserApp/timeslots', methods=['GET', 'POST'])
+def handleTimeSlots():
+    if request.method == 'POST':
+        return BaseTimeSlot().addNewTimeSlot(request.json)
+    else:
+        return BaseTimeSlot().getAllTimeSlots()
+
+@app.route('/UserApp/timeslots/<int:tid>', methods=['GET', 'PUT', 'DELETE'])
+def handleTimeSlotbyId(tid):
+    if request.method == 'GET':
+        return BaseTimeSlot().getTimeSlotByTimeSlotId(tid)
+    elif request.method == 'PUT':
+        return BaseTimeSlot().updateTimeSlot(request.json)
+    elif request.method == 'DELETE':
+        return BaseTimeSlot().deleteTimeSlot(tid)
+
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, port=8080, host="0.0.0.0")
