@@ -98,5 +98,9 @@ def handleRoomSchedulebyId(rsid):
     elif request.method == 'DELETE':
         return BaseRoomSchedule().deleteRoomSchedule(rsid)
 
+@app.route('/UserApp/reservation/most-used', methods=['GET'])
+def handleMisc():
+    return BaseReservation().getMostUsedRoom()
+
 if __name__ == '__main__':
     app.run(debug=True)

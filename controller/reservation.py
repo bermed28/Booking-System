@@ -67,3 +67,8 @@ class BaseReservation:
             return jsonify("DELETED"), 200
         else:
             return jsonify("NOT FOUND"), 404
+
+    def getMostUsedRoom(self):
+        dao = ReservationDAO()
+        result = dao.getMostUsedRoom()
+        return result
