@@ -1,5 +1,6 @@
 from config.dbconfig import pg_config
 import psycopg2
+import json
 
 class UserDAO:
 
@@ -50,3 +51,36 @@ class UserDAO:
         # if affected rows == 0, the part was not found and hence not deleted
         # otherwise, it was deleted, so check if affected_rows != 0
         return affected_rows !=0
+
+    def getMostUsedRoombyUser(self, uid):
+        cursor = self.conn.cursor()
+        query = "select rid, rname from (select rid, count(*) as frequency from (select * from reservation where uid = %s) as temp9 group by rid)as temp1  natural inner join room order by frequency desc limit 1;"
+        cursor.execute(query, (uid,))
+        result = cursor.fetchone()
+        dict = {}
+        dict['rid'] = result[0]
+        dict['rname'] = result[1]
+        return [dict]
+
+    def getTimeSlot(self):
+        cursor = self.conn.cursor()
+        query = "select * from time_slot;"
+        cursor.execute(query)
+        result = []
+        for row in cursor:
+            dict = {}
+            dict['tid'] = row[0]
+            dict['tstarttime'] = row[1]
+            dict['tendtime'] = row[2] #Causes TypeError: Object of type time is not JSON serializable
+            #Turning time to string with a json dumps avoids the type casting problem
+            result.append(json.loads(json.dumps(dict, indent=4, default=str)))
+        return result
+
+    def getUserOccupiedTimeSlots(self, uid):
+        cursor = self.conn.cursor()
+        query = "select * from user_schedule where uid = %s"
+        cursor.execute(query, (uid,))
+        result = []
+        for row in cursor:
+            result.append(row)
+        return result

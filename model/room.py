@@ -1,5 +1,6 @@
 from config.dbconfig import pg_config
 import psycopg2
+import json
 
 class RoomDAO:
 
@@ -53,3 +54,26 @@ class RoomDAO:
 
     def getAvailableRooms(self):
         pass
+
+    def getTimeSlot(self):
+        cursor = self.conn.cursor()
+        query = "select * from time_slot;"
+        cursor.execute(query)
+        result = []
+        for row in cursor:
+            dict = {}
+            dict['tid'] = row[0]
+            dict['tstarttime'] = row[1]
+            dict['tendtime'] = row[2] #Causes TypeError: Object of type time is not JSON serializable
+            #Turning time to string with a json dumps avoids the type casting problem
+            result.append(json.loads(json.dumps(dict, indent=4, default=str)))
+        return result
+
+    def getRoomOccupiedTimeSlots(self, rid):
+        cursor = self.conn.cursor()
+        query = "select * from room_schedule where rid = %s"
+        cursor.execute(query, (rid,))
+        result = []
+        for row in cursor:
+            result.append(row)
+        return result
