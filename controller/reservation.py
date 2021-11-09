@@ -72,3 +72,8 @@ class BaseReservation:
         dao = ReservationDAO()
         result = dao.getMostUsedRooms(num)
         return jsonify(result)
+
+    def getMostBookedUsers(self, num):
+        dao = ReservationDAO()
+        result = dao.getMostBookedUsers(num)
+        return jsonify(result)

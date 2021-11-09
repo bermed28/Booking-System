@@ -67,8 +67,12 @@ def handleReservationbyId(resid):
         return BaseReservation().deleteReservation(resid)
 
 @app.route('/UserApp/reservation/most-used/<int:num>', methods=['GET'])
-def handleMisc(num):
+def handleRoomStat(num):
     return BaseReservation().getMostUsedRooms(num)
+
+@app.route('/UserApp/reservation/most-booked/<int:num>', methods=['GET'])
+def handleUserStat(num):
+    return BaseReservation().getMostBookedUsers(num)
 
 @app.route('/UserApp/user-schedule', methods=['GET', 'POST'])
 def handleUserSchedules():
