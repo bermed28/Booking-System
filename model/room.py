@@ -50,3 +50,6 @@ class RoomDAO:
         # if affected rows == 0, the part was not found and hence not deleted
         # otherwise, it was deleted, so check if affected_rows != 0
         return affected_rows != 0
+
+    def getAvailableRooms(self):
+        pass

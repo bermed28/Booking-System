@@ -51,10 +51,11 @@ class ReservationDAO:
         # otherwise, it was deleted, so check if affected_rows != 0
         return affected_rows != 0
 
-    def getMostUsedRoom(self):
+    def getMostUsedRooms(self, num):
         cursor = self.conn.cursor()
-        query = "select rid from (select rid, count(*) as frequency from reservation group by rid)as temp1 \
-                 where frequency=(select max(frequency) from (select count(*) as frequency from reservation group by rid) as temp2)"
-        cursor.execute(query)
-        rid = cursor.fetchone()[0]
-        return str(rid)
+        query = "select rid, frequency from (select rid, count(*) as frequency from reservation group by rid)as temp1 order by frequency desc limit %s"
+        cursor.execute(query, (num,))
+        result = []
+        for row in cursor:
+            result.append(row[0])
+        return result

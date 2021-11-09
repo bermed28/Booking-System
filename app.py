@@ -66,6 +66,10 @@ def handleReservationbyId(resid):
     elif request.method == 'DELETE':
         return BaseReservation().deleteReservation(resid)
 
+@app.route('/UserApp/reservation/most-used/<int:num>', methods=['GET'])
+def handleMisc(num):
+    return BaseReservation().getMostUsedRooms(num)
+
 @app.route('/UserApp/user-schedule', methods=['GET', 'POST'])
 def handleUserSchedules():
     if request.method == 'POST':
@@ -98,10 +102,6 @@ def handleRoomSchedulebyId(rsid):
         return BaseRoomSchedule().updateRoomSchedule(request.json)
     elif request.method == 'DELETE':
         return BaseRoomSchedule().deleteRoomSchedule(rsid)
-
-@app.route('/UserApp/reservation/most-used', methods=['GET'])
-def handleMisc():
-    return BaseReservation().getMostUsedRoom()
 
 @app.route('/UserApp/timeslots', methods=['GET', 'POST'])
 def handleTimeSlots():
