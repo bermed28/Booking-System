@@ -65,7 +65,7 @@ class ReservationDAO:
 
     def getMostBookedUsers(self, num):
         cursor = self.conn.cursor()
-        query = "select uid, frequency, ufirstname from (select uid, count(*) as frequency from reservation group by uid)as temp1 natural inner join public.user order by frequency desc limit %s"
+        query = "select uid, frequency, ufirstname from (select uid, count(*) as frequency from reservation group by uid) as temp1 natural inner join public.user order by frequency desc limit %s"
         cursor.execute(query, (num,))
         result = []
         for row in cursor:

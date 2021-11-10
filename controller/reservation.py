@@ -1,5 +1,8 @@
 from flask import jsonify
 from model.reservation import ReservationDAO
+from model.members import MembersDAO
+from model.user_schedule import UserScheduleDAO
+from model.room_schedule import RoomScheduleDAO
 
 class BaseReservation:
 
@@ -44,9 +47,21 @@ class BaseReservation:
         resday = json['resday']
         rid = json['rid']
         uid = json['uid']
+        members = json['members']
+        members.append(uid)
         dao = ReservationDAO()
         resid = dao.insertReservation(resname, resday, rid, uid)
         result = self.build_attr_dict(resid, resname, resday, rid, uid)
+        members_dao = MembersDAO()
+        us_dao = UserScheduleDAO()
+        rs_dao = RoomScheduleDAO()
+        for member in json['members']:
+            if member != uid:
+                members_dao.insertMember(member, resid)
+            for time_slot in json['time_slots']:
+                us_dao.insertUserSchedule(False, member, time_slot, resday)
+        for time_slot in json['time_slots']:
+            rs_dao.insertRoomSchedule(False, rid, time_slot, resday)
         return jsonify(result), 201
 
     def updateReservation(self, json):

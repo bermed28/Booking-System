@@ -36,7 +36,6 @@ class BaseMembers:
     def addNewMember(self, json):
         uid = json['uid']
         resid = json['resid']
-
         dao = MembersDAO()
         uid = dao.insertMember(uid, resid)
         result = self.build_attr_dict(uid, resid)
