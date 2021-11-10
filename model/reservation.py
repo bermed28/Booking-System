@@ -59,3 +59,11 @@ class ReservationDAO:
         for row in cursor:
             result.append(row[0])
         return result
+
+    def getWhoAppointedRoomAtTime(self, rid, tid):
+        cursor = self.conn.cursor()
+        query = "select uid from reservation natural inner join reservation_schedule where tid = %s and rid = %s"
+        cursor.execute(query, (tid, rid))
+        result = {}
+        result['uid'] = cursor.fetchone()[0]
+        return result

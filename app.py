@@ -134,5 +134,9 @@ def handleAllDayUserSchedule(uid):
 def handleAllDayRoomSchedule(rid):
     return BaseRoom().getAllDayRoomSchedule(rid)
 
+@app.route('/UserApp/reservation/whoAppointed/<int:rid>/<int:tid>', methods=['GET'])
+def handlegetWhoAppointedRoomAtTime(rid, tid):
+    return BaseReservation().getWhoAppointedRoomAtTime(rid, tid)
+
 if __name__ == '__main__':
     app.run(debug=True, port=8080, host="0.0.0.0")
