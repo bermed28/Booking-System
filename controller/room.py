@@ -2,6 +2,7 @@ from flask import jsonify
 from model.room import RoomDAO
 from model.reservation_schedule import ReservationScheduleDAO
 from model.members import MembersDAO
+from model.user import UserDAO
 
 class BaseRoom:
 
@@ -90,21 +91,24 @@ class BaseRoom:
         result = dao.findRoomAtTime(tid)
         return jsonify(result)
 
-    def findRoomAppointmentInfo(self, rid):
+    def findRoomAppointmentInfo(self, rid, uid):
         roomdao = RoomDAO()
         reservations = roomdao.findRoomReservations(rid)
         rscheduledao = ReservationScheduleDAO()
         membersdao = MembersDAO()
+        userdao = UserDAO()
+        permission = userdao.checkPermission(uid)
+        if permission == 'Professor' or permission == 'Department Staff':
+            for res in reservations:
+                tidInReser = rscheduledao.getReservationScheduleByReservationId(res['resid'])
+                res['tid'] =[]
+                for tid in tidInReser:
+                    res['tid'].append(tid[1])
 
-        for res in reservations:
-            tidInReser = rscheduledao.getReservationScheduleByReservationId(res['resid'])
-            res['tid'] =[]
-            for tid in tidInReser:
-                res['tid'].append(tid[1])
-
-            members = membersdao.getMembersByReservationId(res['resid'])
-            res['members'] =[]
-            for member in members:
-                res['members'].append(member[0])
-
-        return jsonify(reservations)
+                members = membersdao.getMembersByReservationId(res['resid'])
+                res['members'] =[]
+                for member in members:
+                    res['members'].append(member[0])
+            return jsonify(reservations)
+        else:
+            return jsonify("You do not have permission to view this information.")

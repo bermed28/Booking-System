@@ -95,3 +95,15 @@ class BaseUser:
                 time['available'] = True
 
         return jsonify(timeslot)
+
+    def checkPermission(self, uid):
+        dao = UserDAO()
+        return jsonify(dao.checkPermission(uid))
+
+    def getMostBookedWith(self, uid, num):
+        dao = UserDAO()
+        user_list = dao.getMostBookedWith(uid, num)
+        result_list = []
+        for row in user_list:
+            result_list.append(row)
+        return jsonify(result_list)

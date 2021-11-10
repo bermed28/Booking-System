@@ -72,7 +72,6 @@ class BaseRoomSchedule:
         dao = RoomScheduleDAO()
         userdao = UserDAO()
         permission = userdao.checkPermission(uid)
-        print(permission)
         if permission == 'Professor' or permission == 'Department Staff':
             result = dao.deleteRoomSchedule(rsid)
             if result:

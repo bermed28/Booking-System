@@ -52,9 +52,6 @@ class RoomDAO:
         # otherwise, it was deleted, so check if affected_rows != 0
         return affected_rows != 0
 
-    def getAvailableRooms(self):
-        pass
-
     def getTimeSlot(self):
         cursor = self.conn.cursor()
         query = "select * from time_slot;"

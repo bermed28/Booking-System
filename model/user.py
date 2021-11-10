@@ -91,3 +91,16 @@ class UserDAO:
         cursor.execute(query, (uid,))
         result = cursor.fetchone()[0]
         return result
+
+    def getMostBookedWith(self, uid, num):
+        cursor = self.conn.cursor()
+        query = "select public.members.uid as invitee, count(*) as frequency from public.reservation inner join public.members \
+                 using(resid) where reservation.uid = %s group by members.uid order by frequency desc limit %s;"
+        cursor.execute(query, (uid, num))
+        result = []
+        for row in cursor:
+            dict = {}
+            dict['uid'] = row[0]
+            dict['frequency'] = row[1]
+            result.append(dict)
+        return result

@@ -129,6 +129,10 @@ def handleTimeSlotbyId(tid):
 def handleMostUsedRoombyUser(uid):
     return BaseUser().getMostUsedRoombyUser(uid)
 
+@app.route('/StackOverflowersStudios/user/mostbookedusers/<int:uid>/<int:num>', methods=['GET'])
+def handleMostBookedInvitees(uid, num):
+    return BaseUser().getMostBookedWith(uid, num)
+
 @app.route('/StackOverflowersStudios/user/alldayschedule/<int:uid>', methods=['GET'])
 def handleAllDayUserSchedule(uid):
     return BaseUser().getAllDayUserSchedule(uid)
@@ -145,9 +149,9 @@ def handlegetWhoAppointedRoomAtTime(rid, tid):
 def handleFindRoomAtTime(tid):
     return BaseRoom().findRoomAtTime(tid)
 
-@app.route('/StackOverflowersStudios/room/roomAppointmentInfo/<int:rid>', methods=['GET'])
-def handleRoomAppointmentInfo(rid):
-    return BaseRoom().findRoomAppointmentInfo(rid)
+@app.route('/StackOverflowersStudios/room/roomAppointmentInfo/<int:rid>/<int:uid>', methods=['GET'])
+def handleRoomAppointmentInfo(rid, uid):
+    return BaseRoom().findRoomAppointmentInfo(rid, uid)
 
 
 if __name__ == '__main__':
