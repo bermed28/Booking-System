@@ -25,10 +25,10 @@ class UserScheduleDAO:
         result = cursor.fetchone()
         return result
 
-    def insertUserSchedule(self, uavailability, uid, tid):
+    def insertUserSchedule(self, uavailability, uid, tid, usday):
         cursor = self.conn.cursor()
-        query = "insert into public.user_schedule(uavailability, uid, tid) values(%s,%s,%s) returning usid;"
-        cursor.execute(query, (uavailability, uid, tid))
+        query = "insert into public.user_schedule(uavailability, uid, tid, usday) values(%s,%s,%s,%s) returning usid;"
+        cursor.execute(query, (uavailability, uid, tid, usday))
         rid = cursor.fetchone()[0]
         self.conn.commit()
         return rid

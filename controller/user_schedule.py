@@ -9,14 +9,16 @@ class BaseUserSchedule:
         result['uavailability'] = row[1]
         result['uid'] = row[2]
         result['tid'] = row[3]
+        result['usday'] = row[4]
         return result
 
-    def build_attr_dict(self, usid, uavailability, uid, tid):
+    def build_attr_dict(self, usid, uavailability, uid, tid, usday):
         result = {}
         result['usid'] = usid
         result['uavailability'] = uavailability
         result['uid'] = uid
         result['tid'] = tid
+        result['usday'] = usday
         return result
 
     def getAllUserSchedules(self):
@@ -41,6 +43,7 @@ class BaseUserSchedule:
         uavailability = json['uavailability']
         uid = json['uid']
         tid = json['tid']
+        usday = json['usday']
         dao = UserScheduleDAO()
         usid = dao.insertUserSchedule(uavailability, uid, tid)
         result = self.build_attr_dict(usid, uavailability, uid, tid)
@@ -51,6 +54,7 @@ class BaseUserSchedule:
         uid = json['uid']
         tid = json['tid']
         usid = json['usid']
+        usday = json['usday']
         dao = UserScheduleDAO()
         updated_user_schedule = dao.updateUserSchedule(usid, uavailability, uid, tid)
         result = self.build_attr_dict(usid, uavailability, uid, tid)

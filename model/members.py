@@ -36,11 +36,14 @@ class MembersDAO:
 
     def insertMember(self, uid, resid):
         cursor = self.conn.cursor()
-        query = "insert into public.members(uid, resid) values(%s,%s) returning (uid, resid);"
+        query = "insert into public.members(uid, resid) values(%s,%s)"
         cursor.execute(query, (uid, resid))
-        uid, resid = cursor.fetchone()[0], cursor.fetchone()[1]
         self.conn.commit()
-        return (uid, resid)
+        # row = cursor.fetchone()
+        # print(row)
+        # uid, resid = row[0], row[1]
+        # self.conn.commit()
+        return True
 
     def updateMember(self, oldUid, newUid, resid):
         cursor = self.conn.cursor()

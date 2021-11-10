@@ -53,11 +53,14 @@ class ReservationDAO:
 
     def getMostUsedRooms(self, num):
         cursor = self.conn.cursor()
-        query = "select rid, frequency from (select rid, count(*) as frequency from reservation group by rid)as temp1 order by frequency desc limit %s"
+        query = "select rid, frequency, rname from (select rid, count(*) as frequency from reservation group by rid)as temp1 natural inner join public.room order by frequency desc limit %s"
         cursor.execute(query, (num,))
         result = []
         for row in cursor:
-            result.append(row[0])
+            dict = {}
+            dict["rid"] = row[0]
+            dict["rname"] = row[2]
+            result.append(dict)
         return result
 
     def getWhoAppointedRoomAtTime(self, rid, tid):
@@ -65,5 +68,17 @@ class ReservationDAO:
         query = "select uid from reservation natural inner join reservation_schedule where tid = %s and rid = %s"
         cursor.execute(query, (tid, rid))
         result = {}
-        result['uid'] = cursor.fetchone()[0]
+        result['uid'] = cursor.fetchone()[0]            
+        return result
+
+    def getMostBookedUsers(self, num):
+        cursor = self.conn.cursor()
+        query = "select uid, frequency, ufirstname from (select uid, count(*) as frequency from reservation group by uid) as temp1 natural inner join public.user order by frequency desc limit %s"
+        cursor.execute(query, (num,))
+        result = []
+        for row in cursor:
+            dict = {}
+            dict["uid"] = row[0]
+            dict["ufirstname"] = row[2]
+            result.append(dict)
         return result

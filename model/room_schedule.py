@@ -25,10 +25,10 @@ class RoomScheduleDAO:
         result = cursor.fetchone()
         return result
 
-    def insertRoomSchedule(self, uavailability, rid, tid):
+    def insertRoomSchedule(self, rsavailability, rid, tid, rsday):
         cursor = self.conn.cursor()
-        query = "insert into public.room_schedule(uavailability, rid, tid) values(%s,%s,%s) returning rsid;"
-        cursor.execute(query, (uavailability, rid, tid))
+        query = "insert into public.room_schedule(rsavailability, rid, tid, rsday) values(%s,%s,%s,%s) returning rsid;"
+        cursor.execute(query, (rsavailability, rid, tid, rsday))
         rid = cursor.fetchone()[0]
         self.conn.commit()
         return rid

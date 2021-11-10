@@ -9,14 +9,16 @@ class BaseRoomSchedule:
         result['uavailability'] = row[1]
         result['rid'] = row[2]
         result['tid'] = row[3]
+        result['rsday'] = row[4]
         return result
 
-    def build_attr_dict(self, rsid, uavailability, rid, tid):
+    def build_attr_dict(self, rsid, uavailability, rid, tid, rsday):
         result = {}
         result['rsid'] = rsid
         result['uavailability'] = uavailability
         result['rid'] = rid
         result['tid'] = tid
+        result['rsday'] = rsday
         return result
 
     def getAllRoomSchedules(self):
@@ -41,9 +43,10 @@ class BaseRoomSchedule:
         uavailability = json['uavailability']
         rid = json['rid']
         tid = json['tid']
+        rsday = json['rsday']
         dao = RoomScheduleDAO()
-        rsid = dao.insertRoomSchedule(uavailability, rid, tid)
-        result = self.build_attr_dict(rsid, uavailability, rid, tid)
+        rsid = dao.insertRoomSchedule(uavailability, rid, tid, rsday)
+        result = self.build_attr_dict(rsid, uavailability, rid, tid, rsday)
         return jsonify(result), 201
 
     def updateRoomSchedule(self, json):
