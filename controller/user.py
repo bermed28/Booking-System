@@ -76,7 +76,7 @@ class BaseUser:
         else:
             return jsonify("NOT FOUND"), 404
 
-    def getMostRoombyUser(self, uid):
+    def getMostUsedRoombyUser(self, uid):
         dao = UserDAO()
         result = dao.getMostUsedRoombyUser(uid)
         return jsonify(result)
