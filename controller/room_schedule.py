@@ -1,5 +1,7 @@
 from flask import jsonify
 from model.room_schedule import RoomScheduleDAO
+from model.user import UserDAO
+
 
 class BaseRoomSchedule:
 
@@ -39,15 +41,21 @@ class BaseRoomSchedule:
             result = self.build_map_dict(room_schedule_tuple)
             return jsonify(result), 200
 
-    def addNewRoomSchedule(self, json):
+    def addNewRoomSchedule(self, json, uid):
         rsavailability = json['rsavailability']
         rid = json['rid']
         tid = json['tid']
         rsday = json['rsday']
         dao = RoomScheduleDAO()
-        rsid = dao.insertRoomSchedule(rsavailability, rid, tid, rsday)
-        result = self.build_attr_dict(rsid, rsavailability, rid, tid, rsday)
-        return jsonify(result), 201
+        userdao = UserDAO()
+        permission = userdao.checkPermission(uid)
+        print(permission)
+        if permission == 'Professor' or permission == 'Department Staff':
+            rsid = dao.insertRoomSchedule(rsavailability, rid, tid, rsday)
+            result = self.build_attr_dict(rsid, rsavailability, rid, tid, rsday)
+            return jsonify(result), 201
+        else:
+            return jsonify("This user does not have permission"), 404
 
     def updateRoomSchedule(self, json):
         rsavailability = json['rsavailability']
@@ -60,10 +68,16 @@ class BaseRoomSchedule:
         result = self.build_attr_dict(rsid, rsavailability, rid, tid, rsday)
         return jsonify(result), 200
 
-    def deleteRoomSchedule(self, rsid):
+    def deleteRoomSchedule(self, rsid, uid):
         dao = RoomScheduleDAO()
-        result = dao.deleteRoomSchedule(rsid)
-        if result:
-            return jsonify("DELETED"), 200
+        userdao = UserDAO()
+        permission = userdao.checkPermission(uid)
+        print(permission)
+        if permission == 'Professor' or permission == 'Department Staff':
+            result = dao.deleteRoomSchedule(rsid)
+            if result:
+                return jsonify("DELETED"), 200
+            else:
+                return jsonify("NOT FOUND"), 404
         else:
-            return jsonify("NOT FOUND"), 404
+            return jsonify("This user does not have permission"), 404

@@ -84,3 +84,10 @@ class UserDAO:
         for row in cursor:
             result.append(row)
         return result
+
+    def checkPermission(self, uid):
+        cursor = self.conn.cursor()
+        query = "select upermission from public.user where uid = %s"
+        cursor.execute(query, (uid,))
+        result = cursor.fetchone()[0]
+        return result

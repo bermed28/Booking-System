@@ -70,6 +70,11 @@ def handleReservationbyId(resid):
     elif request.method == 'DELETE':
         return BaseReservation().deleteReservation(resid)
 
+# Global Statistics
+@app.route('/StackOverflowersStudios/reservation/busiest-hours/<int:num>', methods=['GET'])
+def handleHourStat(num):
+    return BaseReservation().getBusiestHours(num)
+
 @app.route('/StackOverflowersStudios/reservation/most-used/<int:num>', methods=['GET'])
 def handleRoomStat(num):
     return BaseReservation().getMostUsedRooms(num)
@@ -95,21 +100,21 @@ def handleUserSchedulebyId(usid):
         return BaseUserSchedule().deleteUserSchedule(usid)
 
 
-@app.route('/StackOverflowersStudios/room-schedule', methods=['GET', 'POST'])
-def handleRoomSchedules():
+@app.route('/StackOverflowersStudios/room-schedule/<int:uid>', methods=['GET', 'POST'])
+def handleRoomSchedules(uid):
     if request.method == 'POST':
-        return BaseRoomSchedule().addNewRoomSchedule(request.json)
+        return BaseRoomSchedule().addNewRoomSchedule(request.json, uid)
     else:
         return BaseRoomSchedule().getAllRoomSchedules()
 
-@app.route('/StackOverflowersStudios/room-schedule/<int:rsid>', methods=['GET', 'PUT', 'DELETE'])
-def handleRoomSchedulebyId(rsid):
+@app.route('/StackOverflowersStudios/room-schedule/<int:rsid>/<int:uid>', methods=['GET', 'PUT', 'DELETE'])
+def handleRoomSchedulebyId(rsid, uid):
     if request.method == 'GET':
         return BaseRoomSchedule().getRoomScheduleById(rsid)
     elif request.method == 'PUT':
         return BaseRoomSchedule().updateRoomSchedule(request.json)
     elif request.method == 'DELETE':
-        return BaseRoomSchedule().deleteRoomSchedule(rsid)
+        return BaseRoomSchedule().deleteRoomSchedule(rsid, uid)
 
 @app.route('/StackOverflowersStudios/timeslots', methods=['GET'])
 def handleTimeSlots():
