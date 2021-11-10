@@ -145,6 +145,10 @@ def handlegetWhoAppointedRoomAtTime(rid, tid):
 def handleFindRoomAtTime(tid):
     return BaseRoom().findRoomAtTime(tid)
 
+@app.route('/StackOverflowersStudios/room/roomAppointmentInfo/<int:rid>', methods=['GET'])
+def handleRoomAppointmentInfo(rid):
+    return BaseRoom().findRoomAppointmentInfo(rid)
+
 
 if __name__ == '__main__':
     app.run(debug=True, port=8080, host="0.0.0.0")

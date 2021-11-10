@@ -1,5 +1,7 @@
 from flask import jsonify
 from model.room import RoomDAO
+from model.reservation_schedule import ReservationScheduleDAO
+from model.members import MembersDAO
 
 class BaseRoom:
 
@@ -87,3 +89,22 @@ class BaseRoom:
         dao = RoomDAO()
         result = dao.findRoomAtTime(tid)
         return jsonify(result)
+
+    def findRoomAppointmentInfo(self, rid):
+        roomdao = RoomDAO()
+        reservations = roomdao.findRoomReservations(rid)
+        rscheduledao = ReservationScheduleDAO()
+        membersdao = MembersDAO()
+
+        for res in reservations:
+            tidInReser = rscheduledao.getReservationScheduleByReservationId(res['resid'])
+            res['tid'] =[]
+            for tid in tidInReser:
+                res['tid'].append(tid[1])
+
+            members = membersdao.getMembersByReservationId(res['resid'])
+            res['members'] =[]
+            for member in members:
+                res['members'].append(member[0])
+
+        return jsonify(reservations)

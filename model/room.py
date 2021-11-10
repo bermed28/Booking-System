@@ -87,3 +87,33 @@ class RoomDAO:
             result.append(row)
         return result
 
+    def findRoomReservations(self, rid):
+        cursor = self.conn.cursor()
+        query = "select * from reservation natural inner join room where rid = %s"
+        cursor.execute(query, (rid,))
+        result = []
+        for row in cursor:
+            dict = {}
+            dict['resid'] = row[1]
+            dict['resname'] = row[2]
+            dict['resday'] = row[3]
+            dict['rname'] = row[5]
+
+            result.append(dict)
+        return result
+
+    def findReservationsTid(self, rid):
+        cursor = self.conn.cursor()
+        query = "select * from reservation natural inner join room where rid = %s"
+        cursor.execute(query, (rid,))
+        result = []
+        for row in cursor:
+            dict = {}
+            dict['resid'] = row[1]
+            dict['resname'] = row[2]
+            dict['resday'] = row[3]
+            dict['rname'] = row[5]
+
+            result.append(dict)
+        return result
+
