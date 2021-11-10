@@ -23,9 +23,9 @@ class BaseRoom:
 
     def getAllRooms(self):
         dao = RoomDAO()
-        user_list = dao.getAllRooms()
+        room_list = dao.getAllRooms()
         result_list = []
-        for row in user_list:
+        for row in room_list:
             obj = self.build_map_dict(row)
             result_list.append(obj)
         return jsonify(result_list)
@@ -67,3 +67,23 @@ class BaseRoom:
             return jsonify("DELETED"), 200
         else:
             return jsonify("NOT FOUND"), 404
+
+    def getAllDayRoomSchedule(self, rid):
+        dao = RoomDAO()
+        timeslot = dao.getTimeSlot()
+        occupiedTid = dao.getRoomOccupiedTimeSlots(rid)
+
+        for time in timeslot:
+            for tid in occupiedTid:
+                if tid[3] == time['tid']:
+                    time['available'] = False
+
+            if 'available' not in time:
+                time['available'] = True
+
+        return jsonify(timeslot)
+
+    def findRoomAtTime(self, tid):
+        dao = RoomDAO()
+        result = dao.findRoomAtTime(tid)
+        return jsonify(result)

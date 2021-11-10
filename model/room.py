@@ -1,5 +1,6 @@
 from config.dbconfig import pg_config
 import psycopg2
+import json
 
 class RoomDAO:
 
@@ -50,3 +51,39 @@ class RoomDAO:
         # if affected rows == 0, the part was not found and hence not deleted
         # otherwise, it was deleted, so check if affected_rows != 0
         return affected_rows != 0
+
+    def getAvailableRooms(self):
+        pass
+
+    def getTimeSlot(self):
+        cursor = self.conn.cursor()
+        query = "select * from time_slot;"
+        cursor.execute(query)
+        result = []
+        for row in cursor:
+            dict = {}
+            dict['tid'] = row[0]
+            dict['tstarttime'] = row[1]
+            dict['tendtime'] = row[2] #Causes TypeError: Object of type time is not JSON serializable
+            #Turning time to string with a json dumps avoids the type casting problem
+            result.append(json.loads(json.dumps(dict, indent=4, default=str)))
+        return result
+
+    def getRoomOccupiedTimeSlots(self, rid):
+        cursor = self.conn.cursor()
+        query = "select * from room_schedule where rid = %s"
+        cursor.execute(query, (rid,))
+        result = []
+        for row in cursor:
+            result.append(row)
+        return result
+
+    def findRoomAtTime(self, tid):
+        cursor = self.conn.cursor()
+        query = "select rid from room where not exists (select * from room_schedule where rid = room.rid and tid =%s) limit 10"
+        cursor.execute(query, (tid,))
+        result = []
+        for row in cursor:
+            result.append(row)
+        return result
+
