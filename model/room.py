@@ -77,3 +77,13 @@ class RoomDAO:
         for row in cursor:
             result.append(row)
         return result
+
+    def findRoomAtTime(self, tid):
+        cursor = self.conn.cursor()
+        query = "select rid from room where not exists (select * from room_schedule where rid = room.rid and tid =%s) limit 10"
+        cursor.execute(query, (tid,))
+        result = []
+        for row in cursor:
+            result.append(row)
+        return result
+
