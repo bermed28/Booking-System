@@ -63,6 +63,14 @@ class ReservationDAO:
             result.append(dict)
         return result
 
+    def getWhoAppointedRoomAtTime(self, rid, tid):
+        cursor = self.conn.cursor()
+        query = "select uid from reservation natural inner join reservation_schedule where tid = %s and rid = %s"
+        cursor.execute(query, (tid, rid))
+        result = {}
+        result['uid'] = cursor.fetchone()[0]            
+        return result
+
     def getMostBookedUsers(self, num):
         cursor = self.conn.cursor()
         query = "select uid, frequency, ufirstname from (select uid, count(*) as frequency from reservation group by uid) as temp1 natural inner join public.user order by frequency desc limit %s"

@@ -75,3 +75,23 @@ class BaseUser:
             return jsonify("DELETED"), 200
         else:
             return jsonify("NOT FOUND"), 404
+
+    def getMostRoombyUser(self, uid):
+        dao = UserDAO()
+        result = dao.getMostUsedRoombyUser(uid)
+        return jsonify(result)
+
+    def getAllDayUserSchedule(self, uid):
+        dao = UserDAO()
+        timeslot = dao.getTimeSlot()
+        occupiedTid = dao.getUserOccupiedTimeSlots(uid)
+
+        for time in timeslot:
+            for tid in occupiedTid:
+                if tid[3] == time['tid']:
+                    time['available'] = False
+
+            if 'available' not in time:
+                time['available'] = True
+
+        return jsonify(timeslot)

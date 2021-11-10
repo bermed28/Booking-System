@@ -18,12 +18,13 @@ app = Flask(__name__)
 def hello_world():  # put application's code here
     return '<h1>Hello World!<h1/>'
 
+#Every route that has /UserApp is part of my API
 @app.route('/UserApp/users', methods=['GET', 'POST'])
 def handleUsers():
-    if request.method == 'POST':
+    if request.method == 'POST': #ADD
         return BaseUser().addNewUser(request.json)
     else:
-        return BaseUser().getAllUsers()
+        return BaseUser().getAllUsers() #Get list of all users
 
 @app.route('/UserApp/users/<int:uid>', methods=['GET', 'PUT', 'DELETE'])
 def handleUsersbyId(uid):
@@ -122,6 +123,30 @@ def handleTimeSlotbyId(tid):
         return BaseTimeSlot().updateTimeSlot(request.json)
     elif request.method == 'DELETE':
         return BaseTimeSlot().deleteTimeSlot(tid)
+
+
+#Get User Statistic
+@app.route('/UserApp/user/mostusedroom/<int:uid>', methods=['GET'])
+def handleMostUsedRoombyUser(uid):
+    return BaseUser().getMostRoombyUser(uid)
+
+@app.route('/UserApp/user/alldayschedule/<int:uid>', methods=['GET'])
+def handleAllDayUserSchedule(uid):
+    return BaseUser().getAllDayUserSchedule(uid)
+
+@app.route('/UserApp/room/alldayschedule/<int:rid>', methods=['GET'])
+def handleAllDayRoomSchedule(rid):
+    return BaseRoom().getAllDayRoomSchedule(rid)
+
+@app.route('/UserApp/reservation/whoAppointed/<int:rid>/<int:tid>', methods=['GET'])
+def handlegetWhoAppointedRoomAtTime(rid, tid):
+    return BaseReservation().getWhoAppointedRoomAtTime(rid, tid)
+
+@app.route('/UserApp/room/findRoomAtTime/<int:tid>', methods=['GET'])
+def handleFindRoomAtTime(tid):
+    return BaseRoom().findRoomAtTime(tid)
+
+
 
 if __name__ == '__main__':
     app.run(debug=True, port=8080, host="0.0.0.0")
