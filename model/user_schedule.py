@@ -11,7 +11,7 @@ class UserScheduleDAO:
 
     def getAllUserSchedules(self):
         cursor = self.conn.cursor()
-        query = "select usid, uavailability, uid, tid from public.user_schedule;"
+        query = "select usid, uavailability, uid, tid, usday from public.user_schedule;"
         cursor.execute(query)
         result = []
         for row in cursor:
@@ -20,7 +20,7 @@ class UserScheduleDAO:
 
     def getUserScheduleById(self, usid):
         cursor = self.conn.cursor()
-        query = "select usid, uavailability, uid, tid from public.user_schedule where usid = %s;"
+        query = "select usid, uavailability, uid, tid, usday from public.user_schedule where usid = %s;"
         cursor.execute(query, (usid,))
         result = cursor.fetchone()
         return result

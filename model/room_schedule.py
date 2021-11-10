@@ -11,7 +11,7 @@ class RoomScheduleDAO:
 
     def getAllRoomSchedules(self):
         cursor = self.conn.cursor()
-        query = "select rsid, uavailability, rid, tid from public.room_schedule;"
+        query = "select rsid, uavailability, rid, tid, rsday from public.room_schedule;"
         cursor.execute(query)
         result = []
         for row in cursor:
@@ -20,7 +20,7 @@ class RoomScheduleDAO:
 
     def getRoomScheduleById(self, rsid):
         cursor = self.conn.cursor()
-        query = "select rsid, uavailability, rid, tid from public.room_schedule where rsid = %s;"
+        query = "select rsid, uavailability, rid, tid, rsday from public.room_schedule where rsid = %s;"
         cursor.execute(query, (rsid,))
         result = cursor.fetchone()
         return result
