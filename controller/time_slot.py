@@ -28,37 +28,37 @@ class BaseTimeSlot:
 
     def getTimeSlotByTimeSlotId(self, tid):
         dao = TimeSlotDAO()
-        member = dao.getTimeSlotById(tid)
+        member = dao.getTimeSlotByTimeSlotId(tid)
         if not member:
             return jsonify("Not Found"), 404
         else:
             result = self.build_map_dict(member)
             return jsonify(result), 200
 
-    def addNewTimeSlot(self, json):
-        tid = json['tid']
-        tstarttime = json['tstarttime']
-        tendtime = json['tendtime']
-
-        dao = TimeSlotDAO()
-        tid = dao.insertTimeSlot(tstarttime, tendtime)
-        result = self.build_attr_dict(tid, tstarttime, tendtime)
-        return jsonify(result), 201
-
-    def updateTimeSlot(self, json):
-        tid = json['tid']
-        tstarttime = json['tstarttime']
-        tendtime = json['tendtime']
-
-        dao = TimeSlotDAO()
-        updated_time_slot = dao.updateTimeSlot(tid, tstarttime, tendtime)
-        result = self.build_attr_dict(tid, tstarttime, tendtime)
-        return jsonify(result), 200
-
-    def deleteTimeSlot(self, tid):
-        dao = TimeSlotDAO()
-        result = dao.deleteTimeSlot(tid)
-        if result:
-            return jsonify("DELETED"), 200
-        else:
-            return jsonify("NOT FOUND"), 404
+    # def addNewTimeSlot(self, json):
+    #     tid = json['tid']
+    #     tstarttime = json['tstarttime']
+    #     tendtime = json['tendtime']
+    # 
+    #     dao = TimeSlotDAO()
+    #     tid = dao.insertTimeSlot(tstarttime, tendtime)
+    #     result = self.build_attr_dict(tid, tstarttime, tendtime)
+    #     return jsonify(result), 201
+    # 
+    # def updateTimeSlot(self, json):
+    #     tid = json['tid']
+    #     tstarttime = json['tstarttime']
+    #     tendtime = json['tendtime']
+    # 
+    #     dao = TimeSlotDAO()
+    #     updated_time_slot = dao.updateTimeSlot(tid, tstarttime, tendtime)
+    #     result = self.build_attr_dict(tid, tstarttime, tendtime)
+    #     return jsonify(result), 200
+    # 
+    # def deleteTimeSlot(self, tid):
+    #     dao = TimeSlotDAO()
+    #     result = dao.deleteTimeSlot(tid)
+    #     if result:
+    #         return jsonify("DELETED"), 200
+    #     else:
+    #         return jsonify("NOT FOUND"), 404

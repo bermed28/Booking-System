@@ -11,7 +11,7 @@ class RoomScheduleDAO:
 
     def getAllRoomSchedules(self):
         cursor = self.conn.cursor()
-        query = "select rsid, uavailability, rid, tid, rsday from public.room_schedule;"
+        query = "select rsid, rsavailability, rid, tid, rsday from public.room_schedule;"
         cursor.execute(query)
         result = []
         for row in cursor:
@@ -20,7 +20,7 @@ class RoomScheduleDAO:
 
     def getRoomScheduleById(self, rsid):
         cursor = self.conn.cursor()
-        query = "select rsid, uavailability, rid, tid, rsday from public.room_schedule where rsid = %s;"
+        query = "select rsid, rsavailability, rid, tid, rsday from public.room_schedule where rsid = %s;"
         cursor.execute(query, (rsid,))
         result = cursor.fetchone()
         return result
@@ -33,10 +33,10 @@ class RoomScheduleDAO:
         self.conn.commit()
         return rid
 
-    def updateRoomSchedule(self, rsid, uavailability, rid, tid):
+    def updateRoomSchedule(self, rsid, uavailability, rid, tid, rsday):
         cursor = self.conn.cursor()
-        query = "update public.room_schedule set uavailability = %s, rid = %s, tid = %s where rsid = %s;"
-        cursor.execute(query, (uavailability, rid, tid, rsid))
+        query = "update public.room_schedule set rsavailability = %s, rid = %s, tid = %s, rsday = %s where rsid = %s;"
+        cursor.execute(query, (uavailability, rid, tid, rsday, rsid))
         self.conn.commit()
         return True
 

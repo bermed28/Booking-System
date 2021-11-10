@@ -102,7 +102,7 @@ def handleRoomSchedules():
     else:
         return BaseRoomSchedule().getAllRoomSchedules()
 
-@app.route('/UserApp/room-schedule/<int:rsid>', methods=['GET', 'PUT', 'DELETE'])
+@app.route('/StackOverflowersStudios/room-schedule/<int:rsid>', methods=['GET', 'PUT', 'DELETE'])
 def handleRoomSchedulebyId(rsid):
     if request.method == 'GET':
         return BaseRoomSchedule().getRoomScheduleById(rsid)
@@ -111,21 +111,13 @@ def handleRoomSchedulebyId(rsid):
     elif request.method == 'DELETE':
         return BaseRoomSchedule().deleteRoomSchedule(rsid)
 
-@app.route('/StackOverflowersStudios/timeslots', methods=['GET', 'POST'])
+@app.route('/StackOverflowersStudios/timeslots', methods=['GET'])
 def handleTimeSlots():
-    if request.method == 'POST':
-        return BaseTimeSlot().addNewTimeSlot(request.json)
-    else:
-        return BaseTimeSlot().getAllTimeSlots()
+    return BaseTimeSlot().getAllTimeSlots()
 
-@app.route('/StackOverflowersStudios/timeslots/<int:tid>', methods=['GET', 'PUT', 'DELETE'])
+@app.route('/StackOverflowersStudios/timeslots/<int:tid>', methods=['GET'])
 def handleTimeSlotbyId(tid):
-    if request.method == 'GET':
-        return BaseTimeSlot().getTimeSlotByTimeSlotId(tid)
-    elif request.method == 'PUT':
-        return BaseTimeSlot().updateTimeSlot(request.json)
-    elif request.method == 'DELETE':
-        return BaseTimeSlot().deleteTimeSlot(tid)
+    return BaseTimeSlot().getTimeSlotByTimeSlotId(tid)
 
 """""""""""""""""ALL DAY SCHEDULES"""""""""""""""
 @app.route('/StackOverflowersStudios/user/mostusedroom/<int:uid>', methods=['GET'])

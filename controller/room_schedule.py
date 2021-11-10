@@ -6,16 +6,16 @@ class BaseRoomSchedule:
     def build_map_dict(self, row):
         result = {}
         result['rsid'] = row[0]
-        result['uavailability'] = row[1]
+        result['rsavailability'] = row[1]
         result['rid'] = row[2]
         result['tid'] = row[3]
         result['rsday'] = row[4]
         return result
 
-    def build_attr_dict(self, rsid, uavailability, rid, tid, rsday):
+    def build_attr_dict(self, rsid, rsavailability, rid, tid, rsday):
         result = {}
         result['rsid'] = rsid
-        result['uavailability'] = uavailability
+        result['rsavailability'] = rsavailability
         result['rid'] = rid
         result['tid'] = tid
         result['rsday'] = rsday
@@ -40,23 +40,24 @@ class BaseRoomSchedule:
             return jsonify(result), 200
 
     def addNewRoomSchedule(self, json):
-        uavailability = json['uavailability']
+        rsavailability = json['rsavailability']
         rid = json['rid']
         tid = json['tid']
         rsday = json['rsday']
         dao = RoomScheduleDAO()
-        rsid = dao.insertRoomSchedule(uavailability, rid, tid, rsday)
-        result = self.build_attr_dict(rsid, uavailability, rid, tid, rsday)
+        rsid = dao.insertRoomSchedule(rsavailability, rid, tid, rsday)
+        result = self.build_attr_dict(rsid, rsavailability, rid, tid, rsday)
         return jsonify(result), 201
 
     def updateRoomSchedule(self, json):
-        uavailability = json['uavailability']
+        rsavailability = json['rsavailability']
         rid = json['rid']
         tid = json['tid']
         rsid = json['rsid']
+        rsday = json['rsday']
         dao = RoomScheduleDAO()
-        updated_room_schedule = dao.updateRoomSchedule(rsid, uavailability, rid, tid)
-        result = self.build_attr_dict(rsid, uavailability, rid, tid)
+        updated_room_schedule = dao.updateRoomSchedule(rsid, rsavailability, rid, tid, rsday)
+        result = self.build_attr_dict(rsid, rsavailability, rid, tid, rsday)
         return jsonify(result), 200
 
     def deleteRoomSchedule(self, rsid):
