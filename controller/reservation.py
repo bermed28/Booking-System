@@ -3,6 +3,9 @@ from model.reservation import ReservationDAO
 from model.members import MembersDAO
 from model.user_schedule import UserScheduleDAO
 from model.room_schedule import RoomScheduleDAO
+from model.time_slot import TimeSlotDAO
+from controller.time_slot import BaseTimeSlot
+
 
 class BaseReservation:
 
@@ -102,3 +105,29 @@ class BaseReservation:
         dao = ReservationDAO()
         result = dao.getMostBookedUsers(num)
         return jsonify(result)
+
+    def getFreeTime(self, json):
+        uids = json['uids']
+        usday = json['usday']
+        uschedao = UserScheduleDAO()
+        tsdao = TimeSlotDAO()
+        result = []
+        allOccupiedTid = []
+        for uid in uids:
+            #finds occupied tid of a specific user on a certain day
+            occupiedTids = uschedao.getOccupiedTid(uid, usday)
+            for tid in occupiedTids:
+                if tid not in allOccupiedTid:
+                    allOccupiedTid.append(tid)
+
+        timeslots = tsdao.getAllTimeSlots()
+        #loops through all the time slots and only keeps the ones that are not occupied for a user
+        for time in timeslots:
+            if int(time[0]) not in allOccupiedTid:
+                result.append(BaseTimeSlot().build_map_dict(time))
+
+        return jsonify(result)
+
+
+
+

@@ -153,6 +153,9 @@ def handleFindRoomAtTime(tid):
 def handleRoomAppointmentInfo(rid, uid):
     return BaseRoom().findRoomAppointmentInfo(rid, uid)
 
+@app.route('/StackOverflowersStudios/reservation/getFreeTime', methods=['GET'])
+def handlegetFreeTime():
+    return BaseReservation().getFreeTime(request.json)
 
 if __name__ == '__main__':
     app.run(debug=True, port=8080, host="0.0.0.0")
