@@ -46,10 +46,9 @@ class BaseUserSchedule:
         result = self.build_attr_dict(usid, uid, tid, usday)
         return jsonify(result), 201
 
-    def updateUserSchedule(self, json):
+    def updateUserSchedule(self, usid, json):
         uid = json['uid']
         tid = json['tid']
-        usid = json['usid']
         usday = json['usday']
         dao = UserScheduleDAO()
         updated_user_schedule = dao.updateUserSchedule(usid, uid, tid, usday)

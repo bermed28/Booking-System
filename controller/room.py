@@ -52,12 +52,11 @@ class BaseRoom:
         result = self.build_attr_dict(rid, rname, rcapacity, rbuildname, rpermission)
         return jsonify(result), 201
 
-    def updateRoom(self, json):
+    def updateRoom(self, rid, json):
         rname = json['rname']
         rcapacity = json['rcapacity']
         rbuildname = json['rbuildname']
         rpermission = json['rpermission']
-        rid = json['rid']
         dao = RoomDAO()
         updated_room = dao.updateRoom(rid, rname, rcapacity, rbuildname, rpermission)
         result = self.build_attr_dict(rid, rname, rcapacity, rbuildname, rpermission)

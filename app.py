@@ -50,7 +50,7 @@ def handleRoomsbyId(rid):
     if request.method == 'GET':
         return BaseRoom().getRoomById(rid)
     elif request.method == 'PUT':
-        return BaseRoom().updateRoom(request.json)
+        return BaseRoom().updateRoom(rid, request.json)
     elif request.method == 'DELETE':
         return BaseRoom().deleteRoom(rid)
 
@@ -95,7 +95,7 @@ def handleUserSchedulebyId(usid):
     if request.method == 'GET':
         return BaseUserSchedule().getUserScheduleById(usid)
     elif request.method == 'PUT':
-        return BaseUserSchedule().updateUserSchedule(request.json)
+        return BaseUserSchedule().updateUserSchedule(usid, request.json)
     elif request.method == 'DELETE':
         return BaseUserSchedule().deleteUserSchedule(usid)
 
