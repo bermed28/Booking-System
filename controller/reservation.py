@@ -79,9 +79,9 @@ class BaseReservation:
             if member != uid:
                 members_dao.insertMember(member, resid)
             for time_slot in time_slots:
-                us_dao.insertUserSchedule(False, member, time_slot, resday)
+                us_dao.insertUserSchedule(member, time_slot, resday)
         for time_slot in time_slots:
-            rs_dao.insertRoomSchedule(False, rid, time_slot, resday)
+            rs_dao.insertRoomSchedule(rid, time_slot, resday)
             reserv_dao.insertReservationSchedule(resid, time_slot)
 
         return jsonify(result), 201
@@ -92,14 +92,17 @@ class BaseReservation:
         rid = json['rid']
         uid = json['uid']
         time_slots = json['tids']
+        new_time_slots = []
         dao = ReservationDAO()
-        # if dao.checkForConflicts(rid, resday, time_slots):
-        #     return jsonify("This reservation cannot be made at this time due to a conflict.")
-
-        updated_reservation = dao.updateReservation(resid, resname, resday, rid, uid)
-        dao = ReservationScheduleDAO()
-        dao.deleteReseravtionSchedule(resid)
         reserv_dao = ReservationScheduleDAO()
+        used_tids = dao.getInUseTids(resid)
+        for tid in time_slots:
+            if tid not in used_tids:
+                new_time_slots.append(tid)
+        if dao.checkForConflicts(rid, resday, new_time_slots):
+            return jsonify("This reservation cannot be made at this time due to a conflict.")
+        updated_reservation = dao.updateReservation(resid, resname, resday, rid, uid)
+        reserv_dao.deleteReseravtionSchedule(resid)
         for tid in time_slots:
             reserv_dao.insertReservationSchedule(resid, tid)
         result = self.build_attr_dict(resid, resname, resday, rid, uid)

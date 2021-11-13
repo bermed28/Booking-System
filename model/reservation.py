@@ -105,3 +105,12 @@ class ReservationDAO:
             if cursor.rowcount > 0:
                 return True
         return False
+
+    def getInUseTids(self, resid):
+        cursor = self.conn.cursor()
+        query = "select tid from public.reservation_schedule where resid = %s;"
+        cursor.execute(query, (resid,))
+        result = []
+        for row in cursor:
+            result.append(row[0])
+        return result
