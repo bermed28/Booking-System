@@ -101,9 +101,9 @@ class BaseUser:
         dao = UserDAO()
         return jsonify(dao.checkPermission(uid))
 
-    def getMostBookedWith(self, uid, num):
+    def getMostBookedWith(self, uid):
         dao = UserDAO()
-        user_list = dao.getMostBookedWith(uid, num)
+        user_list = dao.getMostBookedWith(uid)
         result_list = []
         for row in user_list:
             result_list.append(row)

@@ -74,7 +74,7 @@ class UserScheduleDAO:
     def getOccupiedTid(self, uid, usday):
         cursor = self.conn.cursor()
         query = "select distinct tid, usday from user_schedule where uid = %s and usday = %s"
-        cursor.execute(query, (uid,usday))
+        cursor.execute(query, (uid, usday))
         result = []
         for row in cursor:
             result.append(row[0])

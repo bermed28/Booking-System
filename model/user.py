@@ -62,14 +62,24 @@ class UserDAO:
 
     def getMostUsedRoombyUser(self, uid):
         cursor = self.conn.cursor()
-        query = "select rid, rname from (select rid, count(*) as frequency from (select * from reservation where uid = %s) as temp9 group by rid)as temp1  natural inner join room order by frequency desc limit 1;"
-        cursor.execute(query, (uid,))
-        result = cursor.fetchone()
+        query = "select rid, rname, frequency from \
+            (select rid, count(*) as frequency from\
+            (select * from reservation inner join members on reservation.resid = members.resid \
+            where members.uid = %s or reservation.uid = %s) as temp9 group by rid)as temp1\
+            natural inner join room order by frequency desc limit 1;"
+        cursor.execute(query, (uid, uid))
+        result = []
+        if cursor.rowcount <= 0:
+            return "User has not used any rooms"
+
+        row = cursor.fetchone()
         dict = {}
-        dict['rid'] = result[0]
-        dict['rname'] = result[1]
+        dict['rid'] = row[0]
+        dict['rname'] = row[1]
+        dict['frequency'] = row[2]
+        result.append(dict)
         cursor.close()
-        return [dict]
+        return result
 
     def getTimeSlot(self):
         cursor = self.conn.cursor()
@@ -104,11 +114,11 @@ class UserDAO:
         cursor.close()
         return result
 
-    def getMostBookedWith(self, uid, num):
+    def getMostBookedWith(self, uid):
         cursor = self.conn.cursor()
         query = "select public.members.uid as invitee, count(*) as frequency from public.reservation inner join public.members \
-                 using(resid) where reservation.uid = %s group by members.uid order by frequency desc limit %s;"
-        cursor.execute(query, (uid, num))
+                 using(resid) where reservation.uid = %s group by members.uid order by frequency desc limit 1;"
+        cursor.execute(query, (uid,))
         result = []
         for row in cursor:
             dict = {}
