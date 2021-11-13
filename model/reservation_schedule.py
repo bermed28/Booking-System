@@ -36,11 +36,10 @@ class ReservationScheduleDAO:
 
     def insertReservationSchedule(self, resid, tid):
         cursor = self.conn.cursor()
-        query = "insert into public.reservation_schedule(resid, tid) values(%s,%s) returning (resid, tid);"
+        query = "insert into public.reservation_schedule(resid, tid) values(%s,%s);"
         cursor.execute(query, (resid, tid))
-        resid, tid = cursor.fetchone()[0], cursor.fetchone()[1]
         self.conn.commit()
-        return (resid, tid)
+        return [resid, tid]
 
     def updateReservationShedule(self, oldResid, newResid, tid):
         cursor = self.conn.cursor()

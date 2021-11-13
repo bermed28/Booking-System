@@ -66,7 +66,7 @@ def handleReservationbyId(resid):
     if request.method == 'GET':
         return BaseReservation().getReservationById(resid)
     elif request.method == 'PUT':
-        return BaseReservation().updateReservation(request.json)
+        return BaseReservation().updateReservation(resid, request.json)
     elif request.method == 'DELETE':
         return BaseReservation().deleteReservation(resid)
 
