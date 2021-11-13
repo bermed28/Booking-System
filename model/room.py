@@ -66,13 +66,13 @@ class RoomDAO:
             result.append(json.loads(json.dumps(dict, indent=4, default=str)))
         return result
 
-    def getRoomOccupiedTimeSlots(self, rid):
+    def getRoomOccupiedTimeSlots(self, rid, rsday):
         cursor = self.conn.cursor()
-        query = "select * from room_schedule where rid = %s"
-        cursor.execute(query, (rid,))
+        query = "select tid from room_schedule where rid = %s and rsday = %s"
+        cursor.execute(query, (rid, rsday))
         result = []
         for row in cursor:
-            result.append(row)
+            result.append(row[0])
         return result
 
     def findRoomAtTime(self, tid):

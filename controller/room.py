@@ -70,15 +70,16 @@ class BaseRoom:
         else:
             return jsonify("NOT FOUND"), 404
 
-    def getAllDayRoomSchedule(self, rid):
+    def getAllDayRoomSchedule(self, json):
+        rid = json['rid']
+        rsday = json['rsday']
         dao = RoomDAO()
         timeslot = dao.getTimeSlot()
-        occupiedTid = dao.getRoomOccupiedTimeSlots(rid)
+        occupiedTid = dao.getRoomOccupiedTimeSlots(rid, rsday)
 
         for time in timeslot:
-            for tid in occupiedTid:
-                if tid[3] == time['tid']:
-                    time['available'] = False
+            if time['tid'] in occupiedTid:
+                time['available'] = False
 
             if 'available' not in time:
                 time['available'] = True

@@ -76,13 +76,13 @@ class UserDAO:
             result.append(json.loads(json.dumps(dict, indent=4, default=str)))
         return result
 
-    def getUserOccupiedTimeSlots(self, uid):
+    def getUserOccupiedTimeSlots(self, uid, rsday):
         cursor = self.conn.cursor()
-        query = "select * from user_schedule where uid = %s"
-        cursor.execute(query, (uid,))
+        query = "select tid from user_schedule where uid = %s and usday = %s"
+        cursor.execute(query, (uid, rsday))
         result = []
         for row in cursor:
-            result.append(row)
+            result.append(row[0])
         return result
 
     def checkPermission(self, uid):
