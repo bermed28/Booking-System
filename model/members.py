@@ -16,6 +16,7 @@ class MembersDAO:
         result = []
         for row in cursor:
             result.append(row)
+        cursor.close()
         return result
 
     def getMemberByUserId(self, uid):
@@ -23,6 +24,7 @@ class MembersDAO:
         query = "select uid, resid from public.members where uid = %s;"
         cursor.execute(query, (uid,))
         result = cursor.fetchone()
+        cursor.close()
         return result
 
     def getMembersByReservationId(self, resid):
@@ -32,6 +34,7 @@ class MembersDAO:
         result = []
         for row in cursor:
             result.append(row)
+        cursor.close()
         return result
 
     def insertMember(self, uid, resid):
@@ -43,6 +46,7 @@ class MembersDAO:
         # print(row)
         # uid, resid = row[0], row[1]
         # self.conn.commit()
+        cursor.close()
         return True
 
     def updateMember(self, oldUid, newUid, resid):
@@ -50,6 +54,7 @@ class MembersDAO:
         query = "update public.members set uid = %s, resid = %s where uid = %s;"
         cursor.execute(query, (newUid, resid, oldUid))
         self.conn.commit()
+        cursor.close()
         return True
 
     def deleteMember(self, uid):
@@ -61,4 +66,8 @@ class MembersDAO:
         self.conn.commit()
         # if affected rows == 0, the part was not found and hence not deleted
         # otherwise, it was deleted, so check if affected_rows != 0
+        cursor.close()
         return affected_rows != 0
+
+    def __del__(self):
+        self.conn.close()

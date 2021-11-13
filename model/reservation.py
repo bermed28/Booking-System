@@ -85,12 +85,25 @@ class ReservationDAO:
         cursor.close()
         return result
 
-    def getWhoAppointedRoomAtTime(self, rid, tid):
+# We probably have to join here with user too pq lo que nos importa es la información de quién tiene
+# el cuarto
+    def getWhoAppointedRoomAtTime(self, rid, tid, date):
         cursor = self.conn.cursor()
-        query = "select uid from reservation natural inner join reservation_schedule where tid = %s and rid = %s"
-        cursor.execute(query, (tid, rid))
+        query = "select uid, username, uemail, upassword, ufirstname, ulastname, upermission from reservation \
+        natural inner join reservation_schedule natural inner join public.user where tid = %s and rid = %s and reservation.resday = %s"
+        cursor.execute(query, (tid, rid, date))
+        if cursor.rowcount <= 0:
+            return "No one is using this room at this time."
         result = {}
-        result['uid'] = cursor.fetchone()[0]
+
+        temp = cursor.fetchone()
+        result['uid'] = temp[0]
+        result['username'] = temp[1]
+        result['uemail'] = temp[2]
+        result['upassword'] = temp[3]
+        result['ufirstname'] = temp[4]
+        result['ulastname'] = temp[5]
+        result['upermission'] = temp[6]
         cursor.close()
         return result
 
