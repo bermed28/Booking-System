@@ -141,13 +141,14 @@ def handleAllDayUserSchedule(uid):
 def handleAllDayRoomSchedule(rid):
     return BaseRoom().getAllDayRoomSchedule(rid)
 
-@app.route('/StackOverflowersStudios/reservation/whoAppointed/<int:rid>/<int:tid>', methods=['GET'])
-def handlegetWhoAppointedRoomAtTime(rid, tid):
-    return BaseReservation().getWhoAppointedRoomAtTime(rid, tid)
+#cambiar esto a request.json también
+@app.route('/StackOverflowersStudios/reservation/whoAppointed', methods=['GET'])
+def handlegetWhoAppointedRoomAtTime():
+    return BaseReservation().getWhoAppointedRoomAtTime(request.json)
 
-@app.route('/StackOverflowersStudios/room/findRoomAtTime/<int:tid>', methods=['GET'])
-def handleFindRoomAtTime(tid):
-    return BaseRoom().findRoomAtTime(tid)
+@app.route('/StackOverflowersStudios/room/findRoomAtTime', methods=['GET'])
+def handleFindRoomAtTime():
+    return BaseRoom().findRoomAtTime(request.json)
 
 @app.route('/StackOverflowersStudios/room/roomAppointmentInfo/<int:rid>/<int:uid>', methods=['GET'])
 def handleRoomAppointmentInfo(rid, uid):

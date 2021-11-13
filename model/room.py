@@ -75,13 +75,20 @@ class RoomDAO:
             result.append(row)
         return result
 
-    def findRoomAtTime(self, tid):
+    def findRoomAtTime(self, tid, date):
         cursor = self.conn.cursor()
-        query = "select rid from room where not exists (select * from room_schedule where rid = room.rid and tid =%s) limit 10"
-        cursor.execute(query, (tid,))
+        query = "select * from room where not exists (select * from room_schedule where rid = room.rid and tid =%s and \
+                 rsday = %s)"
+        cursor.execute(query, (tid, date))
         result = []
         for row in cursor:
-            result.append(row)
+            dict = {}
+            dict['rid'] = row[0]
+            dict['rname'] = row[1]
+            dict['rcapacity'] = row[2]
+            dict['rbuildname'] = row[3]
+            dict['rpermission'] = row[4]
+            result.append(dict)
         return result
 
     def findRoomReservations(self, rid):

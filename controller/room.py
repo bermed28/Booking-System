@@ -85,9 +85,11 @@ class BaseRoom:
 
         return jsonify(timeslot)
 
-    def findRoomAtTime(self, tid):
+    def findRoomAtTime(self, json):
+        tid = json['tid']
+        date = json['date']
         dao = RoomDAO()
-        result = dao.findRoomAtTime(tid)
+        result = dao.findRoomAtTime(tid, date)
         return jsonify(result)
 
     def findRoomAppointmentInfo(self, rid, uid):
