@@ -18,11 +18,13 @@ class ReservationScheduleDAO:
             result.append(row)
         return result
 
-    def getReservationScheduleByTimeId(self, tid):
+    def getTimeSlotsByReservationId(self, resid):
         cursor = self.conn.cursor()
-        query = "select resid, tid from public.reservation_schedule where tid = %s;"
-        cursor.execute(query, (tid,))
-        result = cursor.fetchone()
+        query = "select tid from public.reservation_schedule where resid = %s;"
+        cursor.execute(query, (resid,))
+        result = []
+        for row in cursor:
+            result.append(row[0])
         return result
 
     def getReservationScheduleByReservationId(self, resid):
@@ -48,7 +50,7 @@ class ReservationScheduleDAO:
         self.conn.commit()
         return True
 
-    def deleteReseravtionSchedule(self, resid):
+    def deleteReservationSchedule(self, resid):
         cursor = self.conn.cursor()
         query = "delete from public.reservation_schedule where resid=%s;"
         cursor.execute(query, (resid,))

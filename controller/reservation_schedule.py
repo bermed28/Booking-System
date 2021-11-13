@@ -55,7 +55,7 @@ class BaseReservationSchedule:
 
     def deleteReservationSchedule(self, resid):
         dao = ReservationScheduleDAO()
-        result = dao.deleteReseravtionSchedule(resid)
+        result = dao.deleteReservationSchedule(resid)
         if result:
             return jsonify("DELETED"), 200
         else:
