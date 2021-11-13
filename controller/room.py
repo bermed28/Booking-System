@@ -86,19 +86,22 @@ class BaseRoom:
 
         return jsonify(timeslot)
 
-    def findRoomAtTime(self, tid):
+    def findRoomAtTime(self, json):
+        tid = json['tid']
+        date = json['date']
         dao = RoomDAO()
-        result = dao.findRoomAtTime(tid)
+        result = dao.findRoomAtTime(tid, date)
         return jsonify(result)
 
     def findRoomAppointmentInfo(self, rid, uid):
         roomdao = RoomDAO()
         reservations = roomdao.findRoomReservations(rid)
+        rpermission = roomdao.getRoomPermission(rid)
         rscheduledao = ReservationScheduleDAO()
         membersdao = MembersDAO()
         userdao = UserDAO()
         permission = userdao.checkPermission(uid)
-        if permission == 'Professor' or permission == 'Department Staff':
+        if permission == rpermission:
             for res in reservations:
                 tidInReser = rscheduledao.getReservationScheduleByReservationId(res['resid'])
                 res['tid'] =[]

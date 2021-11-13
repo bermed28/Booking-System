@@ -127,9 +127,12 @@ class BaseReservation:
         result = dao.getBusiestHours(num)
         return jsonify(result)
 
-    def getWhoAppointedRoomAtTime(self, rid, tid):
+    def getWhoAppointedRoomAtTime(self, json):
         dao = ReservationDAO()
-        result = dao.getWhoAppointedRoomAtTime(rid, tid)
+        rid = json['rid']
+        tid = json['tid']
+        date = json['date']
+        result = dao.getWhoAppointedRoomAtTime(rid, tid, date)
         return jsonify(result)
       
     def getMostBookedUsers(self, num):

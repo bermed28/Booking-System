@@ -9,6 +9,9 @@ class ReservationDAO:
         print("conection url:  ", connection_url)
         self.conn = psycopg2.connect(connection_url)
 
+    def __del__(self):
+        self.conn.close()
+
     def getAllReservations(self):
         cursor = self.conn.cursor()
         query = "select resid, resname, resday, rid, uid from public.reservation;"
@@ -16,6 +19,7 @@ class ReservationDAO:
         result = []
         for row in cursor:
             result.append(row)
+        cursor.close()
         return result
 
     def getReservationById(self, resid):
@@ -23,6 +27,7 @@ class ReservationDAO:
         query = "select resid, resname, resday, rid, uid from public.reservation where resid = %s;"
         cursor.execute(query, (resid,))
         result = cursor.fetchone()
+        cursor.close()
         return result
 
     def insertReservation(self, resname, resday, rid, uid):
@@ -31,6 +36,7 @@ class ReservationDAO:
         cursor.execute(query, (resname, resday, rid, uid))
         resid = cursor.fetchone()[0]
         self.conn.commit()
+        cursor.close()
         return resid
 
     def updateReservation(self, resid, resname, resday, rid, uid):
@@ -38,6 +44,7 @@ class ReservationDAO:
         query = "update public.reservation set resname = %s, resday = %s, rid = %s, uid = %s where resid = %s;"
         cursor.execute(query, (resname, resday, rid, uid, resid))
         self.conn.commit()
+        cursor.close()
         return True
 
     def deleteReservation(self, resid):
@@ -49,6 +56,7 @@ class ReservationDAO:
         self.conn.commit()
         # if affected rows == 0, the part was not found and hence not deleted
         # otherwise, it was deleted, so check if affected_rows != 0
+        cursor.close()
         return affected_rows != 0
 
     def getMostUsedRooms(self, num):
@@ -61,6 +69,7 @@ class ReservationDAO:
             dict["rid"] = row[0]
             dict["rname"] = row[2]
             result.append(dict)
+        cursor.close()
         return result
 
     def getBusiestHours(self, num):
@@ -73,14 +82,29 @@ class ReservationDAO:
             dict["tid"] = row[0]
             dict["count"] = row[1]
             result.append(dict)
+        cursor.close()
         return result
 
-    def getWhoAppointedRoomAtTime(self, rid, tid):
+# We probably have to join here with user too pq lo que nos importa es la información de quién tiene
+# el cuarto
+    def getWhoAppointedRoomAtTime(self, rid, tid, date):
         cursor = self.conn.cursor()
-        query = "select uid from reservation natural inner join reservation_schedule where tid = %s and rid = %s"
-        cursor.execute(query, (tid, rid))
+        query = "select uid, username, uemail, upassword, ufirstname, ulastname, upermission from reservation \
+        natural inner join reservation_schedule natural inner join public.user where tid = %s and rid = %s and reservation.resday = %s"
+        cursor.execute(query, (tid, rid, date))
+        if cursor.rowcount <= 0:
+            return "No one is using this room at this time."
         result = {}
-        result['uid'] = cursor.fetchone()[0]            
+
+        temp = cursor.fetchone()
+        result['uid'] = temp[0]
+        result['username'] = temp[1]
+        result['uemail'] = temp[2]
+        result['upassword'] = temp[3]
+        result['ufirstname'] = temp[4]
+        result['ulastname'] = temp[5]
+        result['upermission'] = temp[6]
+        cursor.close()
         return result
 
     def getMostBookedUsers(self, num):
@@ -94,17 +118,21 @@ class ReservationDAO:
             dict["uid"] = row[0]
             dict["ufirstname"] = row[2]
             result.append(dict)
+        cursor.close()
         return result
 
     def checkForConflicts(self, rid, resday, time_slots):
+        boolean = False
         cursor = self.conn.cursor()
         query = "select * from reservation natural inner join reservation_schedule where rid = %s and resday = %s and tid = %s"
         temp = []
         for time_slot in time_slots:
             cursor.execute(query, (rid, resday, time_slot))
             if cursor.rowcount > 0:
-                return True
-        return False
+                boolean = True
+                break
+        cursor.close()
+        return boolean
 
     def getInUseTids(self, resid):
         cursor = self.conn.cursor()
@@ -113,4 +141,5 @@ class ReservationDAO:
         result = []
         for row in cursor:
             result.append(row[0])
+        cursor.close()
         return result
