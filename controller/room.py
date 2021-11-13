@@ -95,11 +95,12 @@ class BaseRoom:
     def findRoomAppointmentInfo(self, rid, uid):
         roomdao = RoomDAO()
         reservations = roomdao.findRoomReservations(rid)
+        rpermission = roomdao.getRoomPermission(rid)
         rscheduledao = ReservationScheduleDAO()
         membersdao = MembersDAO()
         userdao = UserDAO()
         permission = userdao.checkPermission(uid)
-        if permission == 'Professor' or permission == 'Department Staff':
+        if permission == rpermission:
             for res in reservations:
                 tidInReser = rscheduledao.getReservationScheduleByReservationId(res['resid'])
                 res['tid'] =[]

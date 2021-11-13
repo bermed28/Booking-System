@@ -17,6 +17,7 @@ class RoomDAO:
         result = []
         for row in cursor:
             result.append(row)
+        cursor.close()
         return result
 
     def getRoomById(self, rid):
@@ -24,6 +25,7 @@ class RoomDAO:
         query = "select rid, rname, rcapacity, rbuildname, rpermission from public.room where rid = %s;"
         cursor.execute(query, (rid,))
         result = cursor.fetchone()
+        cursor.close()
         return result
 
     def insertRoom(self, rname, rcapacity, rbuildname, rpermission):
@@ -32,6 +34,7 @@ class RoomDAO:
         cursor.execute(query, (rname, rcapacity, rbuildname, rpermission))
         rid = cursor.fetchone()[0]
         self.conn.commit()
+        cursor.close()
         return rid
 
     def updateRoom(self, rid, rname, rcapacity, rbuildname, rpermission):
@@ -39,6 +42,7 @@ class RoomDAO:
         query = "update public.room set rname = %s, rcapacity = %s, rbuildname = %s, rpermission = %s where rid = %s;"
         cursor.execute(query, (rname, rcapacity, rbuildname, rpermission, rid))
         self.conn.commit()
+        cursor.close()
         return True
 
     def deleteRoom(self, rid):
@@ -50,6 +54,7 @@ class RoomDAO:
         self.conn.commit()
         # if affected rows == 0, the part was not found and hence not deleted
         # otherwise, it was deleted, so check if affected_rows != 0
+        cursor.close()
         return affected_rows != 0
 
     def getTimeSlot(self):
@@ -64,6 +69,8 @@ class RoomDAO:
             dict['tendtime'] = row[2] #Causes TypeError: Object of type time is not JSON serializable
             #Turning time to string with a json dumps avoids the type casting problem
             result.append(json.loads(json.dumps(dict, indent=4, default=str)))
+        cursor.close()
+        self.conn.close()
         return result
 
     def getRoomOccupiedTimeSlots(self, rid):
@@ -73,6 +80,7 @@ class RoomDAO:
         result = []
         for row in cursor:
             result.append(row)
+        cursor.close()
         return result
 
     def findRoomAtTime(self, tid, date):
@@ -89,6 +97,7 @@ class RoomDAO:
             dict['rbuildname'] = row[3]
             dict['rpermission'] = row[4]
             result.append(dict)
+        cursor.close()
         return result
 
     def findRoomReservations(self, rid):
@@ -102,8 +111,8 @@ class RoomDAO:
             dict['resname'] = row[2]
             dict['resday'] = row[3]
             dict['rname'] = row[5]
-
             result.append(dict)
+        cursor.close()
         return result
 
     def findReservationsTid(self, rid):
@@ -117,7 +126,17 @@ class RoomDAO:
             dict['resname'] = row[2]
             dict['resday'] = row[3]
             dict['rname'] = row[5]
-
             result.append(dict)
+        cursor.close()
         return result
 
+    def getRoomPermission(self, rid):
+        cursor = self.conn.cursor()
+        query = "select rpermission from room where rid = %s"
+        cursor.execute(query, (rid,))
+        result = cursor.fetchone()[0]
+        cursor.close()
+        return result
+
+    def __del__(self):
+        self.conn.close()
