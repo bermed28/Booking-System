@@ -17,6 +17,7 @@ class TimeSlotDAO:
         result = []
         for row in cursor:
             result.append(json.loads(json.dumps(row, indent=4, default=str)))
+        cursor.close()
         return result
 
     def getTimeSlotByTimeSlotId(self, tid):
@@ -24,7 +25,11 @@ class TimeSlotDAO:
         query = "select tid, tstarttime, tendtime from public.time_slot where tid = %s;"
         cursor.execute(query, (tid,))
         result = cursor.fetchone()
+        cursor.close()
         return json.loads(json.dumps(result, indent=4, default=str))
+
+    def __del__(self):
+        self.conn.close()
     #
     # def insertTimeSlot(self, tstarttime, tendtime):
     #     cursor = self.conn.cursor()

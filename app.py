@@ -133,21 +133,22 @@ def handleMostUsedRoombyUser(uid):
 def handleMostBookedInvitees(uid, num):
     return BaseUser().getMostBookedWith(uid, num)
 
-@app.route('/StackOverflowersStudios/user/alldayschedule/<int:uid>', methods=['GET'])
-def handleAllDayUserSchedule(uid):
-    return BaseUser().getAllDayUserSchedule(uid)
+@app.route('/StackOverflowersStudios/user/alldayschedule', methods=['GET'])
+def handleAllDayUserSchedule():
+    return BaseUser().getAllDayUserSchedule(request.json)
 
-@app.route('/StackOverflowersStudios/room/alldayschedule/<int:rid>', methods=['GET'])
-def handleAllDayRoomSchedule(rid):
-    return BaseRoom().getAllDayRoomSchedule(rid)
+@app.route('/StackOverflowersStudios/room/alldayschedule', methods=['GET'])
+def handleAllDayRoomSchedule():
+    return BaseRoom().getAllDayRoomSchedule(request.json)
 
-@app.route('/StackOverflowersStudios/reservation/whoAppointed/<int:rid>/<int:tid>', methods=['GET'])
-def handlegetWhoAppointedRoomAtTime(rid, tid):
-    return BaseReservation().getWhoAppointedRoomAtTime(rid, tid)
+#cambiar esto a request.json también
+@app.route('/StackOverflowersStudios/reservation/whoAppointed', methods=['GET'])
+def handlegetWhoAppointedRoomAtTime():
+    return BaseReservation().getWhoAppointedRoomAtTime(request.json)
 
-@app.route('/StackOverflowersStudios/room/findRoomAtTime/<int:tid>', methods=['GET'])
-def handleFindRoomAtTime(tid):
-    return BaseRoom().findRoomAtTime(tid)
+@app.route('/StackOverflowersStudios/room/findRoomAtTime', methods=['GET'])
+def handleFindRoomAtTime():
+    return BaseRoom().findRoomAtTime(request.json)
 
 @app.route('/StackOverflowersStudios/room/roomAppointmentInfo/<int:rid>/<int:uid>', methods=['GET'])
 def handleRoomAppointmentInfo(rid, uid):

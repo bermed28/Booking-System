@@ -70,34 +70,38 @@ class BaseRoom:
         else:
             return jsonify("NOT FOUND"), 404
 
-    def getAllDayRoomSchedule(self, rid):
+    def getAllDayRoomSchedule(self, json):
+        rid = json['rid']
+        rsday = json['rsday']
         dao = RoomDAO()
         timeslot = dao.getTimeSlot()
-        occupiedTid = dao.getRoomOccupiedTimeSlots(rid)
+        occupiedTid = dao.getRoomOccupiedTimeSlots(rid, rsday)
 
         for time in timeslot:
-            for tid in occupiedTid:
-                if tid[3] == time['tid']:
-                    time['available'] = False
+            if time['tid'] in occupiedTid:
+                time['available'] = False
 
             if 'available' not in time:
                 time['available'] = True
 
         return jsonify(timeslot)
 
-    def findRoomAtTime(self, tid):
+    def findRoomAtTime(self, json):
+        tid = json['tid']
+        date = json['date']
         dao = RoomDAO()
-        result = dao.findRoomAtTime(tid)
+        result = dao.findRoomAtTime(tid, date)
         return jsonify(result)
 
     def findRoomAppointmentInfo(self, rid, uid):
         roomdao = RoomDAO()
         reservations = roomdao.findRoomReservations(rid)
+        rpermission = roomdao.getRoomPermission(rid)
         rscheduledao = ReservationScheduleDAO()
         membersdao = MembersDAO()
         userdao = UserDAO()
         permission = userdao.checkPermission(uid)
-        if permission == 'Professor' or permission == 'Department Staff':
+        if permission == rpermission:
             for res in reservations:
                 tidInReser = rscheduledao.getReservationScheduleByReservationId(res['resid'])
                 res['tid'] =[]

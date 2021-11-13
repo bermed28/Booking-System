@@ -16,6 +16,7 @@ class RoomScheduleDAO:
         result = []
         for row in cursor:
             result.append(row)
+        cursor.close()
         return result
 
     def getRoomScheduleById(self, rsid):
@@ -23,6 +24,7 @@ class RoomScheduleDAO:
         query = "select rsid, rid, tid, rsday from public.room_schedule where rsid = %s;"
         cursor.execute(query, (rsid,))
         result = cursor.fetchone()
+        cursor.close()
         return result
 
     def insertRoomSchedule(self, rid, tid, rsday):
@@ -31,6 +33,7 @@ class RoomScheduleDAO:
         cursor.execute(query, (rid, tid, rsday))
         rid = cursor.fetchone()[0]
         self.conn.commit()
+        cursor.close()
         return rid
 
     def updateRoomSchedule(self, rsid, rid, tid, rsday):
@@ -38,6 +41,7 @@ class RoomScheduleDAO:
         query = "update public.room_schedule set rid = %s, tid = %s, rsday = %s where rsid = %s;"
         cursor.execute(query, (rid, tid, rsday, rsid))
         self.conn.commit()
+        cursor.close()
         return True
 
     def deleteRoomSchedule(self, rsid):
@@ -49,4 +53,8 @@ class RoomScheduleDAO:
         self.conn.commit()
         # if affected rows == 0, the part was not found and hence not deleted
         # otherwise, it was deleted, so check if affected_rows != 0
+        cursor.close()
         return affected_rows != 0
+
+    def __del__(self):
+        self.conn.close()
