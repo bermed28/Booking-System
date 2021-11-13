@@ -11,7 +11,7 @@ class UserScheduleDAO:
 
     def getAllUserSchedules(self):
         cursor = self.conn.cursor()
-        query = "select usid, uavailability, uid, tid, usday from public.user_schedule;"
+        query = "select usid, uid, tid, usday from public.user_schedule;"
         cursor.execute(query)
         result = []
         for row in cursor:
@@ -20,23 +20,23 @@ class UserScheduleDAO:
 
     def getUserScheduleById(self, usid):
         cursor = self.conn.cursor()
-        query = "select usid, uavailability, uid, tid, usday from public.user_schedule where usid = %s;"
+        query = "select usid, uid, tid, usday from public.user_schedule where usid = %s;"
         cursor.execute(query, (usid,))
         result = cursor.fetchone()
         return result
 
-    def insertUserSchedule(self, uavailability, uid, tid, usday):
+    def insertUserSchedule(self, uid, tid, usday):
         cursor = self.conn.cursor()
-        query = "insert into public.user_schedule(uavailability, uid, tid, usday) values(%s,%s,%s,%s) returning usid;"
-        cursor.execute(query, (uavailability, uid, tid, usday))
+        query = "insert into public.user_schedule(uid, tid, usday) values(%s,%s,%s) returning usid;"
+        cursor.execute(query, (uid, tid, usday))
         rid = cursor.fetchone()[0]
         self.conn.commit()
         return rid
 
-    def updateUserSchedule(self, usid, uavailability, uid, tid, usday):
+    def updateUserSchedule(self, usid, uid, tid, usday):
         cursor = self.conn.cursor()
-        query = "update public.user_schedule set uavailability = %s, uid = %s, tid = %s, usday = %s where usid = %s;"
-        cursor.execute(query, (uavailability, uid, tid, usday, usid))
+        query = "update public.user_schedule set uid = %s, tid = %s, usday = %s where usid = %s;"
+        cursor.execute(query, (uid, tid, usday, usid))
         self.conn.commit()
         return True
 

@@ -11,7 +11,7 @@ class RoomScheduleDAO:
 
     def getAllRoomSchedules(self):
         cursor = self.conn.cursor()
-        query = "select rsid, rsavailability, rid, tid, rsday from public.room_schedule;"
+        query = "select rsid, rid, tid, rsday from public.room_schedule;"
         cursor.execute(query)
         result = []
         for row in cursor:
@@ -20,23 +20,23 @@ class RoomScheduleDAO:
 
     def getRoomScheduleById(self, rsid):
         cursor = self.conn.cursor()
-        query = "select rsid, rsavailability, rid, tid, rsday from public.room_schedule where rsid = %s;"
+        query = "select rsid, rid, tid, rsday from public.room_schedule where rsid = %s;"
         cursor.execute(query, (rsid,))
         result = cursor.fetchone()
         return result
 
-    def insertRoomSchedule(self, rsavailability, rid, tid, rsday):
+    def insertRoomSchedule(self, rid, tid, rsday):
         cursor = self.conn.cursor()
-        query = "insert into public.room_schedule(rsavailability, rid, tid, rsday) values(%s,%s,%s,%s) returning rsid;"
-        cursor.execute(query, (rsavailability, rid, tid, rsday))
+        query = "insert into public.room_schedule(rid, tid, rsday) values(%s,%s,%s) returning rsid;"
+        cursor.execute(query, (rid, tid, rsday))
         rid = cursor.fetchone()[0]
         self.conn.commit()
         return rid
 
-    def updateRoomSchedule(self, rsid, uavailability, rid, tid, rsday):
+    def updateRoomSchedule(self, rsid, rid, tid, rsday):
         cursor = self.conn.cursor()
-        query = "update public.room_schedule set rsavailability = %s, rid = %s, tid = %s, rsday = %s where rsid = %s;"
-        cursor.execute(query, (uavailability, rid, tid, rsday, rsid))
+        query = "update public.room_schedule set rid = %s, tid = %s, rsday = %s where rsid = %s;"
+        cursor.execute(query, (rid, tid, rsday, rsid))
         self.conn.commit()
         return True
 
