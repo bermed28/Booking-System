@@ -102,7 +102,7 @@ class BaseReservation:
         if dao.checkForConflicts(rid, resday, new_time_slots):
             return jsonify("This reservation cannot be made at this time due to a conflict.")
         updated_reservation = dao.updateReservation(resid, resname, resday, rid, uid)
-        reserv_dao.deleteReseravtionSchedule(resid)
+        reserv_dao.deleteReservationSchedule(resid)
         for tid in time_slots:
             reserv_dao.insertReservationSchedule(resid, tid)
         result = self.build_attr_dict(resid, resname, resday, rid, uid)
@@ -110,12 +110,40 @@ class BaseReservation:
         return jsonify(result), 200
 
     def deleteReservation(self, resid):
-        dao = ReservationDAO()
-        result = dao.deleteReservation(resid)
-        if result:
+        """
+        Delete from Reservation, Reservation/User/Room Schedule, Members
+        """
+        reservationdDAO, membersDAO = ReservationDAO(), MembersDAO()
+        roomSchedDAO, userSchedDAO, resSchedDAO = RoomScheduleDAO(), UserScheduleDAO(), ReservationScheduleDAO()
+
+        reservationInfo = reservationdDAO.getReservationById(resid)
+        memberList = membersDAO.getMembersByReservationId(resid)
+        memberList.append((reservationInfo[4], resid))
+        timeSlotList = resSchedDAO.getTimeSlotsByReservationId(resid)
+        day, room = reservationInfo[2], reservationInfo[3]
+
+        delUserSched, delRoomSched = True, True
+
+        for member in memberList:
+            for time in timeSlotList:
+                if not userSchedDAO.deleteUserSchedulebyTimeIDAndDay(member[0], time, day):
+                    delUserSched = False
+
+        for time in timeSlotList:
+            if not roomSchedDAO.deleteRoomScheduleByTimeAndDay(room, time, day):
+                delRoomSched = False
+
+        delMembers = membersDAO.deleteReservationMembers(resid)
+        delResSched = resSchedDAO.deleteReservationSchedule(resid)
+
+        delRes = reservationdDAO.deleteReservation(resid)
+
+
+        if delRes and delMembers and delUserSched and delRoomSched and delRes:
             return jsonify("DELETED"), 200
         else:
-            return jsonify("NOT FOUND"), 404
+            return jsonify("COULD NOT DELETE RESERVATION CORRECTLY"), 500
+
 
     def getMostUsedRooms(self, num):
         dao = ReservationDAO()

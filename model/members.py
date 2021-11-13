@@ -57,10 +57,10 @@ class MembersDAO:
         cursor.close()
         return True
 
-    def deleteMember(self, uid):
+    def deleteReservationMembers(self, resid):
         cursor = self.conn.cursor()
-        query = "delete from public.members where uid=%s;"
-        cursor.execute(query, (uid,))
+        query = "delete from public.members where resid=%s;"
+        cursor.execute(query, (resid,))
         # determine affected rows
         affected_rows = cursor.rowcount
         self.conn.commit()
@@ -68,6 +68,20 @@ class MembersDAO:
         # otherwise, it was deleted, so check if affected_rows != 0
         cursor.close()
         return affected_rows != 0
+
+    def deleteMemberbyReservationID(self, uid, resid):
+        cursor = self.conn.cursor()
+        query = "delete from public.members where uid=%s and resid=%s;"
+        cursor.execute(query, (uid,resid))
+        # determine affected rows
+        affected_rows = cursor.rowcount
+        self.conn.commit()
+        # if affected rows == 0, the part was not found and hence not deleted
+        # otherwise, it was deleted, so check if affected_rows != 0
+        cursor.close()
+        return affected_rows != 0
+
+
 
     def __del__(self):
         self.conn.close()
