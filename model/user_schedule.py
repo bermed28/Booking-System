@@ -9,6 +9,9 @@ class UserScheduleDAO:
         print("conection url:  ", connection_url)
         self.conn = psycopg2.connect(connection_url)
 
+    def __del__(self):
+        self.conn.close()
+
     def getAllUserSchedules(self):
         cursor = self.conn.cursor()
         query = "select usid, uid, tid, usday from public.user_schedule;"
@@ -16,6 +19,7 @@ class UserScheduleDAO:
         result = []
         for row in cursor:
             result.append(row)
+        cursor.close()
         return result
 
     def getUserScheduleById(self, usid):
@@ -23,6 +27,7 @@ class UserScheduleDAO:
         query = "select usid, uid, tid, usday from public.user_schedule where usid = %s;"
         cursor.execute(query, (usid,))
         result = cursor.fetchone()
+        cursor.close()
         return result
 
     def insertUserSchedule(self, uid, tid, usday):
@@ -31,6 +36,7 @@ class UserScheduleDAO:
         cursor.execute(query, (uid, tid, usday))
         rid = cursor.fetchone()[0]
         self.conn.commit()
+        cursor.close()
         return rid
 
     def updateUserSchedule(self, usid, uid, tid, usday):
@@ -38,6 +44,7 @@ class UserScheduleDAO:
         query = "update public.user_schedule set uid = %s, tid = %s, usday = %s where usid = %s;"
         cursor.execute(query, (uid, tid, usday, usid))
         self.conn.commit()
+        cursor.close()
         return True
 
     def deleteUserSchedule(self, usid):
@@ -49,6 +56,7 @@ class UserScheduleDAO:
         self.conn.commit()
         # if affected rows == 0, the part was not found and hence not deleted
         # otherwise, it was deleted, so check if affected_rows != 0
+        cursor.close()
         return affected_rows != 0
 
     def getOccupiedTid(self, uid, usday):
@@ -58,4 +66,5 @@ class UserScheduleDAO:
         result = []
         for row in cursor:
             result.append(row[0])
+        cursor.close()
         return result
