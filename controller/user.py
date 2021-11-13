@@ -81,15 +81,16 @@ class BaseUser:
         result = dao.getMostUsedRoombyUser(uid)
         return jsonify(result)
 
-    def getAllDayUserSchedule(self, uid):
+    def getAllDayUserSchedule(self, json):
+        uid = json['uid']
+        usday = json['usday']
         dao = UserDAO()
         timeslot = dao.getTimeSlot()
-        occupiedTid = dao.getUserOccupiedTimeSlots(uid)
+        occupiedTid = dao.getUserOccupiedTimeSlots(uid, usday)
 
         for time in timeslot:
-            for tid in occupiedTid:
-                if tid[3] == time['tid']:
-                    time['available'] = False
+            if time['tid'] in occupiedTid:
+                time['available'] = False
 
             if 'available' not in time:
                 time['available'] = True
