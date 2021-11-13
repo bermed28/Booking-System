@@ -29,9 +29,9 @@ class ReservationDAO:
         cursor = self.conn.cursor()
         query = "insert into public.reservation(resname, resday, rid, uid) values(%s,%s,%s,%s) returning resid;"
         cursor.execute(query, (resname, resday, rid, uid))
-        rid = cursor.fetchone()[0]
+        resid = cursor.fetchone()[0]
         self.conn.commit()
-        return rid
+        return resid
 
     def updateReservation(self, resid, resname, resday, rid, uid):
         cursor = self.conn.cursor()
@@ -85,7 +85,8 @@ class ReservationDAO:
 
     def getMostBookedUsers(self, num):
         cursor = self.conn.cursor()
-        query = "select uid, frequency, ufirstname from (select uid, count(*) as frequency from reservation group by uid) as temp1 natural inner join public.user order by frequency desc limit %s"
+        query = "select uid, frequency, ufirstname from (select uid, count(*) as frequency \
+                from reservation group by uid) as temp1 natural inner join public.user order by frequency desc limit %s"
         cursor.execute(query, (num,))
         result = []
         for row in cursor:
@@ -94,3 +95,13 @@ class ReservationDAO:
             dict["ufirstname"] = row[2]
             result.append(dict)
         return result
+
+    def checkForConflicts(self, rid, resday, time_slots):
+        cursor = self.conn.cursor()
+        query = "select * from reservation natural inner join reservation_schedule where rid = %s and resday = %s and tid = %s"
+        temp = []
+        for time_slot in time_slots:
+            cursor.execute(query, (rid, resday, time_slot))
+            if cursor.rowcount > 0:
+                return True
+        return False

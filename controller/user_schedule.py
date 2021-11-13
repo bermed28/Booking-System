@@ -45,8 +45,8 @@ class BaseUserSchedule:
         tid = json['tid']
         usday = json['usday']
         dao = UserScheduleDAO()
-        usid = dao.insertUserSchedule(uavailability, uid, tid)
-        result = self.build_attr_dict(usid, uavailability, uid, tid)
+        usid = dao.insertUserSchedule(uavailability, uid, tid, usday)
+        result = self.build_attr_dict(usid, uavailability, uid, tid, usday)
         return jsonify(result), 201
 
     def updateUserSchedule(self, json):
@@ -56,8 +56,8 @@ class BaseUserSchedule:
         usid = json['usid']
         usday = json['usday']
         dao = UserScheduleDAO()
-        updated_user_schedule = dao.updateUserSchedule(usid, uavailability, uid, tid)
-        result = self.build_attr_dict(usid, uavailability, uid, tid)
+        updated_user_schedule = dao.updateUserSchedule(usid, uavailability, uid, tid, usday)
+        result = self.build_attr_dict(usid, uavailability, uid, tid, usday)
         return jsonify(result), 200
 
     def deleteUserSchedule(self, usid):

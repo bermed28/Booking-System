@@ -33,10 +33,10 @@ class UserScheduleDAO:
         self.conn.commit()
         return rid
 
-    def updateUserSchedule(self, usid, uavailability, uid, tid):
+    def updateUserSchedule(self, usid, uavailability, uid, tid, usday):
         cursor = self.conn.cursor()
-        query = "update public.user_schedule set uavailability = %s, uid = %s, tid = %s where usid = %s;"
-        cursor.execute(query, (uavailability, uid, tid, usid))
+        query = "update public.user_schedule set uavailability = %s, uid = %s, tid = %s, usday = %s where usid = %s;"
+        cursor.execute(query, (uavailability, uid, tid, usday, usid))
         self.conn.commit()
         return True
 
