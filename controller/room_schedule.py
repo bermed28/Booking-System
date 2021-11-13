@@ -8,16 +8,14 @@ class BaseRoomSchedule:
     def build_map_dict(self, row):
         result = {}
         result['rsid'] = row[0]
-        result['rsavailability'] = row[1]
-        result['rid'] = row[2]
-        result['tid'] = row[3]
-        result['rsday'] = row[4]
+        result['rid'] = row[1]
+        result['tid'] = row[2]
+        result['rsday'] = row[3]
         return result
 
-    def build_attr_dict(self, rsid, rsavailability, rid, tid, rsday):
+    def build_attr_dict(self, rsid, rid, tid, rsday):
         result = {}
         result['rsid'] = rsid
-        result['rsavailability'] = rsavailability
         result['rid'] = rid
         result['tid'] = tid
         result['rsday'] = rsday
@@ -32,45 +30,44 @@ class BaseRoomSchedule:
             result_list.append(obj)
         return jsonify(result_list)
 
-    def getRoomScheduleById(self, usid):
+    def getRoomScheduleById(self, rsid):
         dao = RoomScheduleDAO()
-        room_schedule_tuple = dao.getRoomScheduleById(usid)
+        room_schedule_tuple = dao.getRoomScheduleById(rsid)
         if not room_schedule_tuple:
             return jsonify("Not Found"), 404
         else:
             result = self.build_map_dict(room_schedule_tuple)
             return jsonify(result), 200
 
-    def addNewRoomSchedule(self, json, uid):
-        rsavailability = json['rsavailability']
+    def addNewRoomSchedule(self, json):
         rid = json['rid']
         tid = json['tid']
         rsday = json['rsday']
+        uid = json['uid']
         dao = RoomScheduleDAO()
         userdao = UserDAO()
         permission = userdao.checkPermission(uid)
         print(permission)
         if permission == 'Professor' or permission == 'Department Staff':
-            rsid = dao.insertRoomSchedule(rsavailability, rid, tid, rsday)
-            result = self.build_attr_dict(rsid, rsavailability, rid, tid, rsday)
+            rsid = dao.insertRoomSchedule(rid, tid, rsday)
+            result = self.build_attr_dict(rsid, rid, tid, rsday)
             return jsonify(result), 201
         else:
             return jsonify("This user does not have permission"), 404
 
-    def updateRoomSchedule(self, json):
-        rsavailability = json['rsavailability']
+    def updateRoomSchedule(self, rsid, json):
         rid = json['rid']
         tid = json['tid']
-        rsid = json['rsid']
         rsday = json['rsday']
         dao = RoomScheduleDAO()
-        updated_room_schedule = dao.updateRoomSchedule(rsid, rsavailability, rid, tid, rsday)
-        result = self.build_attr_dict(rsid, rsavailability, rid, tid, rsday)
+        updated_room_schedule = dao.updateRoomSchedule(rsid, rid, tid, rsday)
+        result = self.build_attr_dict(rsid, rid, tid, rsday)
         return jsonify(result), 200
 
-    def deleteRoomSchedule(self, rsid, uid):
+    def deleteRoomSchedule(self, rsid, json):
         dao = RoomScheduleDAO()
         userdao = UserDAO()
+        uid = json['uid']
         permission = userdao.checkPermission(uid)
         if permission == 'Professor' or permission == 'Department Staff':
             result = dao.deleteRoomSchedule(rsid)
