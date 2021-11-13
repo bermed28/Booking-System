@@ -50,3 +50,12 @@ class UserScheduleDAO:
         # if affected rows == 0, the part was not found and hence not deleted
         # otherwise, it was deleted, so check if affected_rows != 0
         return affected_rows != 0
+
+    def getOccupiedTid(self, uid, usday):
+        cursor = self.conn.cursor()
+        query = "select distinct tid, usday from user_schedule where uid = %s and usday = %s"
+        cursor.execute(query, (uid,usday))
+        result = []
+        for row in cursor:
+            result.append(row[0])
+        return result

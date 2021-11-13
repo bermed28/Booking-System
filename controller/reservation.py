@@ -3,6 +3,10 @@ from model.reservation import ReservationDAO
 from model.members import MembersDAO
 from model.user_schedule import UserScheduleDAO
 from model.room_schedule import RoomScheduleDAO
+from model.time_slot import TimeSlotDAO
+from controller.time_slot import BaseTimeSlot
+from model.reservation_schedule import ReservationScheduleDAO
+
 
 class BaseReservation:
 
@@ -30,6 +34,12 @@ class BaseReservation:
         result_list = []
         for row in reservation_list:
             obj = self.build_map_dict(row)
+            rsdao = ReservationScheduleDAO()
+            rs = rsdao.getReservationScheduleByReservationId(obj['resid'])
+            times = []
+            for t in rs:
+                times.append(t[1])
+            obj['tids'] = times
             result_list.append(obj)
         return jsonify(result_list)
 
@@ -40,6 +50,12 @@ class BaseReservation:
             return jsonify("Not Found"), 404
         else:
             result = self.build_map_dict(reservation_tuple)
+            rsdao = ReservationScheduleDAO()
+            rs = rsdao.getReservationScheduleByReservationId(resid)
+            times = []
+            for t in rs:
+                times.append(t[1])
+            result['tids'] = times
             return jsonify(result), 200
 
     def addNewReservation(self, json):
@@ -108,3 +124,29 @@ class BaseReservation:
         dao = ReservationDAO()
         result = dao.getMostBookedUsers(num)
         return jsonify(result)
+
+    def getFreeTime(self, json):
+        uids = json['uids']
+        usday = json['usday']
+        uschedao = UserScheduleDAO()
+        tsdao = TimeSlotDAO()
+        result = []
+        allOccupiedTid = []
+        for uid in uids:
+            #finds occupied tid of a specific user on a certain day
+            occupiedTids = uschedao.getOccupiedTid(uid, usday)
+            for tid in occupiedTids:
+                if tid not in allOccupiedTid:
+                    allOccupiedTid.append(tid)
+
+        timeslots = tsdao.getAllTimeSlots()
+        #loops through all the time slots and only keeps the ones that are not occupied for a user
+        for time in timeslots:
+            if int(time[0]) not in allOccupiedTid:
+                result.append(BaseTimeSlot().build_map_dict(time))
+
+        return jsonify(result)
+
+
+
+
