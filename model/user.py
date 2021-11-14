@@ -118,30 +118,20 @@ class UserDAO:
 
     def getMostBookedWith(self, uid):
         cursor = self.conn.cursor()
-        #Get all the members that are have been in the same reservation as the uid
-        query = "with todoResid as (select reservation.resid from\
-                reservation inner join members on reservation.resid = members.resid\
-                where reservation.uid = %s or members.uid = %s)\
-                select uid, count(*) from (select * from members natural inner join todoResid where uid <> %s)\
-                as temp2 group by uid"
+        query = "with involved_reservations as (select resid from ((select uid, resid from reservation where uid = %s) \
+        union (select uid, resid from members where uid = %s)) as temp), involvements_per_user as ( \
+        select uid, count(*) as involvements from ((select uid, resid from reservation) union (select \
+        uid, resid from members)) as temp2 where resid in(select resid from involved_reservations) and uid <> %s \
+        group by uid) select * from public.user natural inner join involvements_per_user order by involvements desc;"
         cursor.execute(query, (uid, uid, uid))
+        row = cursor.fetchone()
         result = {}
-        for row in cursor:
-            result[row[0]] = row[1]
-        # Get all the users that have created a reservation and invited the uid
-        query2 = "with todoResid as (select reservation.resid from \
-                reservation inner join members on reservation.resid = members.resid where\
-                reservation.uid = %s or members.uid = %s)\
-                select uid, count(*) from (select * from \
-                reservation natural inner join todoResid where uid <> %s)as temp2 group by uid"
-        cursor.execute(query2, (uid, uid, uid))
-        for row in cursor:
-            if row[0] in result:
-                result[row[0]] += row[1]
-
-        cursor.close()
-        v = list(result.values())
-        maxVal = max(result.values())
-        k = list(result.keys())
-        resuid = k[v.index(maxVal)]
-        return {"uid": resuid, "count": maxVal}
+        result['uid'] = row[0]
+        result['username'] = row[1]
+        result['uemail'] = row[2]
+        result['upassword'] = row[3]
+        result['ufirstname'] = row[4]
+        result['ulastname'] = row[5]
+        result['upermission'] = row[6]
+        result['times booked together'] = row[7]
+        return result

@@ -80,7 +80,7 @@ class BaseReservation:
         members = json['members']
         time_slots = json['time_slots']
         room_dao = RoomDAO()
-        if len(members) > room_dao.getRoomCapacity(rid):
+        if len(members) + 1 > room_dao.getRoomCapacity(rid):
             return jsonify("This reservation cannot be made because there are too many people for this room."), 400
         members.append(uid)
         dao = ReservationDAO()
@@ -111,6 +111,9 @@ class BaseReservation:
         time_slots = json['tids']
         new_time_slots = []
         dao = ReservationDAO()
+        room_dao = RoomDAO()
+        if len(members) + 1 > room_dao.getRoomCapacity(rid):
+            return jsonify("This reservation cannot be made because there are too many people for this room."), 400
         resSchedDAO = ReservationScheduleDAO()
         used_tids = dao.getInUseTids(resid)
         for tid in time_slots:

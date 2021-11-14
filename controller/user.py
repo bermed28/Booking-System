@@ -103,6 +103,4 @@ class BaseUser:
     def getMostBookedWith(self, uid):
         dao = UserDAO()
         user = dao.getMostBookedWith(uid)
-        userInfo = dao.getUserById(user['uid'])
-        user['uname'] = userInfo[4] + " " + userInfo[5]
         return jsonify(user)
