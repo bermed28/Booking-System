@@ -56,5 +56,17 @@ class RoomScheduleDAO:
         cursor.close()
         return affected_rows != 0
 
+    def checkForConflicts(self, rid, rsday, time_slots):
+        boolean = False
+        cursor = self.conn.cursor()
+        query = "select * from room_schedule where rid = %s and rsday = %s and tid = %s"
+        for time_slot in time_slots:
+            cursor.execute(query, (rid, rsday, time_slot))
+            if cursor.rowcount > 0:
+                boolean = True
+                break
+        cursor.close()
+        return boolean
+
     def __del__(self):
         self.conn.close()

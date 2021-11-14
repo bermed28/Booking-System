@@ -35,7 +35,7 @@ def handleUsersbyId(uid):
     if request.method == 'GET':
         return BaseUser().getUserById(uid)
     elif request.method == 'PUT':
-        return BaseUser().updateUser(request.json)
+        return BaseUser().updateUser(uid, request.json)
     elif request.method == 'DELETE':
         return BaseUser().deleteUser(uid)
 

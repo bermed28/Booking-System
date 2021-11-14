@@ -47,7 +47,8 @@ class BaseRoomSchedule:
         dao = RoomScheduleDAO()
         userdao = UserDAO()
         permission = userdao.checkPermission(uid)
-        print(permission)
+        if dao.checkForConflicts(rid, rsday, [tid]):
+            return jsonify("This room is already unavailable at this particular time.")
         if permission == 'Department Staff':
             rsid = dao.insertRoomSchedule(rid, tid, rsday)
             result = self.build_attr_dict(rsid, rid, tid, rsday)
@@ -60,6 +61,8 @@ class BaseRoomSchedule:
         tid = json['tid']
         rsday = json['rsday']
         dao = RoomScheduleDAO()
+        if dao.checkForConflicts(rid, rsday, [tid]):
+            return jsonify("This room is already unavailable at this particular time.")
         updated_room_schedule = dao.updateRoomSchedule(rsid, rid, tid, rsday)
         result = self.build_attr_dict(rsid, rid, tid, rsday)
         return jsonify(result), 200
