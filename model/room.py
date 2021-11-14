@@ -79,7 +79,7 @@ class RoomDAO:
         cursor.execute(query, (rid, rsday))
         result = []
         for row in cursor:
-            result.append(row)
+            result.append(row[0])
         cursor.close()
         return result
 

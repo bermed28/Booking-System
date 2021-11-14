@@ -75,6 +75,7 @@ class BaseRoom:
         rsday = json['rsday']
         dao = RoomDAO()
         timeslot = dao.getTimeSlot()
+        dao = RoomDAO()
         occupiedTid = dao.getRoomOccupiedTimeSlots(rid, rsday)
 
         for time in timeslot:
