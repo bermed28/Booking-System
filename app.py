@@ -6,6 +6,7 @@ from controller.room import BaseRoom
 from controller.reservation import BaseReservation
 from controller.room_schedule import BaseRoomSchedule
 from controller.time_slot import BaseTimeSlot
+from controller.members import BaseMembers
 
 app = Flask(__name__)
 #apply CORS
@@ -70,18 +71,32 @@ def handleReservationbyId(resid):
     elif request.method == 'DELETE':
         return BaseReservation().deleteReservation(resid)
 
+@app.route('/StackOverflowersStudios/members', methods=['GET', 'POST'])
+def handleMembers():
+    if request.method == 'POST':
+        return BaseMembers().addNewMember(request.json)
+    else:
+        return BaseMembers().getAllMembers()
+
+@app.route('/StackOverflowersStudios/members/<int:uid>', methods=['GET', 'DELETE'])
+def handleMembersbyId(uid):
+    if request.method == 'GET':
+        return BaseMembers().getMembersByUserId(uid)
+    elif request.method == 'DELETE':
+        return BaseMembers().deleteMember(uid)
+
 # Global Statistics
-@app.route('/StackOverflowersStudios/reservation/busiest-hours/<int:num>', methods=['GET'])
-def handleHourStat(num):
-    return BaseReservation().getBusiestHours(num)
+@app.route('/StackOverflowersStudios/reservation/busiest-hours', methods=['GET'])
+def handleHourStat():
+    return BaseReservation().getBusiestHours()
 
-@app.route('/StackOverflowersStudios/reservation/most-used/<int:num>', methods=['GET'])
-def handleRoomStat(num):
-    return BaseReservation().getMostUsedRooms(num)
+@app.route('/StackOverflowersStudios/reservation/most-used', methods=['GET'])
+def handleRoomStat():
+    return BaseReservation().getMostUsedRooms()
 
-@app.route('/StackOverflowersStudios/reservation/most-booked/<int:num>', methods=['GET'])
-def handleUserStat(num):
-    return BaseReservation().getMostBookedUsers(num)
+@app.route('/StackOverflowersStudios/reservation/most-booked', methods=['GET'])
+def handleUserStat():
+    return BaseReservation().getMostBookedUsers()
 
 @app.route('/StackOverflowersStudios/user-schedule', methods=['GET', 'POST'])
 def handleUserSchedules():
@@ -141,7 +156,6 @@ def handleAllDayUserSchedule():
 def handleAllDayRoomSchedule():
     return BaseRoom().getAllDayRoomSchedule(request.json)
 
-#cambiar esto a request.json también
 @app.route('/StackOverflowersStudios/reservation/whoAppointed', methods=['GET'])
 def handlegetWhoAppointedRoomAtTime():
     return BaseReservation().getWhoAppointedRoomAtTime(request.json)
@@ -157,6 +171,14 @@ def handleRoomAppointmentInfo(rid, uid):
 @app.route('/StackOverflowersStudios/reservation/getFreeTime', methods=['GET'])
 def handlegetFreeTime():
     return BaseReservation().getFreeTime(request.json)
+
+@app.route('/StackOverflowersStudios/user-schedule/markunavailable', methods=['POST'])
+def handlemarkUserUnavailable():
+    return BaseUserSchedule().addNewUserSchedule(request.json)
+
+@app.route('/StackOverflowersStudios/room-schedule/markunavailable', methods=['POST'])
+def handlemarkRoomUnavailable():
+    return BaseRoomSchedule().addNewRoomSchedule(request.json)
 
 if __name__ == '__main__':
     app.run(debug=True, port=8080, host="0.0.0.0")

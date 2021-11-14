@@ -34,10 +34,10 @@ class UserScheduleDAO:
         cursor = self.conn.cursor()
         query = "insert into public.user_schedule(uid, tid, usday) values(%s,%s,%s) returning usid;"
         cursor.execute(query, (uid, tid, usday))
-        rid = cursor.fetchone()[0]
+        usid = cursor.fetchone()[0]
         self.conn.commit()
         cursor.close()
-        return rid
+        return usid
 
     def updateUserSchedule(self, usid, uid, tid, usday):
         cursor = self.conn.cursor()

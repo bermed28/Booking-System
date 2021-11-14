@@ -48,7 +48,7 @@ class BaseRoomSchedule:
         userdao = UserDAO()
         permission = userdao.checkPermission(uid)
         print(permission)
-        if permission == 'Professor' or permission == 'Department Staff':
+        if permission == 'Department Staff':
             rsid = dao.insertRoomSchedule(rid, tid, rsday)
             result = self.build_attr_dict(rsid, rid, tid, rsday)
             return jsonify(result), 201

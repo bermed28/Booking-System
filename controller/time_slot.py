@@ -7,7 +7,7 @@ class BaseTimeSlot:
         result = {}
         result['tid'] = row[0]
         result['tstarttime'] = row[1]
-        result['tendtime'] = row[1]
+        result['tendtime'] = row[2]
         return result
 
     def build_attr_dict(self, tid, tstarttime, tendttime):
