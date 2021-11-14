@@ -137,5 +137,13 @@ class RoomDAO:
         cursor.close()
         return result
 
+    def getRoomCapacity(self, rid):
+        cursor = self.conn.cursor()
+        query = "select rcapacity from room where rid = %s"
+        cursor.execute(query, (rid,))
+        result = cursor.fetchone()[0]
+        cursor.close()
+        return result
+
     def __del__(self):
         self.conn.close()

@@ -6,6 +6,7 @@ from model.room_schedule import RoomScheduleDAO
 from model.time_slot import TimeSlotDAO
 from controller.time_slot import BaseTimeSlot
 from model.reservation_schedule import ReservationScheduleDAO
+from model.room import RoomDAO
 
 
 class BaseReservation:
@@ -78,6 +79,9 @@ class BaseReservation:
         uid = json['uid']
         members = json['members']
         time_slots = json['time_slots']
+        room_dao = RoomDAO()
+        if len(members) > room_dao.getRoomCapacity(rid):
+            return jsonify("This reservation cannot be made because there are too many people for this room."), 400
         members.append(uid)
         dao = ReservationDAO()
         rs_dao = RoomScheduleDAO()
