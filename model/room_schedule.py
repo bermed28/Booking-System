@@ -56,6 +56,18 @@ class RoomScheduleDAO:
         cursor.close()
         return affected_rows != 0
 
+    def deleteRoomScheduleByTimeAndDay(self, rid, tid, rsday):
+        cursor = self.conn.cursor()
+        query = "delete from public.room_schedule where rid=%s and tid=%s and rsday=%s;"
+        cursor.execute(query, (rid,tid,rsday))
+        # determine affected rows
+        affected_rows = cursor.rowcount
+        self.conn.commit()
+        # if affected rows == 0, the part was not found and hence not deleted
+        # otherwise, it was deleted, so check if affected_rows != 0
+        cursor.close()
+        return affected_rows != 0
+
     def checkForConflicts(self, rid, rsday, time_slots):
         boolean = False
         cursor = self.conn.cursor()

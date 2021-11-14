@@ -9,6 +9,9 @@ class ReservationScheduleDAO:
         print("conection url:  ", connection_url)
         self.conn = psycopg2.connect(connection_url)
 
+    def __del__(self):
+        self.conn.close()
+
     def getAllReservationSchedules(self):
         cursor = self.conn.cursor()
         query = "select resid, tid from public.reservation_schedule;"
@@ -16,13 +19,17 @@ class ReservationScheduleDAO:
         result = []
         for row in cursor:
             result.append(row)
+        cursor.close()
         return result
 
-    def getReservationScheduleByTimeId(self, tid):
+    def getTimeSlotsByReservationId(self, resid):
         cursor = self.conn.cursor()
-        query = "select resid, tid from public.reservation_schedule where tid = %s;"
-        cursor.execute(query, (tid,))
-        result = cursor.fetchone()
+        query = "select tid from public.reservation_schedule where resid = %s;"
+        cursor.execute(query, (resid,))
+        result = []
+        for row in cursor:
+            result.append(row[0])
+        cursor.close()
         return result
 
     def getReservationScheduleByReservationId(self, resid):
@@ -32,6 +39,7 @@ class ReservationScheduleDAO:
         result = []
         for row in cursor:
             result.append(row)
+        cursor.close()
         return result
 
     def insertReservationSchedule(self, resid, tid):
@@ -39,6 +47,7 @@ class ReservationScheduleDAO:
         query = "insert into public.reservation_schedule(resid, tid) values(%s,%s);"
         cursor.execute(query, (resid, tid))
         self.conn.commit()
+        cursor.close()
         return [resid, tid]
 
     def updateReservationShedule(self, oldResid, newResid, tid):
@@ -46,15 +55,17 @@ class ReservationScheduleDAO:
         query = "update public.reservation_schedule set resid = %s, tid = %s where resid = %s;"
         cursor.execute(query, (newResid, tid, oldResid))
         self.conn.commit()
+        cursor.close()
         return True
 
-    def deleteReseravtionSchedule(self, resid):
+    def deleteReservationSchedule(self, resid):
         cursor = self.conn.cursor()
         query = "delete from public.reservation_schedule where resid=%s;"
         cursor.execute(query, (resid,))
         # determine affected rows
         affected_rows = cursor.rowcount
         self.conn.commit()
+        cursor.close()
         # if affected rows == 0, the part was not found and hence not deleted
         # otherwise, it was deleted, so check if affected_rows != 0
         return affected_rows != 0

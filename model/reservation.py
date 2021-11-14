@@ -40,10 +40,10 @@ class ReservationDAO:
         cursor.close()
         return resid
 
-    def updateReservation(self, resid, resname, resday, rid, uid):
+    def updateReservation(self, resid, resname, resday, rid):
         cursor = self.conn.cursor()
-        query = "update public.reservation set resname = %s, resday = %s, rid = %s, uid = %s where resid = %s;"
-        cursor.execute(query, (resname, resday, rid, uid, resid))
+        query = "update public.reservation set resname = %s, resday = %s, rid = %s where resid = %s;"
+        cursor.execute(query, (resname, resday, rid, resid))
         self.conn.commit()
         cursor.close()
         return True

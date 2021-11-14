@@ -23,7 +23,9 @@ class MembersDAO:
         cursor = self.conn.cursor()
         query = "select uid, resid from public.members where uid = %s;"
         cursor.execute(query, (uid,))
-        result = cursor.fetchone()
+        result = []
+        for row in cursor:
+            result.append(row)
         cursor.close()
         return result
 
@@ -57,14 +59,10 @@ class MembersDAO:
         cursor.close()
         return True
 
-    # Y si se quiere marcar como unavailable un time slot en el que ya hay una reunión?
-    # Entiendo que habría que hacer un join entre member, reservation, y reservation scheduler
-    # para borrar de members el row que tenga el uid de ese user, con el resid de la reservación
-    # de ese día en específico y a esa hora
-    def deleteMember(self, uid):
+    def deleteReservationMembers(self, resid):
         cursor = self.conn.cursor()
-        query = "delete from public.members where uid=%s;"
-        cursor.execute(query, (uid,))
+        query = "delete from public.members where resid=%s;"
+        cursor.execute(query, (resid,))
         # determine affected rows
         affected_rows = cursor.rowcount
         self.conn.commit()
@@ -72,6 +70,20 @@ class MembersDAO:
         # otherwise, it was deleted, so check if affected_rows != 0
         cursor.close()
         return affected_rows != 0
+
+    def deleteMemberbyReservationID(self, uid, resid):
+        cursor = self.conn.cursor()
+        query = "delete from public.members where uid=%s and resid=%s;"
+        cursor.execute(query, (uid,resid))
+        # determine affected rows
+        affected_rows = cursor.rowcount
+        self.conn.commit()
+        # if affected rows == 0, the part was not found and hence not deleted
+        # otherwise, it was deleted, so check if affected_rows != 0
+        cursor.close()
+        return affected_rows != 0
+
+
 
     def __del__(self):
         self.conn.close()
