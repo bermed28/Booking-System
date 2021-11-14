@@ -4,8 +4,8 @@ import psycopg2
 class RoomScheduleDAO:
 
     def __init__(self):
-        connection_url = "dbname=%s user=%s password=%s port=%s host='ec2-18-233-27-224.compute-1.amazonaws.com'" %(pg_config['dbname'], pg_config['user'],
-                                                                  pg_config['password'], pg_config['dbport'])
+        connection_url = "dbname=%s user=%s password=%s port=%s host='ec2-18-233-27-224.compute-1.amazonaws.com'" %(pg_config['dbname'],
+                          pg_config['user'], pg_config['password'], pg_config['dbport'])
         print("conection url:  ", connection_url)
         self.conn = psycopg2.connect(connection_url)
 
@@ -59,7 +59,7 @@ class RoomScheduleDAO:
     def deleteRoomScheduleByTimeAndDay(self, rid, tid, rsday):
         cursor = self.conn.cursor()
         query = "delete from public.room_schedule where rid=%s and tid=%s and rsday=%s;"
-        cursor.execute(query, (rid,tid,rsday))
+        cursor.execute(query, (rid, tid, rsday))
         # determine affected rows
         affected_rows = cursor.rowcount
         self.conn.commit()

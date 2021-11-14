@@ -5,8 +5,8 @@ import json
 class UserDAO:
 
     def __init__(self):
-        connection_url = "dbname=%s user=%s password=%s port=%s host='ec2-18-233-27-224.compute-1.amazonaws.com'" %(pg_config['dbname'], pg_config['user'],
-                                                                  pg_config['password'], pg_config['dbport'])
+        connection_url = "dbname=%s user=%s password=%s port=%s host='ec2-18-233-27-224.compute-1.amazonaws.com'" %(pg_config['dbname'],
+                          pg_config['user'], pg_config['password'], pg_config['dbport'])
         print("conection url:  ", connection_url)
         self.conn = psycopg2.connect(connection_url)
 
@@ -33,7 +33,8 @@ class UserDAO:
 
     def insertUser(self, username, uemail, upassword, ufirstname, ulastname, upermission):
         cursor = self.conn.cursor()
-        query = "insert into public.user(username, uemail, upassword, ufirstname, ulastname, upermission) values(%s,%s,%s,%s,%s,%s) returning uid;"
+        query = "insert into public.user(username, uemail, upassword, ufirstname, ulastname, upermission) \
+                 values(%s,%s,%s,%s,%s,%s) returning uid;"
         cursor.execute(query, (username, uemail, upassword, ufirstname, ulastname, upermission))
         uid = cursor.fetchone()[0]
         self.conn.commit()
@@ -42,7 +43,8 @@ class UserDAO:
 
     def updateUser(self, uid, username, uemail, upassword, ufirstname, ulastname, upermission):
         cursor = self.conn.cursor()
-        query = "update public.user set username = %s, uemail = %s, upassword = %s, ufirstname = %s, ulastname = %s, upermission = %s where uid = %s;"
+        query = "update public.user set username = %s, uemail = %s, upassword = %s, ufirstname = %s, ulastname = %s, \
+                 upermission = %s where uid = %s;"
         cursor.execute(query, (username, uemail, upassword, ufirstname, ulastname, upermission, uid))
         self.conn.commit()
         cursor.close()
@@ -125,7 +127,7 @@ class UserDAO:
         cursor.execute(query, (uid, uid, uid))
         result = {}
         for row in cursor:
-            result[row[0]]=row[1]
+            result[row[0]] = row[1]
         # Get all the users that have created a reservation and invited the uid
         query2 = "with todoResid as (select reservation.resid from \
                 reservation inner join members on reservation.resid = members.resid where\
@@ -135,7 +137,7 @@ class UserDAO:
         cursor.execute(query2, (uid, uid, uid))
         for row in cursor:
             if row[0] in result:
-                result[row[0]]+=row[1]
+                result[row[0]] += row[1]
 
         cursor.close()
         v = list(result.values())

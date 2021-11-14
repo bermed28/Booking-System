@@ -44,10 +44,6 @@ class MembersDAO:
         query = "insert into public.members(uid, resid) values(%s,%s)"
         cursor.execute(query, (uid, resid))
         self.conn.commit()
-        # row = cursor.fetchone()
-        # print(row)
-        # uid, resid = row[0], row[1]
-        # self.conn.commit()
         cursor.close()
         return True
 
