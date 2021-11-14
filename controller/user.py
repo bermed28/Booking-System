@@ -55,14 +55,13 @@ class BaseUser:
         result = self.build_attr_dict(uid, username, uemail, upassword, ufirstname, ulastname, upermission)
         return jsonify(result), 201
 
-    def updateUser(self, json):
+    def updateUser(self, uid, json):
         username = json['username']
         uemail = json['uemail']
         upassword = json['upassword']
         ufirstname = json['ufirstname']
         ulastname = json['ulastname']
         upermission = json['upermission']
-        uid = json['uid']
         dao = UserDAO()
         updated_user = dao.updateUser(uid, username, uemail, upassword, ufirstname, ulastname, upermission)
         result = self.build_attr_dict(uid, username, uemail, upassword, ufirstname, ulastname, upermission)
