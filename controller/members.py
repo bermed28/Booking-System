@@ -26,12 +26,15 @@ class BaseMembers:
 
     def getMembersByUserId(self, uid):
         dao = MembersDAO()
-        member = dao.getMemberByUserId(uid)
-        if not member:
+        members = dao.getMemberByUserId(uid)
+        if not members:
             return jsonify("Not Found"), 404
         else:
-            result = self.build_map_dict(member)
-            return jsonify(result), 200
+            result_list = []
+            for row in members:
+                obj = self.build_map_dict(row)
+                result_list.append(obj)
+            return jsonify(result_list), 200
 
     def addNewMember(self, json):
         uid = json['uid']
@@ -41,9 +44,9 @@ class BaseMembers:
         result = self.build_attr_dict(uid, resid)
         return jsonify(result), 201
 
-    def deleteMember(self, uid):
+    def deleteMember(self, uid, json):
         dao = MembersDAO()
-        result = dao.deleteMember(uid)
+        result = dao.deleteMemberbyReservationID(uid, json['resid'])
         if result:
             return jsonify("DELETED"), 200
         else:
