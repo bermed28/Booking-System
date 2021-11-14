@@ -75,14 +75,13 @@ class BaseReservation:
         time_slots = json['time_slots']
         members.append(uid)
         dao = ReservationDAO()
-        if dao.checkForConflicts(rid, resday, time_slots):
+        rs_dao = RoomScheduleDAO()
+        if dao.checkForConflicts(rid, resday, time_slots) or rs_dao.checkForConflicts(rid, resday, time_slots):
             return jsonify("This reservation cannot be made at this time due to a conflict.")
         resid = dao.insertReservation(resname, resday, rid, uid)
-        dao.__del__()
         result = self.build_attr_dict(resid, resname, resday, rid, uid)
         members_dao = MembersDAO()
         us_dao = UserScheduleDAO()
-        rs_dao = RoomScheduleDAO()
         reserv_dao = ReservationScheduleDAO()
         for member in json['members']:
             if member != uid:
@@ -90,12 +89,9 @@ class BaseReservation:
             for time_slot in time_slots:
                 us_dao.insertUserSchedule(member, time_slot, resday)
 
-        members_dao.__del__()
-        us_dao.__del__()
         for time_slot in time_slots:
             rs_dao.insertRoomSchedule(rid, time_slot, resday)
             reserv_dao.insertReservationSchedule(resid, time_slot)
-        reserv_dao.__del__()
         return jsonify(result), 201
 
     def updateReservation(self, resid, json):
@@ -112,7 +108,8 @@ class BaseReservation:
             if tid not in used_tids:
                 new_time_slots.append(tid)
 
-        if dao.checkForConflicts(rid, resday, new_time_slots):
+        roomSchedDAO = RoomScheduleDAO()
+        if dao.checkForConflicts(rid, resday, new_time_slots) or roomSchedDAO.checkForConflicts(rid, resday, time_slots):
             return jsonify("This reservation cannot be made at this time due to a conflict.")
 
         #Get old info before deleting
@@ -138,7 +135,7 @@ class BaseReservation:
             for time in used_tids:
                 userSchedDAO.deleteUserSchedulebyTimeIDAndDay(mem[0], time, oldate)
 
-        roomSchedDAO = RoomScheduleDAO()
+
         for time in used_tids:
             roomSchedDAO.deleteRoomScheduleByTimeAndDay(oldrid, time, oldate)
 

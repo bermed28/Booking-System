@@ -70,7 +70,6 @@ class RoomDAO:
             #Turning time to string with a json dumps avoids the type casting problem
             result.append(json.loads(json.dumps(dict, indent=4, default=str)))
         cursor.close()
-        self.conn.close()
         return result
 
     def getRoomOccupiedTimeSlots(self, rid, rsday):
