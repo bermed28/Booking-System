@@ -7,6 +7,7 @@ from model.time_slot import TimeSlotDAO
 from controller.time_slot import BaseTimeSlot
 from model.reservation_schedule import ReservationScheduleDAO
 from model.room import RoomDAO
+from model.user import UserDAO
 
 
 class BaseReservation:
@@ -87,6 +88,14 @@ class BaseReservation:
         rs_dao = RoomScheduleDAO()
         if dao.checkForConflicts(rid, resday, time_slots) or rs_dao.checkForConflicts(rid, resday, time_slots):
             return jsonify("This reservation cannot be made at this time due to a conflict."), 409
+        userdao = UserDAO()
+        for uid in members:
+            occupiedTids = userdao.getUserOccupiedTimeSlots(uid, resday)
+            for time in time_slots:
+                if time in occupiedTids:
+                    username = userdao.getUserById(uid)[1]
+                    return jsonify("This reservation cannot be made at this time because the user with username: " +
+                                   username + " has a time conflict."), 409
         resid = dao.insertReservation(resname, resday, rid, uid)
         result = self.build_attr_dict(resid, resname, resday, rid, uid)
         members_dao = MembersDAO()
@@ -114,6 +123,14 @@ class BaseReservation:
         room_dao = RoomDAO()
         if len(members) + 1 > room_dao.getRoomCapacity(rid):
             return jsonify("This reservation cannot be made because there are too many people for this room."), 400
+        userdao = UserDAO()
+        for uid in members:
+            occupiedTids = userdao.getUserOccupiedTimeSlots(uid, resday)
+            for time in time_slots:
+                if time in occupiedTids:
+                    username = userdao.getUserById(uid)[1]
+                    return jsonify("This reservation cannot be made at this time because the user with username: " +
+                                   username + " has a time conflict."), 409
         resSchedDAO = ReservationScheduleDAO()
         used_tids = dao.getInUseTids(resid)
         for tid in time_slots:
