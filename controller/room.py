@@ -3,6 +3,7 @@ from model.room import RoomDAO
 from model.reservation_schedule import ReservationScheduleDAO
 from model.members import MembersDAO
 from model.user import UserDAO
+from model.time_slot import TimeSlotDAO
 
 class BaseRoom:
 
@@ -104,13 +105,31 @@ class BaseRoom:
         if upermission == rpermission or upermission == 'Department Staff' or upermission == 'Professor':
             for res in reservations:
                 tidInReser = rscheduledao.getReservationScheduleByReservationId(res['resid'])
-                res['tid'] =[]
+                res['time slots'] = []
+                tsdao = TimeSlotDAO()
                 for tid in tidInReser:
-                    res['tid'].append(tid[1])
+                    time_slot = tsdao.getTimeSlotByTimeSlotId(tid[1])
+                    res['time slots'].append(time_slot[1] + " to " + time_slot[2])
                 members = membersdao.getMembersByReservationId(res['resid'])
                 res['members'] =[]
                 for member in members:
-                    res['members'].append(member[0])
+                    res['members'].append(userdao.getUserById(member[0])[1])
             return jsonify(reservations)
         else:
-            return jsonify("You do not have permission to view this information."), 403
+            reservations = roomdao.findRoomReservationsForUser(rid, uid)
+            if not reservations:
+                return jsonify("You do not have permission to view this information nor do you have any \
+                                information to view."), 403
+            else:
+                for res in reservations:
+                    tidInReser = rscheduledao.getReservationScheduleByReservationId(res['resid'])
+                    res['time slots'] = []
+                    tsdao = TimeSlotDAO()
+                    for tid in tidInReser:
+                        time_slot = tsdao.getTimeSlotByTimeSlotId(tid[1])
+                        res['time slots'].append(time_slot[1] + " to " + time_slot[2])
+                    members = membersdao.getMembersByReservationId(res['resid'])
+                    res['members'] = []
+                    for member in members:
+                        res['members'].append(userdao.getUserById(member[0])[1])
+                return jsonify(reservations)
