@@ -54,6 +54,9 @@ class BaseUserSchedule:
         tid = json['tid']
         usday = json['usday']
         dao = UserScheduleDAO()
+        #Check if it usid exist
+        if not dao.getUserScheduleById(usid):
+            return "User Schedule id does not exist, no update can be done"
         updated_user_schedule = dao.updateUserSchedule(usid, uid, tid, usday)
         result = self.build_attr_dict(usid, uid, tid, usday)
         return jsonify(result), 200
