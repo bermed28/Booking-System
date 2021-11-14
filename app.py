@@ -35,7 +35,7 @@ def handleUsersbyId(uid):
     if request.method == 'GET':
         return BaseUser().getUserById(uid)
     elif request.method == 'PUT':
-        return BaseUser().updateUser(request.json)
+        return BaseUser().updateUser(uid, request.json)
     elif request.method == 'DELETE':
         return BaseUser().deleteUser(uid)
 
@@ -83,7 +83,7 @@ def handleMembersbyId(uid):
     if request.method == 'GET':
         return BaseMembers().getMembersByUserId(uid)
     elif request.method == 'DELETE':
-        return BaseMembers().deleteMember(uid)
+        return BaseMembers().deleteMember(uid, request.json)
 
 # Global Statistics
 @app.route('/StackOverflowersStudios/reservation/busiest-hours', methods=['GET'])

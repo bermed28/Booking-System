@@ -139,7 +139,6 @@ class ReservationDAO:
         boolean = False
         cursor = self.conn.cursor()
         query = "select * from reservation natural inner join reservation_schedule where rid = %s and resday = %s and tid = %s"
-        temp = []
         for time_slot in time_slots:
             cursor.execute(query, (rid, resday, time_slot))
             if cursor.rowcount > 0:

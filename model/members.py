@@ -23,7 +23,9 @@ class MembersDAO:
         cursor = self.conn.cursor()
         query = "select uid, resid from public.members where uid = %s;"
         cursor.execute(query, (uid,))
-        result = cursor.fetchone()
+        result = []
+        for row in cursor:
+            result.append(row)
         cursor.close()
         return result
 
