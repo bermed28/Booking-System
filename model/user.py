@@ -62,14 +62,24 @@ class UserDAO:
 
     def getMostUsedRoombyUser(self, uid):
         cursor = self.conn.cursor()
-        query = "select rid, rname from (select rid, count(*) as frequency from (select * from reservation where uid = %s) as temp9 group by rid)as temp1  natural inner join room order by frequency desc limit 1;"
-        cursor.execute(query, (uid,))
-        result = cursor.fetchone()
+        query = "select rid, rname, frequency from \
+            (select rid, count(*) as frequency from\
+            (select * from reservation inner join members on reservation.resid = members.resid \
+            where members.uid = %s or reservation.uid = %s) as temp9 group by rid)as temp1\
+            natural inner join room order by frequency desc limit 1;"
+        cursor.execute(query, (uid, uid))
+        result = []
+        if cursor.rowcount <= 0:
+            return "User has not used any rooms"
+
+        row = cursor.fetchone()
         dict = {}
-        dict['rid'] = result[0]
-        dict['rname'] = result[1]
+        dict['rid'] = row[0]
+        dict['rname'] = row[1]
+        dict['frequency'] = row[2]
+        result.append(dict)
         cursor.close()
-        return [dict]
+        return result
 
     def getTimeSlot(self):
         cursor = self.conn.cursor()
@@ -104,17 +114,32 @@ class UserDAO:
         cursor.close()
         return result
 
-    def getMostBookedWith(self, uid, num):
+    def getMostBookedWith(self, uid):
         cursor = self.conn.cursor()
-        query = "select public.members.uid as invitee, count(*) as frequency from public.reservation inner join public.members \
-                 using(resid) where reservation.uid = %s group by members.uid order by frequency desc limit %s;"
-        cursor.execute(query, (uid, num))
-        result = []
+        #Get all the members that are have been in the same reservation as the uid
+        query = "with todoResid as (select reservation.resid from\
+                reservation inner join members on reservation.resid = members.resid\
+                where reservation.uid = %s or members.uid = %s)\
+                select uid, count(*) from (select * from members natural inner join todoResid where uid <> %s)\
+                as temp2 group by uid"
+        cursor.execute(query, (uid, uid, uid))
+        result = {}
         for row in cursor:
-            dict = {}
-            dict['uid'] = row[0]
-            dict['frequency'] = row[1]
-            result.append(dict)
-        cursor.close()
-        return result
+            result[row[0]]=row[1]
+        # Get all the users that have created a reservation and invited the uid
+        query2 = "with todoResid as (select reservation.resid from \
+                reservation inner join members on reservation.resid = members.resid where\
+                reservation.uid = %s or members.uid = %s)\
+                select uid, count(*) from (select * from \
+                reservation natural inner join todoResid where uid <> %s)as temp2 group by uid"
+        cursor.execute(query2, (uid, uid, uid))
+        for row in cursor:
+            if row[0] in result:
+                result[row[0]]+=row[1]
 
+        cursor.close()
+        v = list(result.values())
+        maxVal = max(result.values())
+        k = list(result.keys())
+        resuid = k[v.index(maxVal)]
+        return {"uid": resuid, "count": maxVal}

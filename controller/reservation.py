@@ -78,6 +78,7 @@ class BaseReservation:
         if dao.checkForConflicts(rid, resday, time_slots):
             return jsonify("This reservation cannot be made at this time due to a conflict.")
         resid = dao.insertReservation(resname, resday, rid, uid)
+        dao.__del__()
         result = self.build_attr_dict(resid, resname, resday, rid, uid)
         members_dao = MembersDAO()
         us_dao = UserScheduleDAO()
@@ -88,42 +89,114 @@ class BaseReservation:
                 members_dao.insertMember(member, resid)
             for time_slot in time_slots:
                 us_dao.insertUserSchedule(member, time_slot, resday)
+
+        members_dao.__del__()
+        us_dao.__del__()
         for time_slot in time_slots:
             rs_dao.insertRoomSchedule(rid, time_slot, resday)
             reserv_dao.insertReservationSchedule(resid, time_slot)
-
+        reserv_dao.__del__()
         return jsonify(result), 201
 
     def updateReservation(self, resid, json):
         resname = json['resname']
         resday = json['resday']
         rid = json['rid']
-        uid = json['uid']
+        members = json['members']
         time_slots = json['tids']
         new_time_slots = []
         dao = ReservationDAO()
-        reserv_dao = ReservationScheduleDAO()
+        resSchedDAO = ReservationScheduleDAO()
         used_tids = dao.getInUseTids(resid)
         for tid in time_slots:
             if tid not in used_tids:
                 new_time_slots.append(tid)
+
         if dao.checkForConflicts(rid, resday, new_time_slots):
             return jsonify("This reservation cannot be made at this time due to a conflict.")
-        updated_reservation = dao.updateReservation(resid, resname, resday, rid, uid)
-        reserv_dao.deleteReseravtionSchedule(resid)
-        for tid in time_slots:
-            reserv_dao.insertReservationSchedule(resid, tid)
+
+        #Get old info before deleting
+        reservationdDAO = ReservationDAO()
+        membersDAO = MembersDAO()
+        userSchedDAO = UserScheduleDAO()
+
+        OldReservationInfo = reservationdDAO.getReservationById(resid)
+        oldMembers = membersDAO.getMembersByReservationId(resid)
+        oldate = OldReservationInfo[2]
+        oldrid = OldReservationInfo[3]
+        uid = OldReservationInfo[4]
+        oldMembers.append((uid, resid))
+
+        #Delete old members
+        membersDAO.deleteReservationMembers(resid)
+        #Insert update members
+        for mem in members:
+            membersDAO.insertMember(mem, resid)
+
+        #Go throught old members and delete from their US the reservation
+        for mem in oldMembers:
+            for time in used_tids:
+                userSchedDAO.deleteUserSchedulebyTimeIDAndDay(mem[0], time, oldate)
+
+        roomSchedDAO = RoomScheduleDAO()
+        for time in used_tids:
+            roomSchedDAO.deleteRoomScheduleByTimeAndDay(oldrid, time, oldate)
+
+        updated_reservation = dao.updateReservation(resid, resname, resday, rid)
+        resSchedDAO.deleteReservationSchedule(resid) #Delete old tids
+        for tid in time_slots: #Add new tid
+            resSchedDAO.insertReservationSchedule(resid, tid)
+
+        #Add new time of reservation to user schedule
+        members.append(uid)
+        for mem in members:
+            for time in time_slots:
+                userSchedDAO.insertUserSchedule(mem, time, resday)
+
+        roomSchedDAO = RoomScheduleDAO()
+        # Add new time of reservation to room schedule
+        for time in time_slots:
+            roomSchedDAO.insertRoomSchedule(rid, time, resday)
+
         result = self.build_attr_dict(resid, resname, resday, rid, uid)
         result["tids"] = time_slots
         return jsonify(result), 200
 
     def deleteReservation(self, resid):
-        dao = ReservationDAO()
-        result = dao.deleteReservation(resid)
-        if result:
+        """
+        Delete from Reservation, Reservation/User/Room Schedule, Members
+        """
+        reservationdDAO, membersDAO = ReservationDAO(), MembersDAO()
+        roomSchedDAO, userSchedDAO, resSchedDAO = RoomScheduleDAO(), UserScheduleDAO(), ReservationScheduleDAO()
+
+        reservationInfo = reservationdDAO.getReservationById(resid)
+        memberList = membersDAO.getMembersByReservationId(resid)
+        memberList.append((reservationInfo[4], resid))
+        timeSlotList = resSchedDAO.getTimeSlotsByReservationId(resid)
+        day, room = reservationInfo[2], reservationInfo[3]
+
+        delUserSched, delRoomSched = True, True
+
+        for member in memberList:
+            for time in timeSlotList:
+                if not userSchedDAO.deleteUserSchedulebyTimeIDAndDay(member[0], time, day):
+                    delUserSched = False
+
+        for time in timeSlotList:
+            if not roomSchedDAO.deleteRoomScheduleByTimeAndDay(room, time, day):
+                delRoomSched = False
+
+        delMembers = membersDAO.deleteReservationMembers(resid)
+        delResSched = resSchedDAO.deleteReservationSchedule(resid)
+
+        delRes = reservationdDAO.deleteReservation(resid)
+
+
+        if delRes and delMembers and delUserSched and delRoomSched and delRes:
             return jsonify("DELETED"), 200
         else:
-            return jsonify("NOT FOUND"), 404
+            return jsonify("COULD NOT DELETE RESERVATION CORRECTLY"), 500
+
 
     def getMostUsedRooms(self):
         dao = ReservationDAO()
