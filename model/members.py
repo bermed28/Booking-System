@@ -4,8 +4,8 @@ import psycopg2
 class MembersDAO:
 
     def __init__(self):
-        connection_url = "dbname=%s user=%s password=%s port=%s host='ec2-18-233-27-224.compute-1.amazonaws.com'" %(pg_config['dbname'], pg_config['user'],
-                                                                  pg_config['password'], pg_config['dbport'])
+        connection_url = "dbname=%s user=%s password=%s port=%s host='ec2-18-233-27-224.compute-1.amazonaws.com'" %(pg_config['dbname'],
+                          pg_config['user'], pg_config['password'], pg_config['dbport'])
         print("conection url:  ", connection_url)
         self.conn = psycopg2.connect(connection_url)
 
@@ -82,8 +82,6 @@ class MembersDAO:
         # otherwise, it was deleted, so check if affected_rows != 0
         cursor.close()
         return affected_rows != 0
-
-
 
     def __del__(self):
         self.conn.close()

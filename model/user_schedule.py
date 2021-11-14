@@ -26,9 +26,7 @@ class UserScheduleDAO:
         cursor = self.conn.cursor()
         query = "select usid, uid, tid, usday from public.user_schedule where usid = %s;"
         cursor.execute(query, (usid,))
-        result = []
-        for row in cursor:
-            result.append(row)
+        result = cursor.fetchone()
         cursor.close()
         return result
 

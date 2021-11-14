@@ -84,17 +84,17 @@ class BaseUser:
         uid = json['uid']
         usday = json['usday']
         dao = UserDAO()
-        timeslot = dao.getTimeSlot()
+        timeslots = dao.getTimeSlot()
         occupiedTid = dao.getUserOccupiedTimeSlots(uid, usday)
 
-        for time in timeslot:
+        for time in timeslots:
             if time['tid'] in occupiedTid:
                 time['available'] = False
 
             if 'available' not in time:
                 time['available'] = True
 
-        return jsonify(timeslot)
+        return jsonify(timeslots)
 
     def checkPermission(self, uid):
         dao = UserDAO()

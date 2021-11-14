@@ -20,8 +20,7 @@ def hello_world():  # put application's code here
     return '<h1>Hello World!<h1/>'
 
 #Every route that has /StackOverflowersStudios is part of the API
-
-"""""""""""""MAIN ENTITY HANDLERS"""""""""""""""
+"""""""""""""MAIN ENTITY HANDLERS (CRUD Operations)"""""""""""""""
 
 @app.route('/StackOverflowersStudios/users', methods=['GET', 'POST'])
 def handleUsers():
@@ -85,19 +84,6 @@ def handleMembersbyId(uid):
     elif request.method == 'DELETE':
         return BaseMembers().deleteMember(uid, request.json)
 
-# Global Statistics
-@app.route('/StackOverflowersStudios/reservation/busiest-hours', methods=['GET'])
-def handleHourStat():
-    return BaseReservation().getBusiestHours()
-
-@app.route('/StackOverflowersStudios/reservation/most-used', methods=['GET'])
-def handleRoomStat():
-    return BaseReservation().getMostUsedRooms()
-
-@app.route('/StackOverflowersStudios/reservation/most-booked', methods=['GET'])
-def handleUserStat():
-    return BaseReservation().getMostBookedUsers()
-
 @app.route('/StackOverflowersStudios/user-schedule', methods=['GET', 'POST'])
 def handleUserSchedules():
     if request.method == 'POST':
@@ -139,7 +125,21 @@ def handleTimeSlots():
 def handleTimeSlotbyId(tid):
     return BaseTimeSlot().getTimeSlotByTimeSlotId(tid)
 
-"""""""""""""""""ALL DAY SCHEDULES"""""""""""""""
+"""""""""""""GLOBAL STATISTICS"""""""""""""""
+
+@app.route('/StackOverflowersStudios/reservation/busiest-hours', methods=['GET'])
+def handleHourStat():
+    return BaseReservation().getBusiestHours()
+
+@app.route('/StackOverflowersStudios/reservation/most-used', methods=['GET'])
+def handleRoomStat():
+    return BaseReservation().getMostUsedRooms()
+
+@app.route('/StackOverflowersStudios/reservation/most-booked', methods=['GET'])
+def handleUserStat():
+    return BaseReservation().getMostBookedUsers()
+
+"""""""""""""""""USER STATISTICS"""""""""""""""
 @app.route('/StackOverflowersStudios/user/mostusedroom/<int:uid>', methods=['GET'])
 def handleMostUsedRoombyUser(uid):
     return BaseUser().getMostUsedRoombyUser(uid)
@@ -148,6 +148,7 @@ def handleMostUsedRoombyUser(uid):
 def handleMostBookedWith(uid):
     return BaseUser().getMostBookedWith(uid)
 
+"""""""""""""""""ALL DAY SCHEDULES"""""""""""""""
 @app.route('/StackOverflowersStudios/user/alldayschedule', methods=['GET'])
 def handleAllDayUserSchedule():
     return BaseUser().getAllDayUserSchedule(request.json)
@@ -156,6 +157,7 @@ def handleAllDayUserSchedule():
 def handleAllDayRoomSchedule():
     return BaseRoom().getAllDayRoomSchedule(request.json)
 
+"""""""""""""""""MISCELLANEOUS OPERATIONS"""""""""""""""
 @app.route('/StackOverflowersStudios/reservation/whoAppointed', methods=['GET'])
 def handlegetWhoAppointedRoomAtTime():
     return BaseReservation().getWhoAppointedRoomAtTime(request.json)
@@ -180,5 +182,6 @@ def handlemarkUserUnavailable():
 def handlemarkRoomUnavailable():
     return BaseRoomSchedule().addNewRoomSchedule(request.json)
 
+"""""""""""""""""MAIN FUNCTION"""""""""""""""
 if __name__ == '__main__':
     app.run(debug=True, port=8080, host="0.0.0.0")

@@ -30,15 +30,12 @@ class BaseUserSchedule:
 
     def getUserScheduleById(self, usid):
         dao = UserScheduleDAO()
-        user_schedule_list = dao.getUserScheduleById(usid)
-        if not user_schedule_list:
+        user_schedule = dao.getUserScheduleById(usid)
+        if not user_schedule:
             return jsonify("Not Found"), 404
         else:
-            result_list = []
-            for row in user_schedule_list:
-                obj = self.build_map_dict(row)
-                result_list.append(obj)
-            return jsonify(result_list), 200
+            obj = self.build_map_dict(user_schedule)
+            return jsonify(obj), 200
 
     def addNewUserSchedule(self, json):
         uid = json['uid']

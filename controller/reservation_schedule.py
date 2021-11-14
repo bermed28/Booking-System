@@ -13,7 +13,6 @@ class BaseReservationSchedule:
         result = {}
         result['resid'] = resid
         result['tid'] = tid
-
         return result
 
     def getAllMembers(self):
@@ -44,10 +43,8 @@ class BaseReservationSchedule:
         return jsonify(result), 201
 
     def updateReservationSchedule(self, json):
-        #EDIT THIS METHOD
         tid = json['tid']
         resid = json['resid']
-
         dao = ReservationScheduleDAO()
         updated_schedule = dao.updateReservationShedule(resid, tid, 0)
         result = self.build_attr_dict(resid, tid)

@@ -100,18 +100,17 @@ class BaseRoom:
         rscheduledao = ReservationScheduleDAO()
         membersdao = MembersDAO()
         userdao = UserDAO()
-        permission = userdao.checkPermission(uid)
-        if permission == rpermission:
+        upermission = userdao.checkPermission(uid)
+        if upermission == rpermission or upermission == 'Department Staff' or upermission == 'Professor':
             for res in reservations:
                 tidInReser = rscheduledao.getReservationScheduleByReservationId(res['resid'])
                 res['tid'] =[]
                 for tid in tidInReser:
                     res['tid'].append(tid[1])
-
                 members = membersdao.getMembersByReservationId(res['resid'])
                 res['members'] =[]
                 for member in members:
                     res['members'].append(member[0])
             return jsonify(reservations)
         else:
-            return jsonify("You do not have permission to view this information.")
+            return jsonify("You do not have permission to view this information."), 403
