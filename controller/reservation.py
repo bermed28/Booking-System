@@ -19,6 +19,14 @@ class BaseReservation:
         result['uid'] = row[4]
         return result
 
+    def build_most_booked_dict(self, row):
+        result = {}
+        result['tid'] = row[0]
+        result['tstarttime'] = row[1]
+        result['tendtime'] = row[2]
+        result['times_booked'] = row[3]
+        return result
+
     def build_attr_dict(self, resid, resname, resday, rid, uid):
         result = {}
         result['resid'] = resid
@@ -117,15 +125,19 @@ class BaseReservation:
         else:
             return jsonify("NOT FOUND"), 404
 
-    def getMostUsedRooms(self, num):
+    def getMostUsedRooms(self):
         dao = ReservationDAO()
-        result = dao.getMostUsedRooms(num)
+        result = dao.getMostUsedRooms()
         return jsonify(result)
 
-    def getBusiestHours(self, num):
+    def getBusiestHours(self):
         dao = ReservationDAO()
-        result = dao.getBusiestHours(num)
-        return jsonify(result)
+        temp = dao.getBusiestHours()
+        result_list = []
+        for row in temp:
+            obj = self.build_most_booked_dict(row)
+            result_list.append(obj)
+        return jsonify(result_list)
 
     def getWhoAppointedRoomAtTime(self, json):
         dao = ReservationDAO()
@@ -135,9 +147,9 @@ class BaseReservation:
         result = dao.getWhoAppointedRoomAtTime(rid, tid, date)
         return jsonify(result)
       
-    def getMostBookedUsers(self, num):
+    def getMostBookedUsers(self):
         dao = ReservationDAO()
-        result = dao.getMostBookedUsers(num)
+        result = dao.getMostBookedUsers()
         return jsonify(result)
 
     def getFreeTime(self, json):

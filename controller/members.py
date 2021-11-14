@@ -41,15 +41,6 @@ class BaseMembers:
         result = self.build_attr_dict(uid, resid)
         return jsonify(result), 201
 
-    def updateMember(self, json):
-        #EDIT THIS METHOD
-        uid = json['uid']
-        resid = json['resid']
-        dao = MembersDAO()
-        updated_member = dao.updateMember(uid, resid, 0)
-        result = self.build_attr_dict(uid, resid)
-        return jsonify(result), 200
-
     def deleteMember(self, uid):
         dao = MembersDAO()
         result = dao.deleteMember(uid)

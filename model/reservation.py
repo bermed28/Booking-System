@@ -1,5 +1,6 @@
 from config.dbconfig import pg_config
 import psycopg2
+import json
 
 class ReservationDAO:
 
@@ -59,34 +60,37 @@ class ReservationDAO:
         cursor.close()
         return affected_rows != 0
 
-    def getMostUsedRooms(self, num):
+    def getMostUsedRooms(self):
         cursor = self.conn.cursor()
-        query = "select rid, frequency, rname from (select rid, count(*) as frequency from reservation group by rid)as temp1 natural inner join public.room order by frequency desc limit %s"
-        cursor.execute(query, (num,))
+        query = "select rid, rname, rcapacity, rbuildname, rpermission, times_used from (select rid, count(*) \
+                 as times_used from reservation group by rid)as temp1 natural inner join public.room \
+                 order by times_used desc limit 10"
+        cursor.execute(query)
         result = []
         for row in cursor:
             dict = {}
-            dict["rid"] = row[0]
-            dict["rname"] = row[2]
+            dict['rid'] = row[0]
+            dict['rname'] = row[1]
+            dict['rcapacity'] = row[2]
+            dict['rbuildname'] = row[3]
+            dict['rpermission'] = row[4]
+            dict['times_used'] = row[5]
             result.append(dict)
         cursor.close()
         return result
 
-    def getBusiestHours(self, num):
+    def getBusiestHours(self):
         cursor = self.conn.cursor()
-        query = "select tid, count(tid) from reservation natural inner join reservation_schedule group by tid order by count(tid) desc limit %s"
-        cursor.execute(query, (num,))
+        query = "with busiest_hours as (select tid, count(tid) as times_booked from reservation_schedule \
+                 group by tid) select * from time_slot natural inner join busiest_hours order by times_booked \
+                 desc limit 5"
+        cursor.execute(query)
         result = []
         for row in cursor:
-            dict = {}
-            dict["tid"] = row[0]
-            dict["count"] = row[1]
-            result.append(dict)
+            result.append(json.loads(json.dumps(row, indent=4, default=str)))
         cursor.close()
         return result
 
-# We probably have to join here with user too pq lo que nos importa es la información de quién tiene
-# el cuarto
     def getWhoAppointedRoomAtTime(self, rid, tid, date):
         cursor = self.conn.cursor()
         query = "select uid, username, uemail, upassword, ufirstname, ulastname, upermission from reservation \
@@ -107,16 +111,26 @@ class ReservationDAO:
         cursor.close()
         return result
 
-    def getMostBookedUsers(self, num):
+    def getMostBookedUsers(self):
         cursor = self.conn.cursor()
-        query = "select uid, frequency, ufirstname from (select uid, count(*) as frequency \
-                from reservation group by uid) as temp1 natural inner join public.user order by frequency desc limit %s"
-        cursor.execute(query, (num,))
+        # query = "select uid, count(*) as times_booked from ((select uid, resid from reservation) union\
+        #          (select uid, resid from members)) as temp group by uid order by times_booked desc"
+        query = "with booking_table as (select uid, count(*) as times_booked from ((select uid, resid from reservation)\
+        union (select uid, resid from members)) as temp natural inner join public.user group by uid order by times_booked desc) \
+        select uid, username, uemail, upassword, ufirstname, ulastname, upermission, times_booked from public.user natural  inner join \
+        booking_table order by times_booked desc limit 10;"
+        cursor.execute(query)
         result = []
         for row in cursor:
             dict = {}
-            dict["uid"] = row[0]
-            dict["ufirstname"] = row[2]
+            dict['uid'] = row[0]
+            dict['username'] = row[1]
+            dict['uemail'] = row[2]
+            dict['upassword'] = row[3]
+            dict['ufirstname'] = row[4]
+            dict['ulastname'] = row[5]
+            dict['upermission'] = row[6]
+            dict['times_booked'] = row[7]
             result.append(dict)
         cursor.close()
         return result

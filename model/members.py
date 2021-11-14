@@ -57,6 +57,10 @@ class MembersDAO:
         cursor.close()
         return True
 
+    # Y si se quiere marcar como unavailable un time slot en el que ya hay una reunión?
+    # Entiendo que habría que hacer un join entre member, reservation, y reservation scheduler
+    # para borrar de members el row que tenga el uid de ese user, con el resid de la reservación
+    # de ese día en específico y a esa hora
     def deleteMember(self, uid):
         cursor = self.conn.cursor()
         query = "delete from public.members where uid=%s;"
