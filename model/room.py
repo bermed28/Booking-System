@@ -5,8 +5,8 @@ import json
 class RoomDAO:
 
     def __init__(self):
-        connection_url = "dbname=%s user=%s password=%s port=%s host='ec2-18-233-27-224.compute-1.amazonaws.com'" %(pg_config['dbname'], pg_config['user'],
-                                                                  pg_config['password'], pg_config['dbport'])
+        connection_url = "dbname=%s user=%s password=%s port=%s host='ec2-18-233-27-224.compute-1.amazonaws.com'" %(pg_config['dbname'],
+                          pg_config['user'], pg_config['password'], pg_config['dbport'])
         print("conection url:  ", connection_url)
         self.conn = psycopg2.connect(connection_url)
 
@@ -114,6 +114,21 @@ class RoomDAO:
         cursor.close()
         return result
 
+    def findRoomReservationsForUser(self, rid, uid):
+        cursor = self.conn.cursor()
+        query = "select * from reservation natural inner join room where rid = %s and uid = %s"
+        cursor.execute(query, (rid, uid))
+        result = []
+        for row in cursor:
+            dict = {}
+            dict['resid'] = row[1]
+            dict['resname'] = row[2]
+            dict['resday'] = row[3]
+            dict['rname'] = row[5]
+            result.append(dict)
+        cursor.close()
+        return result
+
     def findReservationsTid(self, rid):
         cursor = self.conn.cursor()
         query = "select * from reservation natural inner join room where rid = %s"
@@ -132,6 +147,14 @@ class RoomDAO:
     def getRoomPermission(self, rid):
         cursor = self.conn.cursor()
         query = "select rpermission from room where rid = %s"
+        cursor.execute(query, (rid,))
+        result = cursor.fetchone()[0]
+        cursor.close()
+        return result
+
+    def getRoomCapacity(self, rid):
+        cursor = self.conn.cursor()
+        query = "select rcapacity from room where rid = %s"
         cursor.execute(query, (rid,))
         result = cursor.fetchone()[0]
         cursor.close()

@@ -5,8 +5,8 @@ import json
 class UserDAO:
 
     def __init__(self):
-        connection_url = "dbname=%s user=%s password=%s port=%s host='ec2-18-233-27-224.compute-1.amazonaws.com'" %(pg_config['dbname'], pg_config['user'],
-                                                                  pg_config['password'], pg_config['dbport'])
+        connection_url = "dbname=%s user=%s password=%s port=%s host='ec2-18-233-27-224.compute-1.amazonaws.com'" %(pg_config['dbname'],
+                          pg_config['user'], pg_config['password'], pg_config['dbport'])
         print("conection url:  ", connection_url)
         self.conn = psycopg2.connect(connection_url)
 
@@ -33,7 +33,8 @@ class UserDAO:
 
     def insertUser(self, username, uemail, upassword, ufirstname, ulastname, upermission):
         cursor = self.conn.cursor()
-        query = "insert into public.user(username, uemail, upassword, ufirstname, ulastname, upermission) values(%s,%s,%s,%s,%s,%s) returning uid;"
+        query = "insert into public.user(username, uemail, upassword, ufirstname, ulastname, upermission) \
+                 values(%s,%s,%s,%s,%s,%s) returning uid;"
         cursor.execute(query, (username, uemail, upassword, ufirstname, ulastname, upermission))
         uid = cursor.fetchone()[0]
         self.conn.commit()
@@ -42,7 +43,8 @@ class UserDAO:
 
     def updateUser(self, uid, username, uemail, upassword, ufirstname, ulastname, upermission):
         cursor = self.conn.cursor()
-        query = "update public.user set username = %s, uemail = %s, upassword = %s, ufirstname = %s, ulastname = %s, upermission = %s where uid = %s;"
+        query = "update public.user set username = %s, uemail = %s, upassword = %s, ufirstname = %s, ulastname = %s, \
+                 upermission = %s where uid = %s;"
         cursor.execute(query, (username, uemail, upassword, ufirstname, ulastname, upermission, uid))
         self.conn.commit()
         cursor.close()
@@ -62,22 +64,23 @@ class UserDAO:
 
     def getMostUsedRoombyUser(self, uid):
         cursor = self.conn.cursor()
-        query = "select rid, rname, frequency from \
-            (select rid, count(*) as frequency from\
-            (select * from reservation inner join members on reservation.resid = members.resid \
-            where members.uid = %s or reservation.uid = %s) as temp9 group by rid)as temp1\
-            natural inner join room order by frequency desc limit 1;"
+        query = "with involved_reservations as (select resid from ((select uid, resid from reservation where uid = 7)\
+         union (select uid, resid from members where uid = 7)) as temp), room_uses as (select rid, count(*) as uses\
+         from reservation natural inner join room where resid in (select resid from involved_reservations)\
+         group by rid) select * from room natural inner join room_uses order by uses desc"
         cursor.execute(query, (uid, uid))
         result = []
         if cursor.rowcount <= 0:
             return "User has not used any rooms"
 
         row = cursor.fetchone()
-        dict = {}
-        dict['rid'] = row[0]
-        dict['rname'] = row[1]
-        dict['frequency'] = row[2]
-        result.append(dict)
+        result = {}
+        result['rid'] = row[0]
+        result['rname'] = row[1]
+        result['rcapacity'] = row[2]
+        result['rbuildname'] = row[3]
+        result['rpermission'] = row[4]
+        result['uses'] = row[5]
         cursor.close()
         return result
 
@@ -116,30 +119,20 @@ class UserDAO:
 
     def getMostBookedWith(self, uid):
         cursor = self.conn.cursor()
-        #Get all the members that are have been in the same reservation as the uid
-        query = "with todoResid as (select reservation.resid from\
-                reservation inner join members on reservation.resid = members.resid\
-                where reservation.uid = %s or members.uid = %s)\
-                select uid, count(*) from (select * from members natural inner join todoResid where uid <> %s)\
-                as temp2 group by uid"
+        query = "with involved_reservations as (select resid from ((select uid, resid from reservation where uid = %s) \
+        union (select uid, resid from members where uid = %s)) as temp), involvements_per_user as ( \
+        select uid, count(*) as involvements from ((select uid, resid from reservation) union (select \
+        uid, resid from members)) as temp2 where resid in(select resid from involved_reservations) and uid <> %s \
+        group by uid) select * from public.user natural inner join involvements_per_user order by involvements desc;"
         cursor.execute(query, (uid, uid, uid))
+        row = cursor.fetchone()
         result = {}
-        for row in cursor:
-            result[row[0]]=row[1]
-        # Get all the users that have created a reservation and invited the uid
-        query2 = "with todoResid as (select reservation.resid from \
-                reservation inner join members on reservation.resid = members.resid where\
-                reservation.uid = %s or members.uid = %s)\
-                select uid, count(*) from (select * from \
-                reservation natural inner join todoResid where uid <> %s)as temp2 group by uid"
-        cursor.execute(query2, (uid, uid, uid))
-        for row in cursor:
-            if row[0] in result:
-                result[row[0]]+=row[1]
-
-        cursor.close()
-        v = list(result.values())
-        maxVal = max(result.values())
-        k = list(result.keys())
-        resuid = k[v.index(maxVal)]
-        return {"uid": resuid, "count": maxVal}
+        result['uid'] = row[0]
+        result['username'] = row[1]
+        result['uemail'] = row[2]
+        result['upassword'] = row[3]
+        result['ufirstname'] = row[4]
+        result['ulastname'] = row[5]
+        result['upermission'] = row[6]
+        result['times booked together'] = row[7]
+        return result

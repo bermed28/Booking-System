@@ -48,13 +48,13 @@ class BaseRoomSchedule:
         userdao = UserDAO()
         permission = userdao.checkPermission(uid)
         if dao.checkForConflicts(rid, rsday, [tid]):
-            return jsonify("This room is already unavailable at this particular time.")
-        if permission == 'Department Staff':
+            return jsonify("This room is already unavailable at this particular time."), 409
+        if permission == 'Professor' or permission == 'Department Staff':
             rsid = dao.insertRoomSchedule(rid, tid, rsday)
             result = self.build_attr_dict(rsid, rid, tid, rsday)
             return jsonify(result), 201
         else:
-            return jsonify("This user does not have permission"), 404
+            return jsonify("This user does not have permission"), 403
 
     def updateRoomSchedule(self, rsid, json):
         rid = json['rid']
@@ -62,7 +62,7 @@ class BaseRoomSchedule:
         rsday = json['rsday']
         dao = RoomScheduleDAO()
         if dao.checkForConflicts(rid, rsday, [tid]):
-            return jsonify("This room is already unavailable at this particular time.")
+            return jsonify("This room is already unavailable at this particular time."), 409
         updated_room_schedule = dao.updateRoomSchedule(rsid, rid, tid, rsday)
         result = self.build_attr_dict(rsid, rid, tid, rsday)
         return jsonify(result), 200
@@ -79,4 +79,4 @@ class BaseRoomSchedule:
             else:
                 return jsonify("NOT FOUND"), 404
         else:
-            return jsonify("This user does not have permission"), 404
+            return jsonify("This user does not have permission"), 403

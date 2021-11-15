@@ -5,8 +5,8 @@ import json
 class ReservationDAO:
 
     def __init__(self):
-        connection_url = "dbname=%s user=%s password=%s port=%s host='ec2-18-233-27-224.compute-1.amazonaws.com'" %(pg_config['dbname'], pg_config['user'],
-                                                                  pg_config['password'], pg_config['dbport'])
+        connection_url = "dbname=%s user=%s password=%s port=%s host='ec2-18-233-27-224.compute-1.amazonaws.com'" %(pg_config['dbname'],
+                          pg_config['user'], pg_config['password'], pg_config['dbport'])
         print("conection url:  ", connection_url)
         self.conn = psycopg2.connect(connection_url)
 
@@ -113,8 +113,6 @@ class ReservationDAO:
 
     def getMostBookedUsers(self):
         cursor = self.conn.cursor()
-        # query = "select uid, count(*) as times_booked from ((select uid, resid from reservation) union\
-        #          (select uid, resid from members)) as temp group by uid order by times_booked desc"
         query = "with booking_table as (select uid, count(*) as times_booked from ((select uid, resid from reservation)\
         union (select uid, resid from members)) as temp natural inner join public.user group by uid order by times_booked desc) \
         select uid, username, uemail, upassword, ufirstname, ulastname, upermission, times_booked from public.user natural  inner join \

@@ -6,6 +6,8 @@ from model.room_schedule import RoomScheduleDAO
 from model.time_slot import TimeSlotDAO
 from controller.time_slot import BaseTimeSlot
 from model.reservation_schedule import ReservationScheduleDAO
+from model.room import RoomDAO
+from model.user import UserDAO
 
 
 class BaseReservation:
@@ -19,6 +21,9 @@ class BaseReservation:
         result['uid'] = row[4]
         return result
 
+    #This function is used to create a dictionary that can be properly jsonified because
+    #the time datatype causes errors in flask when trying to jsonify it directly. It´s only
+    #used in the getMostBookedTimeSlots function
     def build_most_booked_dict(self, row):
         result = {}
         result['tid'] = row[0]
@@ -43,10 +48,10 @@ class BaseReservation:
         for row in reservation_list:
             obj = self.build_map_dict(row)
             rsdao = ReservationScheduleDAO()
-            rs = rsdao.getReservationScheduleByReservationId(obj['resid'])
+            used_time_slots = rsdao.getReservationScheduleByReservationId(obj['resid'])
             times = []
-            for t in rs:
-                times.append(t[1])
+            for time_slot in used_time_slots:
+                times.append(time_slot[1])
             obj['tids'] = times
             result_list.append(obj)
         return jsonify(result_list)
@@ -59,13 +64,15 @@ class BaseReservation:
         else:
             result = self.build_map_dict(reservation_tuple)
             rsdao = ReservationScheduleDAO()
-            rs = rsdao.getReservationScheduleByReservationId(resid)
+            used_time_slots = rsdao.getReservationScheduleByReservationId(resid)
             times = []
-            for t in rs:
-                times.append(t[1])
+            for time_slot in used_time_slots:
+                times.append(time_slot[1])
             result['tids'] = times
             return jsonify(result), 200
 
+    #Adding a reservation implies adding rows to the members, user schedule, reservation schedule and room schedule
+    #tables as well
     def addNewReservation(self, json):
         resname = json['resname']
         resday = json['resday']
@@ -73,11 +80,22 @@ class BaseReservation:
         uid = json['uid']
         members = json['members']
         time_slots = json['time_slots']
+        room_dao = RoomDAO()
+        if len(members) + 1 > room_dao.getRoomCapacity(rid):
+            return jsonify("This reservation cannot be made because there are too many people for this room."), 400
         members.append(uid)
         dao = ReservationDAO()
         rs_dao = RoomScheduleDAO()
         if dao.checkForConflicts(rid, resday, time_slots) or rs_dao.checkForConflicts(rid, resday, time_slots):
-            return jsonify("This reservation cannot be made at this time due to a conflict.")
+            return jsonify("This reservation cannot be made at this time due to a conflict."), 409
+        userdao = UserDAO()
+        for uid in members:
+            occupiedTids = userdao.getUserOccupiedTimeSlots(uid, resday)
+            for time in time_slots:
+                if time in occupiedTids:
+                    username = userdao.getUserById(uid)[1]
+                    return jsonify("This reservation cannot be made at this time because the user with username: " +
+                                   username + " has a time conflict."), 409
         resid = dao.insertReservation(resname, resday, rid, uid)
         result = self.build_attr_dict(resid, resname, resday, rid, uid)
         members_dao = MembersDAO()
@@ -102,6 +120,17 @@ class BaseReservation:
         time_slots = json['tids']
         new_time_slots = []
         dao = ReservationDAO()
+        room_dao = RoomDAO()
+        if len(members) + 1 > room_dao.getRoomCapacity(rid):
+            return jsonify("This reservation cannot be made because there are too many people for this room."), 400
+        userdao = UserDAO()
+        for uid in members:
+            occupiedTids = userdao.getUserOccupiedTimeSlots(uid, resday)
+            for time in time_slots:
+                if time in occupiedTids:
+                    username = userdao.getUserById(uid)[1]
+                    return jsonify("This reservation cannot be made at this time because the user with username: " +
+                                   username + " has a time conflict."), 409
         resSchedDAO = ReservationScheduleDAO()
         used_tids = dao.getInUseTids(resid)
         for tid in time_slots:
@@ -109,8 +138,8 @@ class BaseReservation:
                 new_time_slots.append(tid)
 
         roomSchedDAO = RoomScheduleDAO()
-        if dao.checkForConflicts(rid, resday, new_time_slots) or roomSchedDAO.checkForConflicts(rid, resday, time_slots):
-            return jsonify("This reservation cannot be made at this time due to a conflict.")
+        if dao.checkForConflicts(rid, resday, new_time_slots) or roomSchedDAO.checkForConflicts(rid, resday, new_time_slots):
+            return jsonify("This reservation cannot be made at this time due to a conflict."), 409
 
         #Get old info before deleting
         reservationdDAO = ReservationDAO()
