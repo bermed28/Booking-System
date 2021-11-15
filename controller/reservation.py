@@ -121,6 +121,9 @@ class BaseReservation:
         time_slots = json['tids']
         new_time_slots = []
         dao = ReservationDAO()
+        OldReservationInfo = dao.getReservationById(resid)
+        if not OldReservationInfo:
+            return jsonify("No such reservation exists."), 400
         room_dao = RoomDAO()
         if len(members) + 1 > room_dao.getRoomCapacity(rid):
             return jsonify("This reservation cannot be made because there are too many people for this room."), 400
@@ -148,7 +151,6 @@ class BaseReservation:
         membersDAO = MembersDAO()
         userSchedDAO = UserScheduleDAO()
 
-        OldReservationInfo = reservationdDAO.getReservationById(resid)
         oldMembers = membersDAO.getMembersByReservationId(resid)
         oldate = OldReservationInfo[2]
         oldrid = OldReservationInfo[3]
