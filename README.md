@@ -14,3 +14,8 @@
     <li> Database: d7kp1lg9f4brbq </li>
     <li> Port: 5432 </li>
 </ul>
+
+<h3> Hosted url for app </h3> 
+<ul> 
+    <li> url: https://booking-system-stackoverflower.herokuapp.com/ </li>
+</ul>
