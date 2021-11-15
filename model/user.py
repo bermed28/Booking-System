@@ -64,22 +64,23 @@ class UserDAO:
 
     def getMostUsedRoombyUser(self, uid):
         cursor = self.conn.cursor()
-        query = "select rid, rname, frequency from \
-            (select rid, count(*) as frequency from\
-            (select * from reservation inner join members on reservation.resid = members.resid \
-            where members.uid = %s or reservation.uid = %s) as temp9 group by rid)as temp1\
-            natural inner join room order by frequency desc limit 1;"
+        query = "with involved_reservations as (select resid from ((select uid, resid from reservation where uid = 7)\
+         union (select uid, resid from members where uid = 7)) as temp), room_uses as (select rid, count(*) as uses\
+         from reservation natural inner join room where resid in (select resid from involved_reservations)\
+         group by rid) select * from room natural inner join room_uses order by uses desc"
         cursor.execute(query, (uid, uid))
         result = []
         if cursor.rowcount <= 0:
             return "User has not used any rooms"
 
         row = cursor.fetchone()
-        dict = {}
-        dict['rid'] = row[0]
-        dict['rname'] = row[1]
-        dict['frequency'] = row[2]
-        result.append(dict)
+        result = {}
+        result['rid'] = row[0]
+        result['rname'] = row[1]
+        result['rcapacity'] = row[2]
+        result['rbuildname'] = row[3]
+        result['rpermission'] = row[4]
+        result['uses'] = row[5]
         cursor.close()
         return result
 
