@@ -138,7 +138,7 @@ class BaseReservation:
                 new_time_slots.append(tid)
 
         roomSchedDAO = RoomScheduleDAO()
-        if dao.checkForConflicts(rid, resday, new_time_slots) or roomSchedDAO.checkForConflicts(rid, resday, time_slots):
+        if dao.checkForConflicts(rid, resday, new_time_slots) or roomSchedDAO.checkForConflicts(rid, resday, new_time_slots):
             return jsonify("This reservation cannot be made at this time due to a conflict."), 409
 
         #Get old info before deleting
