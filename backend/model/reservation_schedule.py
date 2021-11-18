@@ -1,4 +1,4 @@
-from config.dbconfig import pg_config
+from backend.config.dbconfig import pg_config
 import psycopg2
 
 class ReservationScheduleDAO:

@@ -1,6 +1,6 @@
 from flask import jsonify
-from model.room_schedule import RoomScheduleDAO
-from model.user import UserDAO
+from backend.model.room_schedule import RoomScheduleDAO
+from backend.model.user import UserDAO
 
 
 class BaseRoomSchedule:

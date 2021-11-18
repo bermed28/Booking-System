@@ -1,5 +1,5 @@
 from flask import jsonify
-from model.user_schedule import UserScheduleDAO
+from backend.model.user_schedule import UserScheduleDAO
 
 class BaseUserSchedule:
 

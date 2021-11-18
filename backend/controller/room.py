@@ -1,9 +1,9 @@
 from flask import jsonify
-from model.room import RoomDAO
-from model.reservation_schedule import ReservationScheduleDAO
-from model.members import MembersDAO
-from model.user import UserDAO
-from model.time_slot import TimeSlotDAO
+from backend.model.room import RoomDAO
+from backend.model.reservation_schedule import ReservationScheduleDAO
+from backend.model.members import MembersDAO
+from backend.model.user import UserDAO
+from backend.model.time_slot import TimeSlotDAO
 
 class BaseRoom:
 
