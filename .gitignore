@@ -1,5 +1,6 @@
 /.idea/
 /venv/
-/config/__pycache__/
-/controller/__pycache__/
-/model/__pycache__/
+backend/config/__pycache__/
+backend/controller/__pycache__/
+backend/model/__pycache__/
+frontend/node_modules/
