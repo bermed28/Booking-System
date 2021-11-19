@@ -1,4 +1,4 @@
-from backend.config.dbconfig import pg_config
+from config.dbconfig import pg_config
 import psycopg2
 import json
 
@@ -157,6 +157,16 @@ class RoomDAO:
         query = "select rcapacity from room where rid = %s"
         cursor.execute(query, (rid,))
         result = cursor.fetchone()[0]
+        cursor.close()
+        return result
+
+    def getAllRoomUses(self, rid):
+        cursor = self.conn.cursor()
+        query = "select * from reservation where rid = %s"
+        cursor.execute(query, (rid,))
+        result = []
+        for row in cursor:
+            result.append(row)
         cursor.close()
         return result
 

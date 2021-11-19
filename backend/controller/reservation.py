@@ -81,6 +81,9 @@ class BaseReservation:
         members = json['members']
         time_slots = json['time_slots']
         room_dao = RoomDAO()
+        userdao = UserDAO()
+        if userdao.checkPermission(uid) != room_dao.getRoomById(rid)[4]:
+            return jsonify("This reservation cannot be made because you do not have permission to use this room."), 403
         if len(members) + 1 > room_dao.getRoomCapacity(rid):
             return jsonify("This reservation cannot be made because there are too many people for this room."), 400
         members.append(uid)
@@ -88,7 +91,6 @@ class BaseReservation:
         rs_dao = RoomScheduleDAO()
         if dao.checkForConflicts(rid, resday, time_slots) or rs_dao.checkForConflicts(rid, resday, time_slots):
             return jsonify("This reservation cannot be made at this time due to a conflict."), 409
-        userdao = UserDAO()
         for uid in members:
             occupiedTids = userdao.getUserOccupiedTimeSlots(uid, resday)
             for time in time_slots:
@@ -192,7 +194,7 @@ class BaseReservation:
         result["tids"] = time_slots
         return jsonify(result), 200
 
-    def deleteReservation(self, resid):
+    def deleteReservation(self, resid, json):
         """
         Delete from Reservation, Reservation/User/Room Schedule, Members
         """
@@ -200,6 +202,8 @@ class BaseReservation:
         roomSchedDAO, userSchedDAO, resSchedDAO = RoomScheduleDAO(), UserScheduleDAO(), ReservationScheduleDAO()
 
         reservationInfo = reservationdDAO.getReservationById(resid)
+        if json['uid'] != reservationInfo[4]:
+            return jsonify("You cannot delete this reservation because you are not its creator."), 403
         memberList = membersDAO.getMembersByReservationId(resid)
         memberList.append((reservationInfo[4], resid))
         timeSlotList = resSchedDAO.getTimeSlotsByReservationId(resid)
@@ -249,7 +253,7 @@ class BaseReservation:
         date = json['date']
         result = dao.getWhoAppointedRoomAtTime(rid, tid, date)
         return jsonify(result)
-      
+
     def getMostBookedUsers(self):
         dao = ReservationDAO()
         result = dao.getMostBookedUsers()

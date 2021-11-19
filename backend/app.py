@@ -1,12 +1,12 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request
 from flask_cors import CORS
-from controller.user import BaseUser
-from controller.user_schedule import BaseUserSchedule
-from controller.room import BaseRoom
-from controller.reservation import BaseReservation
-from controller.room_schedule import BaseRoomSchedule
-from controller.time_slot import BaseTimeSlot
-from controller.members import BaseMembers
+from backend.controller.user import BaseUser
+from backend.controller.user_schedule import BaseUserSchedule
+from backend.controller.room import BaseRoom
+from backend.controller.reservation import BaseReservation
+from backend.controller.room_schedule import BaseRoomSchedule
+from backend.controller.time_slot import BaseTimeSlot
+from backend.controller.members import BaseMembers
 
 app = Flask(__name__)
 #apply CORS
@@ -68,7 +68,7 @@ def handleReservationbyId(resid):
     elif request.method == 'PUT':
         return BaseReservation().updateReservation(resid, request.json)
     elif request.method == 'DELETE':
-        return BaseReservation().deleteReservation(resid)
+        return BaseReservation().deleteReservation(resid, request.json)
 
 @app.route('/StackOverflowersStudios/members', methods=['GET', 'POST'])
 def handleMembers():
@@ -181,6 +181,10 @@ def handlemarkUserUnavailable():
 @app.route('/StackOverflowersStudios/room-schedule/markunavailable', methods=['POST'])
 def handlemarkRoomUnavailable():
     return BaseRoomSchedule().addNewRoomSchedule(request.json)
+
+@app.route('/StackOverflowersStudios/room-schedule/markavailable/<int:rsid>', methods=['DELETE'])
+def handlemarkRoomAvailable(rsid):
+    return BaseRoomSchedule().deleteRoomSchedule(rsid, request.json)
 
 """""""""""""""""MAIN FUNCTION"""""""""""""""
 if __name__ == '__main__':

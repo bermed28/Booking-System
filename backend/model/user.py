@@ -1,4 +1,4 @@
-from backend.config.dbconfig import pg_config
+from config.dbconfig import pg_config
 import psycopg2
 import json
 
@@ -64,8 +64,8 @@ class UserDAO:
 
     def getMostUsedRoombyUser(self, uid):
         cursor = self.conn.cursor()
-        query = "with involved_reservations as (select resid from ((select uid, resid from reservation where uid = %s)\
-         union (select uid, resid from members where uid = %s)) as temp), room_uses as (select rid, count(*) as uses\
+        query = "with involved_reservations as (select resid from ((select uid, resid from reservation where uid = 7)\
+         union (select uid, resid from members where uid = 7)) as temp), room_uses as (select rid, count(*) as uses\
          from reservation natural inner join room where resid in (select resid from involved_reservations)\
          group by rid) select * from room natural inner join room_uses order by uses desc"
         cursor.execute(query, (uid, uid))
@@ -135,4 +135,15 @@ class UserDAO:
         result['ulastname'] = row[5]
         result['upermission'] = row[6]
         result['times booked together'] = row[7]
+        return result
+
+    def getAllUserInvolvements(self, uid):
+        cursor = self.conn.cursor()
+        query = "select resid from ((select uid, resid from reservation where uid = %s) union \
+                 (select uid, resid from members where uid = %s)) as temp"
+        cursor.execute(query, (uid, uid))
+        result = []
+        for row in cursor:
+            result.append(row)
+        cursor.close()
         return result

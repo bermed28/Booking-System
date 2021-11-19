@@ -65,6 +65,8 @@ class BaseRoom:
 
     def deleteRoom(self, rid):
         dao = RoomDAO()
+        if dao.getAllRoomUses(rid):
+            return jsonify("You cannot delete this room because there are reservations made for it."), 400
         result = dao.deleteRoom(rid)
         if result:
             return jsonify("DELETED"), 200
