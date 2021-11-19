@@ -7,10 +7,12 @@ import BookMeeting from "./BookMeeting";
 import 'semantic-ui-css/semantic.min.css'
 import UserView from "./UserView";
 import Dashboard from "./Dashboard";
+import App from './App';
 
 ReactDOM.render(
     <BrowserRouter>
         <Routes>
+            <Route exact path="/" element={<App/>} />
             <Route exact path="/Home" element={<HomePage/>} />
             <Route exact path="/UserView" element={<UserView/>} />
             <Route exact path="/Dashboard" element={<Dashboard/>} />
