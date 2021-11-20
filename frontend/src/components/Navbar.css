@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Comfortaa&family=Dancing+Script:wght@500&display=swap');
 
 .navbar {
     height: 8vh;
@@ -6,6 +7,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    font-family: 'Comfortaa', cursive;
 }
 
 .navbar-logo {
@@ -34,6 +36,7 @@
 .nav-item {
     display: flex;
     align-items: center;
+    height: 8vh;
 }
 
 .nav-item a {
