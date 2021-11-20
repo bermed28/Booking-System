@@ -2,25 +2,25 @@ export const navItems = [
     {
       id: 1,
       title: "Home",
-      path: "./",
+      path: "/Home",
       cName: "nav-item",
     },
     {
       id: 2,
       title: "Create Meeting",
-      path: "./",
+      path: "/UserView",
       cName: "nav-item",
     },
     {
       id: 3,
       title: "My Meetings",
-      path: "./",
+      path: "/UserView",
       cName: "nav-item",
     },
     {
       id: 4,
       title: "Statistics",
-      path: "./",
+      path: "/Dashboard",
       cName: "nav-item",
     },
   ];
@@ -29,13 +29,13 @@ export const navItems = [
     {
       id: 1,
       title: "My Stats",
-      path: "./",
+      path: "/",
       cName: "submenu-item",
     },
     {
       id: 2,
       title: "Global Stats",
-      path: "./",
+      path: "/",
       cName: "submenu-item",
     },
   ];

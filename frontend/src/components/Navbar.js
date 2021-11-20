@@ -30,7 +30,7 @@ const Navbar = () => {
 
                         return (
                         <li key={item.id} className={item.cName}>
-                            <Link to={`/${item.path}`}>{item.title}</Link>
+                            <Link to={item.path}>{item.title}</Link>
                         </li>
                     )})}
                 </ul>

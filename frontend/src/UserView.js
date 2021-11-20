@@ -23,7 +23,7 @@ function UserView(){
 
     return (
         <>
-        <Navbar></Navbar>
+        <Navbar/>
         <Tab panes={panes}/>
         </>
     );

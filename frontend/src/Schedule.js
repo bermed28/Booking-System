@@ -27,7 +27,6 @@ function Schedule(){
 
     return (
         <>
-            <Navbar></Navbar>
             <Container style={{ height: 800 }}>
                 <Calendar localizer={localizer} startAccessor="start" events={dates} endAccessor="end" views={["month", "day"]} defaultDate={Date.now()}></Calendar>
             </Container>

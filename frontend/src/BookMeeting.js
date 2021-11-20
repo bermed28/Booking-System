@@ -22,7 +22,6 @@ function BookMeeting(){
 
     return (
     <>
-        <Navbar></Navbar>
         <Container style={{ height: 800 }}><Calendar
             selectable
             localizer={localizer}

@@ -16,7 +16,7 @@ function BookMeeting(){
 
     return(
         <>
-            <Navbar></Navbar>
+            <Navbar/>
             <Container style={{ height: 800 }}>
                 <BarChart width={730} height={250} data={data}>
                     <CartesianGrid strokeDasharray="3 3" />

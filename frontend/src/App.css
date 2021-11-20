@@ -1,0 +1,16 @@
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500&display=swap');
+
+p {
+    font-size: larger;
+}
+
+h1 {
+    font-family: 'Dancing Script', cursive;
+    font-size: xx-large;
+}
+
+/* .container {
+    inline-size: 50%;
+    overflow-wrap: break-word;
+    text-align: center;
+} */

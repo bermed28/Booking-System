@@ -46,6 +46,7 @@
     margin-right: 2rem;
     padding: 6px 16px;
     border-radius: 5px;
+    transition: 0.3s all ease-out;
 }
 
 .nav-item a:hover {
