@@ -4,6 +4,7 @@ import 'react-big-calendar/lib/css/react-big-calendar.css';
 import moment from 'moment';
 import {Button, Card, Container, Modal} from "semantic-ui-react";
 import {Bar, BarChart, CartesianGrid, Legend, Tooltip, XAxis, YAxis} from "recharts";
+import Navbar from "./components/Navbar";
 
 
 function BookMeeting(){
@@ -13,17 +14,20 @@ function BookMeeting(){
                                                 {"name": 4, "Counts": 2},
                                                 {"name": 5, "Counts": 1}]);
 
-    return <Container style={{ height: 800 }}>
-
-        <BarChart width={730} height={250} data={data}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="name" />
-            <YAxis />
-            <Tooltip />
-            <Legend />
-            <Bar dataKey="Counts" fill="#8884d8" />
-        </BarChart>
-    </Container>
+    return(
+        <>
+            <Navbar></Navbar>
+            <Container style={{ height: 800 }}>
+                <BarChart width={730} height={250} data={data}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="name" />
+                    <YAxis />
+                    <Tooltip />
+                    <Legend />
+                    <Bar dataKey="Counts" fill="#8884d8" />
+                </BarChart>
+            </Container>
+        </>);
 
 
 }

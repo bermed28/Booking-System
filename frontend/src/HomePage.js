@@ -11,13 +11,11 @@ function HomePage() {
         setOpen(true);
     }
 
-    return (<><Navbar /><Segment><Header dividing textAlign="center" size="huge">Welcome to DB Demo</Header>
-        <Modal
-            centered={false}
-            open={open}
-            onClose={() => setOpen(false)}
-            onOpen={() => setOpen(true)}
-        >
+    return (
+        <>
+            <Navbar></Navbar>
+            <Segment><Header dividing textAlign="center" size="huge">Sign Up for Calendearly</Header>
+        <Modal centered={false} open={open} onClose={() => setOpen(false)} onOpen={() => setOpen(true)}>
             <Modal.Header>Needs changing!</Modal.Header>
             <Modal.Content>
                 <Modal.Description>
@@ -53,7 +51,8 @@ function HomePage() {
 
             <Divider vertical>Or</Divider>
         </Segment>
-    </Segment></>
+        </Segment>
+        </>
     )
 }
 

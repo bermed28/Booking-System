@@ -5,6 +5,7 @@ import moment from 'moment';
 import {Button, Card, Container, Modal, Tab} from "semantic-ui-react";
 import BookMeeting from "./BookMeeting";
 import Schedule from "./Schedule";
+import Navbar from "./components/Navbar";
 
 function UserView(){
     const [isAuth, setIsAuth] = useState(false)
@@ -20,7 +21,12 @@ function UserView(){
         }
     ]
 
-    return <Tab panes={panes}/>
+    return (
+        <>
+        <Navbar></Navbar>
+        <Tab panes={panes}/>
+        </>
+    );
 
 }
 export default UserView;

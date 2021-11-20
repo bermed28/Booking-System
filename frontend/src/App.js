@@ -1,27 +1,22 @@
 import Navbar from "./components/Navbar";
+import {useNavigate} from "react-router-dom"
+
 
 const App = () => {
-    let name = "Chris";
-
-    function onClick() {
-        const element  = document.getElementById("greet");
-        if(element.innerText === "Press the button") {
-            element.innerText = "Hello Chris";
-        }
-        else {
-            element.innerText = "Press the button"
-        }
+    const navigate = useNavigate();
+    let  routeChange= () => {
+        navigate('/Home');
     }
 
-    // return (
-    //     <div>
-    //         <h1 id="greet" style={{color : "white", backgroundColor : "black"}}>Press the button</h1>
-    //         <button className="btn" onClick={onClick}>Press me!</button>
-    //     </div>
-    // )
     return(
-        <Navbar/>
-    )
+        <>
+            <Navbar></Navbar>
+            <div id={"Greeting"}>
+                <h3>Welcome to Calendearly by StackOverflowers Studios!</h3>
+                <button id={"SignUp"} onClick={routeChange}>Sign Up/Log In</button>
+            </div>
+        </>
+    );
 }
 
 export default App;

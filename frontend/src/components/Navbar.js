@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import {Link} from "react-router-dom"
+import {Link, useNavigate} from "react-router-dom"
 import * as Icons from "react-icons/fa"
 import "./Navbar.css";
 import { navItems } from './Navitems';
@@ -8,7 +8,10 @@ import Dropdown from "./Dropdown"
 
 const Navbar = () => {
     const [dropdown, setDropdown] = useState(false);
-
+    const navigate = useNavigate();
+    let  routeChange = (path) => {
+        navigate(`/${path}`);
+    }
     return (
         <>
             <nav className="navbar">
@@ -24,9 +27,10 @@ const Navbar = () => {
                                 </li>
                             )
                         }
+
                         return (
                         <li key={item.id} className={item.cName}>
-                            <Link to={item.path}>{item.title}</Link>
+                            <Link to={`/${item.path}`}>{item.title}</Link>
                         </li>
                     )})}
                 </ul>
