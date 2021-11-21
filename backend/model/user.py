@@ -31,6 +31,14 @@ class UserDAO:
         cursor.close()
         return result
 
+    def getUserByLoginInfo(self, email, password):
+        cursor = self.conn.cursor()
+        query = "select uid, username, uemail, upassword, ufirstname, ulastname, upermission from public.user where uemail=%s and upassword=%s"
+        cursor.execute(query, (email, password))
+        result = cursor.fetchone()
+        cursor.close()
+        return result
+
     def insertUser(self, username, uemail, upassword, ufirstname, ulastname, upermission):
         cursor = self.conn.cursor()
         query = "insert into public.user(username, uemail, upassword, ufirstname, ulastname, upermission) \
