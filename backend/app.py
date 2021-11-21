@@ -186,9 +186,10 @@ def handlemarkRoomUnavailable():
 def handlemarkRoomAvailable(rsid):
     return BaseRoomSchedule().deleteRoomSchedule(rsid, request.json)
 
-@app.route('/StackOverflowersStudios/login/', methods=['GET'])
+@app.route('/StackOverflowersStudios/login', methods=['POST'])
 def handleSignInInformation():
-    return BaseUser().getUserByLoginInfo(request.json)
+    print(request.json)
+    return BaseUser().getUserByLoginInfo(request.get_json())
 
 
 """""""""""""""""MAIN FUNCTION"""""""""""""""

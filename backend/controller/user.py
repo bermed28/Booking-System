@@ -45,6 +45,7 @@ class BaseUser:
 
     def getUserByLoginInfo(self, json):
         dao = UserDAO()
+        print(json)
         username = json['email']
         password = json['password']
         user = self.build_map_dict(dao.getUserByLoginInfo(username, password))

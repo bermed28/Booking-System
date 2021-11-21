@@ -2,6 +2,7 @@ import React, {Component, useRef, useState} from 'react';
 import {Button, Divider, Form, Grid, GridColumn, Header, Modal, Segment, Tab} from 'semantic-ui-react';
 import Navbar from "./components/Navbar";
 import axios from "axios";
+import qs from "qs";
 
 
 
@@ -26,12 +27,17 @@ function HomePage() {
 
             console.log(emailInput.value); // output: 'myemail@mail.com'
             console.log(password.value); // output: 'password'
-            getDataAxios()
+            getDataAxios(emailInput.value, password.value)
 
         };
-        async function getDataAxios(){
-            const response = await axios.get("https://booking-system-stackoverflower.herokuapp.com/StackOverflowersStudios/users")
-            console.log(response.data)
+        async function getDataAxios(emailInput, passwordInput){
+            const input = JSON.stringify({ "email": emailInput, "password": passwordInput});
+            console.log(input);
+            // const response = await axios.post("http://192.168.1.9:8080/StackOverflowersStudios/login", json)
+            const res = await axios.get('http://192.168.1.9:8080/StackOverflowersStudios/login', {
+               params: input
+            });
+            console.log(res.data);
         }
 
         return (
