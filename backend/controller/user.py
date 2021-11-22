@@ -43,12 +43,12 @@ class BaseUser:
             result = self.build_map_dict(user_tuple)
             return jsonify(result), 200
 
-    def getUserByLoginInfo(self, json):
+    def getUserByLoginInfo(self, email, password):
         dao = UserDAO()
-        print(json)
-        username = json['email']
-        password = json['password']
-        user = self.build_map_dict(dao.getUserByLoginInfo(username, password))
+        # print(json)
+        # username = json['email']
+        # password = json['password']
+        user = self.build_map_dict(dao.getUserByLoginInfo(email, password))
         return jsonify(user), 200
 
     def addNewUser(self, json):

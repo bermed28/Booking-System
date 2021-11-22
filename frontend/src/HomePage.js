@@ -27,17 +27,15 @@ function HomePage() {
 
             console.log(emailInput.value); // output: 'myemail@mail.com'
             console.log(password.value); // output: 'password'
-            getDataAxios(emailInput.value, password.value)
 
-        };
+            getDataAxios(emailInput.value, password.value)
+        }
         async function getDataAxios(emailInput, passwordInput){
             const input = JSON.stringify({ "email": emailInput, "password": passwordInput});
             console.log(input);
-            // const response = await axios.post("http://192.168.1.9:8080/StackOverflowersStudios/login", json)
-            const res = await axios.get('http://192.168.1.9:8080/StackOverflowersStudios/login', {
-               params: input
-            });
+            const res = await axios.get('http://192.168.1.9:8080/StackOverflowersStudios/login/' + emailInput + '/'+ passwordInput);
             console.log(res.data);
+            return res;
         }
 
         return (
