@@ -7,12 +7,15 @@ from backend.controller.reservation import BaseReservation
 from backend.controller.room_schedule import BaseRoomSchedule
 from backend.controller.time_slot import BaseTimeSlot
 from backend.controller.members import BaseMembers
+import json
 
 app = Flask(__name__)
 #apply CORS
 CORS(app)
+cors = CORS(app, resources={
+    r"/*": {"origins": "*"}
+})
 
-app = Flask(__name__)
 
 
 @app.route('/')
@@ -186,10 +189,15 @@ def handlemarkRoomUnavailable():
 def handlemarkRoomAvailable(rsid):
     return BaseRoomSchedule().deleteRoomSchedule(rsid, request.json)
 
-@app.route('/StackOverflowersStudios/login/<string:email>/<string:password>', methods=['GET'])
-def handleSignInInformation(email, password):
-    return BaseUser().getUserByLoginInfo(email, password)
+# @app.route('/StackOverflowersStudios/login/<string:email>/<string:password>', methods=['GET'])
+# def handleSignInInformation(email, password):
+#     return BaseUser().getUserByLoginInfo(email, password)
 
+@app.route('/StackOverflowersStudios/login', methods=['POST'])
+def handleSignInInformation():
+    # print(request.json)
+    # print(request.data)
+    return BaseUser().getUserByLoginInfo(request.json)
 
 """""""""""""""""MAIN FUNCTION"""""""""""""""
 if __name__ == '__main__':

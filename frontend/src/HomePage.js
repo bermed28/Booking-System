@@ -2,9 +2,6 @@ import React, {Component, useRef, useState} from 'react';
 import {Button, Divider, Form, Grid, GridColumn, Header, Modal, Segment, Tab} from 'semantic-ui-react';
 import Navbar from "./components/Navbar";
 import axios from "axios";
-import qs from "qs";
-
-
 
 function HomePage() {
 
@@ -28,21 +25,37 @@ function HomePage() {
             console.log(emailInput.value); // output: 'myemail@mail.com'
             console.log(password.value); // output: 'password'
 
-            getDataAxios(emailInput.value, password.value)
+            let res = getDataAxios(emailInput.value, password.value);
         }
+        //Get request passing data through endpoint
+        // async function getDataAxios(emailInput, passwordInput){
+        //     const input = JSON.stringify({ "email": emailInput, "password": passwordInput});
+        //     console.log(input);
+        //     const res = await axios.get('http://192.168.1.9:8080/StackOverflowersStudios/login/' + emailInput + '/'+ passwordInput);
+        //     console.log(res.data);
+        //     return res;
+        // }
+
         async function getDataAxios(emailInput, passwordInput){
-            const input = JSON.stringify({ "email": emailInput, "password": passwordInput});
-            console.log(input);
-            const res = await axios.get('http://192.168.1.9:8080/StackOverflowersStudios/login/' + emailInput + '/'+ passwordInput);
-            console.log(res.data);
-            return res;
+            let data = {email: emailInput, password: passwordInput}
+            let result = null;
+            await axios.post("http://192.168.1.9:8080/StackOverflowersStudios/login",
+                    data,
+                  {headers: {'Content-Type': 'application/json' }}//text/plain //application/json
+                  ).then((response) => {
+                      console.log(response);
+                      result = response.data
+                    }, (error) => {
+                      console.log(error);
+                    });
+            console.log(result)
         }
 
         return (
             <form onSubmit={handleSubmit}>
                 <Form.Input icon='user' iconPosition='left' type="email" ref={emailInput} name="email" defaultValue="myemail@mail.com" label='Username' />
                 <br/>
-                <Form.Input icon='lock'  iconPosition='left'type="text" ref={ageInput} name="password" defaultValue="password" label='Password'/>
+                <Form.Input icon='lock'  iconPosition='left' type="text" ref={ageInput} name="password" defaultValue="password" label='Password'/>
                 <br/>
                 <Button type="submit" content='Login' primary />
             </form>
