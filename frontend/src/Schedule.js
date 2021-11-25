@@ -7,14 +7,6 @@ import Navbar from "./components/Navbar";
 import axios from "axios";
 
 
-// Event {
-//     title: string,
-//         start: Date,
-//         end: Date,
-//         allDay?: boolean
-//     resource?: any,
-// }
-
 const dummyEvents = [
 
     {
@@ -40,7 +32,7 @@ const dummyEvents = [
 
 ];
 
-var months = {
+const months = {
     'Jan' : '01',
     'Feb' : '02',
     'Mar' : '03',
@@ -56,38 +48,25 @@ var months = {
 }
 
 /**
- * Meeting Object receied from request:
+ * Meeting Object received from request:
  *
  * meeting = {
- *
  *     resname: str,
- *     resday: str representing a date,
- *     timeSlots: list of time slots (to be changed later on)
+ *     resday: str representing a date (Fri, 01 Jan 2021 00:00:00 GMT)
+ *     timeSlots: [startTimeSlot, endTimeSlot] in format [HH:MM:SS, HH:MM:SS]
  * }
+ *
+ * Event Object:
+ *
+ *  Event {
+ *    title: string,
+ *    start: Date,
+ *    end: Date,
+ *    allDay?: boolean
+ *    resource?: any
+ *  }
  */
 function Schedule(){
-    // const [dates, setDates] = useState([{
-    //     'title': 'Selection',
-    //     'allDay': false,
-    //     'start': new Date(moment.now()),
-    //     'end': new Date(moment.now())
-    // }]);
-
-    // const [book, bookSet] = useState(false)
-    //
-    // const loadBookFromServer = useCallback(async () => {
-    //     let response = await fetch('api/book/' + id)
-    //     response  = await response.json()
-    //     bookSet(response)
-    // }, [id]) // every time id changed, new book will be loaded
-    //
-    // useEffect(() => {
-    //     loadBookFromServer()
-    // }, [loadBookFromServer]) // useEffect will run once and when id changes
-    //
-    //
-    // if (!book) return false
-
     const [open, setOpen] = useState(false);
     const[meetings, setMeetings] = useState([]);
     const localizer = momentLocalizer(moment)
