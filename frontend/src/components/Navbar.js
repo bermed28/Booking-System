@@ -12,6 +12,17 @@ const Navbar = () => {
     let  routeChange = (path) => {
         navigate(`/${path}`);
     }
+    const [loggedIn, setLoggedIn]= React.useState(false);
+    const handleLogout = () => {
+        // localStorage.clear();
+        localStorage.removeItem("login-data");
+    }
+    React.useEffect(() => {
+            const data = localStorage.getItem("login-data");
+            if(data){
+                setLoggedIn(true);
+             }
+        },[])
     return (
         <>
             <nav className="navbar">
@@ -35,8 +46,15 @@ const Navbar = () => {
                     )})}
                 </ul>
                 <div>
-                    <Button text="Sign Up"/>
-                    <Button text="Sign In"/>
+                    { loggedIn === false &&
+                        <Button text="Sign Up" path="/Home"/>
+                    }
+                    { loggedIn === false &&
+                        <Button text="Sign In" path="/Home"/>
+                    }
+                    { loggedIn === true &&
+                        <Button text="Logout" path="/Home" primary onClick={handleLogout}/>
+                    }
                 </div>
             </nav>
         </>
