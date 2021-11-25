@@ -3,10 +3,10 @@ import {Link} from "react-router-dom"
 import "./Button.css"
 
 
-const Button = ({text}) => {
+const Button = ({text, path, onClick}) => {
     return (
-        <Link to="sign-up">
-            <button className="btn">{text}</button>
+        <Link to={path}>
+            <button className="btn" onClick={onClick}>{text}</button>
         </Link>
     );
 }
