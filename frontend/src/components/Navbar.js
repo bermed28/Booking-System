@@ -12,6 +12,13 @@ const Navbar = () => {
     let  routeChange = (path) => {
         navigate(`/${path}`);
     }
+    const [login, setLogin]= React.useState(null);
+    React.useEffect(() => {
+            const data = localStorage.getItem("login-data");
+            if(data){
+                setLogin(data);
+             }
+        })
     return (
         <>
             <nav className="navbar">
@@ -35,8 +42,12 @@ const Navbar = () => {
                     )})}
                 </ul>
                 <div>
-                    <Button text="Sign Up"/>
-                    <Button text="Sign In"/>
+                    { login == null &&
+                        <Button text="Sign Up"/>
+                    }
+                     { login == null &&
+                        <Button text="Sign In"/>
+                    }
                 </div>
             </nav>
         </>
