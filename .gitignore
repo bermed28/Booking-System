@@ -4,3 +4,4 @@ backend/config/__pycache__/
 backend/controller/__pycache__/
 backend/model/__pycache__/
 frontend/node_modules/
+frontend/package-lock.json/
