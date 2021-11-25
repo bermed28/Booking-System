@@ -15,7 +15,7 @@ function HomePage() {
     console.log(emailReg);
     const login = () => {
         let data = {email: emailReg, password: passwordReg}
-        axios.post("http://192.168.1.9:8080/StackOverflowersStudios/login",
+        axios.post("http://localhost:8080/StackOverflowersStudios/login",
             data,
             {headers: {'Content-Type': 'application/json'}}//text/plain //application/json
         ).then((response) => {
