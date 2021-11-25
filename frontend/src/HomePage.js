@@ -39,7 +39,7 @@ function HomePage() {
         async function getDataAxios(emailInput, passwordInput){
             let data = {email: emailInput, password: passwordInput}
             let result = null;
-            await axios.post("http://192.168.1.9:8080/StackOverflowersStudios/login",
+            await axios.post("http://localhost:8080/StackOverflowersStudios/login",
                     data,
                   {headers: {'Content-Type': 'application/json' }}//text/plain //application/json
                   ).then((response) => {

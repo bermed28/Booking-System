@@ -71,6 +71,39 @@ class BaseReservation:
             result['tids'] = times
             return jsonify(result), 200
 
+    def getReservationByUserId(self, uid):
+        dao = ReservationDAO()
+        reservationTuples = dao.getReservationByUserId(uid)
+        if not reservationTuples:
+            return jsonify("Not Found"), 404
+        else:
+            reservations = []
+            rsdao = ReservationScheduleDAO()
+            tsDAO = TimeSlotDAO()
+            for tup in reservationTuples:
+                json = {}
+                json['resid'] = tup[0]
+                json['resname'] = tup[1]
+                json['resday'] = tup[2]
+                reservations.append(json)
+
+            reservations = list(map(dict, set(tuple(r.items()) for r in reservations)))
+
+            for r in reservations:
+                used_time_slots = rsdao.getReservationScheduleByReservationId(r['resid'])
+                times = []
+                if len(used_time_slots) == 1:
+                    times.append(tsDAO.getTimeSlotByTimeSlotId(used_time_slots[0][1])[1:])
+                else:
+
+                    times.append(tsDAO.getTimeSlotByTimeSlotId(used_time_slots[0][1])[1])
+                    times.append(tsDAO.getTimeSlotByTimeSlotId(used_time_slots[-1][1])[2])
+
+                r['timeSlots'] = times
+
+
+            return jsonify(reservations), 200
+
     #Adding a reservation implies adding rows to the members, user schedule, reservation schedule and room schedule
     #tables as well
     def addNewReservation(self, json):

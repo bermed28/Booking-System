@@ -31,6 +31,20 @@ class ReservationDAO:
         cursor.close()
         return result
 
+    def getReservationByUserId(self, uid):
+        cursor = self.conn.cursor()
+        query = "with involved_reservations as (select resid from " \
+                "((select uid, resid from reservation where uid = %s) " \
+                "union (select uid, resid from members where uid = %s)) as temp) " \
+                "select resid, resname, resday from reservation natural inner join reservation_schedule " \
+                "where resid in (select resid from involved_reservations);"
+        cursor.execute(query, (uid, uid))
+        result = []
+        for row in cursor:
+            result.append(row)
+        cursor.close()
+        return result
+
     def insertReservation(self, resname, resday, rid, uid):
         cursor = self.conn.cursor()
         query = "insert into public.reservation(resname, resday, rid, uid) values(%s,%s,%s,%s) returning resid;"

@@ -199,6 +199,11 @@ def handleSignInInformation():
     # print(request.data)
     return BaseUser().getUserByLoginInfo(request.json)
 
+@app.route('/StackOverflowersStudios/userReservations/<int:uid>', methods=['GET'])
+def handleGetReservationByUserID(uid):
+    return BaseReservation().getReservationByUserId(uid)
+
+
 """""""""""""""""MAIN FUNCTION"""""""""""""""
 if __name__ == '__main__':
     app.run(debug=True, port=8080, host="0.0.0.0")
