@@ -59,21 +59,29 @@ function BookMeeting(){
 
       const data = JSON.parse(tempData)
 
-      const [mostUsedRoom, setMostUsedRoom] = useState([]);
+      const [mostUsedRoom, setMostUsedRoom] = useState("");
 
       const getMostUsedRoom = async () => {
           api.get("/StackOverflowersStudios/user/mostusedroom/" + data.uid).then(res => {
               console.log(res);
-              setMostUsedRoom(res.data);
+              if(res.data.rname === undefined){
+                  setMostUsedRoom("User has not used any rooms.");
+              }else{
+              setMostUsedRoom(res.data.rname + " in the " + res.data.rbuildname + " building.");
+              }
           })
       }
   
-      const [mostLoggedWith, setMostLoggedWith] = useState([]);
+      const [mostLoggedWith, setMostLoggedWith] = useState("");
   
       const getMostLoggedWith = async () => {
           api.get("/StackOverflowersStudios/user/mostbookedwith/" + data.uid).then(res => {
               console.log(res);
-              setMostLoggedWith(res.data);
+              if(res.data.username === undefined){
+                  setMostLoggedWith("User has not been booked with anyone.");
+              }else{
+              setMostLoggedWith(res.data.username + ".");
+              }
           })
       }
     
@@ -87,13 +95,13 @@ function BookMeeting(){
             { loggedIn === true &&
                 <Container style={{ height: 100 }}>
                 <h2>The room you've used the most is:</h2>
-                <h3>{mostUsedRoom.rname + " in the " + mostUsedRoom.rbuildname + " building."}</h3>
+                <h3>{mostUsedRoom}</h3>
             </Container>
             }
             { loggedIn === true &&
                 <Container style={{ height: 100 }}>
                 <h2>The user you've been booked with the most is:</h2>
-                <h3>{mostLoggedWith.username + "."}</h3>
+                <h3>{mostLoggedWith}</h3>
             </Container>
             }
             <br/>

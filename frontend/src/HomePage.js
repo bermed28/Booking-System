@@ -40,7 +40,7 @@ function HomePage() {
     return (
         <>
             <Navbar/>
-            <Segment><Header dividing textAlign="center" size="huge">Sign Up for Calendearly</Header>
+            <Segment><Header dividing textAlign="center" size="huge">Sign in to use Calendearly</Header>
                 <Modal centered={false} open={open} onClose={() => setOpen(false)} onOpen={() => setOpen(true)}>
                     <Modal.Header>Needs changing!</Modal.Header>
                     <Modal.Content>
@@ -53,7 +53,6 @@ function HomePage() {
                     </Modal.Actions>
                 </Modal>
                 <Segment placeholder>
-                    <Grid columns={2} relaxed='very' stackable>
                         <Grid.Column>
                             <Form>
                         <Form.Input onChange={(e) => {
@@ -61,8 +60,9 @@ function HomePage() {
                         }}
                             icon='user'
                             iconPosition='left'
-                            label='Username'
-                            placeholder='Username' />
+                            label='Email'
+                            type='email'
+                            placeholder='Email' />
                         <Form.Input onChange={(e) => {
                             setPasswordReg(e.target.value)
                         }}
@@ -73,12 +73,7 @@ function HomePage() {
                         <Button content='Login' primary onClick={login} />
                     </Form>
                         </Grid.Column>
-                        <Grid.Column verticalAlign='middle'>
-                            <Button content='Sign up' icon='signup' size='big' onClick={handleChange}/>
-                        </Grid.Column>
-                    </Grid>
                     {loginMessage}
-                    <Divider vertical>Or</Divider>
                 </Segment>
             </Segment>
         </>
