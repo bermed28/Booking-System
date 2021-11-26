@@ -72,8 +72,8 @@ class UserDAO:
 
     def getMostUsedRoombyUser(self, uid):
         cursor = self.conn.cursor()
-        query = "with involved_reservations as (select resid from ((select uid, resid from reservation where uid = 7)\
-         union (select uid, resid from members where uid = 7)) as temp), room_uses as (select rid, count(*) as uses\
+        query = "with involved_reservations as (select resid from ((select uid, resid from reservation where uid = %s)\
+         union (select uid, resid from members where uid = %s)) as temp), room_uses as (select rid, count(*) as uses\
          from reservation natural inner join room where resid in (select resid from involved_reservations)\
          group by rid) select * from room natural inner join room_uses order by uses desc"
         cursor.execute(query, (uid, uid))
@@ -133,6 +133,8 @@ class UserDAO:
         uid, resid from members)) as temp2 where resid in(select resid from involved_reservations) and uid <> %s \
         group by uid) select * from public.user natural inner join involvements_per_user order by involvements desc;"
         cursor.execute(query, (uid, uid, uid))
+        if cursor.rowcount <= 0:
+            return "User has not been booked with anyone"
         row = cursor.fetchone()
         result = {}
         result['uid'] = row[0]

@@ -8,6 +8,8 @@ import 'semantic-ui-css/semantic.min.css'
 import UserView from "./UserView";
 import Dashboard from "./Dashboard";
 import App from './App';
+import Signup from "./Signup";
+
 
 window.debug = true;
 
@@ -21,6 +23,7 @@ ReactDOM.render(
             <Route exact path="/Home" element={<HomePage/>} />
             <Route exact path="/UserView" element={<UserView/>} />
             <Route exact path="/Dashboard" element={<Dashboard/>} />
+            <Route exact path="/Signup" element={<Signup/>} />
         </Routes>
     </BrowserRouter>,
     document.getElementById('root')
