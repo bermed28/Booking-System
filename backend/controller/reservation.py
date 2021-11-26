@@ -93,7 +93,8 @@ class BaseReservation:
                 used_time_slots = rsdao.getReservationScheduleByReservationId(r['resid'])
                 times = []
                 if len(used_time_slots) == 1:
-                    times.append(tsDAO.getTimeSlotByTimeSlotId(used_time_slots[0][1])[1:])
+                    times.append(tsDAO.getTimeSlotByTimeSlotId(used_time_slots[0][1])[1])
+                    times.append(tsDAO.getTimeSlotByTimeSlotId(used_time_slots[0][1])[2])
                 else:
 
                     times.append(tsDAO.getTimeSlotByTimeSlotId(used_time_slots[0][1])[1])

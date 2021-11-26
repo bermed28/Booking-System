@@ -7,6 +7,7 @@ import Navbar from "./components/Navbar";
 import axios from "axios";
 
 
+
 const dummyEvents = [
 
     {
@@ -70,9 +71,11 @@ function Schedule(){
     const [open, setOpen] = useState(false);
     const[meetings, setMeetings] = useState([]);
     const localizer = momentLocalizer(moment)
+    const loginData = localStorage.getItem('login-data');
+    const data = JSON.parse(loginData);
 
     const fetchData = async () =>{
-        axios.get("http://192.168.0.24:8080/StackOverflowersStudios/userReservations/7", {
+        axios.get(`http://${window.url}/StackOverflowersStudios/userReservations/${data.uid}`, {
             headers: {'Content-Type': 'application/json' }})
             .then(
                 (response) => {

@@ -9,6 +9,11 @@ import UserView from "./UserView";
 import Dashboard from "./Dashboard";
 import App from './App';
 
+window.debug = true;
+
+if(window.debug) window.url = "localhost:8080";
+else window.url = "bs-stackoverflowers-backend.herokuapp.com";
+
 ReactDOM.render(
     <BrowserRouter>
         <Routes>
