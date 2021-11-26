@@ -22,7 +22,8 @@ function HomePage() {
             console.log(response);
             setloginStatus(true);
             setloginMessage('Logged in');
-            localStorage.setItem("login-data", JSON.stringify(response.data))
+            localStorage.setItem("login-data", JSON.stringify(response.data));
+            window.location.reload(false);
         },(error) => {
             // setloginStatus(false);
             setloginMessage('Wrong email or password');
@@ -70,7 +71,8 @@ function HomePage() {
                             iconPosition='left'
                             label='Password'
                             type='password' />
-                        <Button content='Login' primary onClick={login} />
+                        <Button content='Login' onClick={login} color="violet" />
+
                     </Form>
                         </Grid.Column>
                         <Grid.Column verticalAlign='middle'>

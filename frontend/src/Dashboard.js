@@ -85,6 +85,9 @@ function BookMeeting(){
             <Navbar/>
             <br/>
             { loggedIn === true &&
+                <h1 style={{textAlign: "center"}}>Your Statistics:</h1>
+            }
+            { loggedIn === true &&
                 <Container style={{ height: 100 }}>
                 <h2>The room you've used the most is:</h2>
                 <ul>
@@ -101,6 +104,7 @@ function BookMeeting(){
             </Container>
             }
             <br/>
+            <h1 style={{textAlign: "center"}}>Global Statistics:</h1>
             <Container style={{ height: 350 }}>
                 <h2>Most Used Rooms</h2>
                 <BarChart width={1030} height={250} data={rooms}>
