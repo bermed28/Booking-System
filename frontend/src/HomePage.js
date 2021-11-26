@@ -12,7 +12,7 @@ function HomePage() {
     const [passwordReg, setPasswordReg] = useState("");
     const [loginStatus, setloginStatus] = useState(false);
     const [loginMessage, setloginMessage] = useState("");
-    console.log(emailReg);
+
     const login = () => {
         let data = {email: emailReg, password: passwordReg}
         axios.post(`http://${window.url}/StackOverflowersStudios/login`,
