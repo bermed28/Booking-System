@@ -8,7 +8,7 @@ import Navbar from "./components/Navbar";
 import axios from 'axios';
 
 const api = axios.create({
-    baseURL : `http://${window.url}/`
+    baseURL : 'http://localhost:8080'//window.url
 })
 
 function BookMeeting(){

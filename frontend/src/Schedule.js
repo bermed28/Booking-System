@@ -75,7 +75,7 @@ function Schedule(){
     const data = JSON.parse(loginData);
 
     const fetchData = async () =>{
-        axios.get(`http://${window.url}/StackOverflowersStudios/userReservations/${data.uid}`, {
+        axios.get(`http://localhost:8080/StackOverflowersStudios/userReservations/${data.uid}`, {
             headers: {'Content-Type': 'application/json' }})
             .then(
                 (response) => {

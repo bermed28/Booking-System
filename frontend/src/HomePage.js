@@ -15,7 +15,7 @@ function HomePage() {
 
     const login = () => {
         let data = {email: emailReg, password: passwordReg}
-        axios.post(`http://${window.url}/StackOverflowersStudios/login`,
+        axios.post(`http://localhost:8080/StackOverflowersStudios/login`,
             data,
             {headers: {'Content-Type': 'application/json'}}//text/plain //application/json
         ).then((response) => {
