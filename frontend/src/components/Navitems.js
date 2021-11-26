@@ -24,18 +24,3 @@ export const navItems = [
       cName: "nav-item",
     },
   ];
-  
-  export const statsDropdown = [
-    {
-      id: 1,
-      title: "My Stats",
-      path: "/",
-      cName: "submenu-item",
-    },
-    {
-      id: 2,
-      title: "Global Stats",
-      path: "/",
-      cName: "submenu-item",
-    },
-  ];
