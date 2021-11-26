@@ -1,9 +1,13 @@
 import React, {Component, useEffect, useRef, useState} from 'react';
-import {Button, Divider, Form, Grid, GridColumn, Header, Modal, Segment, Tab} from 'semantic-ui-react';
+import {Divider, Form, Grid, GridColumn, Header, Modal, Segment, Tab} from 'semantic-ui-react';
 import Navbar from "./components/Navbar";
 import axios from "axios";
+import Button from "./components/Button";
+import "./components/Button.css";
+import {Link} from "react-router-dom";
+import * as Icons from "react-icons/bi"
 
-function HomePage() {
+function Login() {
     const [open, setOpen] = useState(false);
     const handleChange = (event, newValue) => {
         setOpen(true);
@@ -32,10 +36,10 @@ function HomePage() {
     }
     useEffect(() => {
         const login_data = localStorage.getItem("login-data");
-            if (login_data) {
-                setloginStatus(true);
-            }
-      }, []);
+        if (login_data) {
+            setloginStatus(true);
+        }
+    }, []);
 
 
     return (
@@ -54,32 +58,36 @@ function HomePage() {
                     </Modal.Actions>
                 </Modal>
                 <Segment placeholder>
-                        <Grid.Column>
-                            <Form>
-                        <Form.Input onChange={(e) => {
-                            setEmailReg(e.target.value)
-                        }}
-                            icon='user'
-                            iconPosition='left'
-                            label='Email'
-                            type='email'
-                            placeholder='Email' />
-                        <Form.Input onChange={(e) => {
-                            setPasswordReg(e.target.value)
-                        }}
-                            icon='lock'
-                            iconPosition='left'
-                            label='Password'
-                            type='password' />
-                        <Button content='Login' onClick={login} color="violet" />
+                    <Grid.Column>
+                        <Form>
+                            <Form.Input onChange={(e) => {
+                                setEmailReg(e.target.value)
+                            }}
+                                        icon='user'
+                                        iconPosition='left'
+                                        label='Email'
+                                        type='email'
+                                        placeholder='Email' />
+                            <Form.Input onChange={(e) => {
+                                setPasswordReg(e.target.value)
+                            }}
+                                        icon='lock'
+                                        iconPosition='left'
+                                        label='Password'
+                                        type='password' />
+                            <div style={{display: "flex", justifyContent: "center"}}>
+                                <Link to={"/"} style={{color: "white"}}>
+                                    <button className="btn-submit" onClick={login}><Icons.BiLogIn/> Login</button>
+                                </Link>
+                            </div>
 
-                    </Form>
-                        </Grid.Column>
-                    {loginMessage}
+                        </Form>
+                    </Grid.Column>
+                    {/* {loginMessage} */}
                 </Segment>
             </Segment>
         </>
     )
 }
 
-export default HomePage;
+export default Login;
