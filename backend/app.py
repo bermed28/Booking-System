@@ -1,12 +1,12 @@
 from flask import Flask, request
 from flask_cors import CORS
-from backend.controller.user import BaseUser
-from backend.controller.user_schedule import BaseUserSchedule
-from backend.controller.room import BaseRoom
-from backend.controller.reservation import BaseReservation
-from backend.controller.room_schedule import BaseRoomSchedule
-from backend.controller.time_slot import BaseTimeSlot
-from backend.controller.members import BaseMembers
+from controller.user import BaseUser
+from controller.user_schedule import BaseUserSchedule
+from controller.room import BaseRoom
+from controller.reservation import BaseReservation
+from controller.room_schedule import BaseRoomSchedule
+from controller.time_slot import BaseTimeSlot
+from controller.members import BaseMembers
 import json
 
 app = Flask(__name__)

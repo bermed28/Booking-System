@@ -1,4 +1,4 @@
-from backend.config.dbconfig import pg_config
+from config.dbconfig import pg_config
 import psycopg2
 import json
 

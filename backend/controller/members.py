@@ -1,5 +1,5 @@
 from flask import jsonify
-from backend.model.members import MembersDAO
+from model.members import MembersDAO
 
 class BaseMembers:
 

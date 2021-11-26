@@ -1,5 +1,5 @@
 from flask import jsonify
-from backend.model.reservation_schedule import ReservationScheduleDAO
+from model.reservation_schedule import ReservationScheduleDAO
 
 class BaseReservationSchedule:
 

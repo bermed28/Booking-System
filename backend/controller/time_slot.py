@@ -1,5 +1,5 @@
 from flask import jsonify
-from backend.model.time_slot import TimeSlotDAO
+from model.time_slot import TimeSlotDAO
 
 class BaseTimeSlot:
 
