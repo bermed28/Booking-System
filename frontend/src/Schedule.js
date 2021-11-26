@@ -5,8 +5,7 @@ import moment from 'moment';
 import {Button, Card, Container, Modal} from "semantic-ui-react";
 import Navbar from "./components/Navbar";
 import axios from "axios";
-
-
+const app = require("./App");
 
 const dummyEvents = [
 
@@ -75,7 +74,7 @@ function Schedule(){
     const data = JSON.parse(loginData);
 
     const fetchData = async () =>{
-        axios.get(`http://localhost:8080/StackOverflowersStudios/userReservations/${data.uid}`, {
+        axios.get(`${app.BackendURL}/StackOverflowersStudios/userReservations/${data.uid}`, {
             headers: {'Content-Type': 'application/json' }})
             .then(
                 (response) => {

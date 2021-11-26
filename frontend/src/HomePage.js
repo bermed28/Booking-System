@@ -3,6 +3,7 @@ import {Button, Divider, Form, Grid, GridColumn, Header, Modal, Segment, Tab} fr
 import Navbar from "./components/Navbar";
 import axios from "axios";
 
+const app = require('./App');
 function HomePage() {
     const [open, setOpen] = useState(false);
     const handleChange = (event, newValue) => {
@@ -15,7 +16,7 @@ function HomePage() {
 
     const login = () => {
         let data = {email: emailReg, password: passwordReg}
-        axios.post(`http://localhost:8080/StackOverflowersStudios/login`,
+        axios.post(`${app.BackendURL}/StackOverflowersStudios/login`,
             data,
             {headers: {'Content-Type': 'application/json'}}//text/plain //application/json
         ).then((response) => {

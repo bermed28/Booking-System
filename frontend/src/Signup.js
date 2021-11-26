@@ -2,6 +2,7 @@ import React, {Component, useEffect, useRef, useState} from 'react';
 import {Button, Divider, Form, Grid, GridColumn, Header, Modal, Segment, Tab} from 'semantic-ui-react';
 import Navbar from "./components/Navbar";
 import axios from "axios";
+const app = require("./App");
 
 function HomePage() {
 
@@ -26,7 +27,7 @@ function HomePage() {
         let data = {username: userReg, uemail: emailReg, upassword: passwordReg,
             ufirstname: firstNameReg, ulastname: lastNameReg, upermission: permissionReg};
         console.log(data);
-        axios.post("http://localhost:8080/StackOverflowersStudios/users",
+        axios.post(`${app.BackendURL}/StackOverflowersStudios/users`,
             data,
             {headers: {'Content-Type': 'application/json'}}//text/plain //application/json
         ).then((response) => {
@@ -55,12 +56,30 @@ function HomePage() {
                         <Grid.Column>
                             <Form>
                         <Form.Input onChange={(e) => {
+                            setFirstNameReg(e.target.value)
+                        }}
+                            icon='name'
+                            iconPosition='left'
+                            label='First Name'
+                            type='name'
+                            placeholder='First Name'/>
+                        <Form.Input onChange={(e) => {
+                            setLastNameReg(e.target.value)
+                        }}
+                            icon='name'
+                            iconPosition='left'
+                            label='Last Name'
+                            type='name'
+                            placeholder='Last Name' />
+
+                        <Form.Input onChange={(e) => {
                             setUserReg(e.target.value)
                         }}
                             icon='user'
                             iconPosition='left'
                             label='Username'
-                            type='username' />
+                            type='username'
+                            placeholder='Username' />
                         <Form.Input onChange={(e) => {
                             setEmailReg(e.target.value)
                         }}
@@ -74,27 +93,19 @@ function HomePage() {
                             icon='lock'
                             iconPosition='left'
                             label='Password'
-                            type='password' />
-                         <Form.Input onChange={(e) => {
-                            setFirstNameReg(e.target.value)
-                        }}
-                            icon='name'
-                            iconPosition='left'
-                            label='First Name'
-                            type='name' />
-                         <Form.Input onChange={(e) => {
-                            setLastNameReg(e.target.value)
-                        }}
-                            icon='name'
-                            iconPosition='left'
-                            label='Last Name'
-                            type='name' />
-                    <select style={{width: "250px",} } onChange={(e) => {
-                            setPermissionReg(e.target.value)
-                        }}>
-                      <option selected value="Student">Student</option>
-                      <option value="Department Staff">Department Staff</option>
-                    </select>
+                            type='password'
+                            placeholder='Password'/>
+                        <div align='center'>
+                            <div style={{paddingRight: "140px", margin: "5px"}} >
+                                <h5><strong>Permission</strong></h5>
+                            </div>
+                            <select style={{width: "210px", textAlign: "center"}} onChange={(e) => {setPermissionReg(e.target.value)}}>
+                                <option selected value="Student">Student</option>
+                                <option value="Department Staff">Department Staff</option>
+                            </select>
+                            <br/>
+                        </div>
+
                         <Button content='Signup' primary onClick={signup} />
                     </Form>
                         </Grid.Column>

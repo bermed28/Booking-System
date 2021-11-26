@@ -3,26 +3,23 @@ import {Button, Divider, Form, Grid, Header, Modal, Segment, Tab} from 'semantic
 import {useNavigate, useState} from "react-router-dom"
 import "./App.css"
 
+/**
+ * Example of using [var,setVar]:
+ *  const navigate = useNavigate();
+ *  const [open, setOpen] = useState(false);
+ *  let  routeChange= () => {
+ *      navigate('/Home');
+ *  }
+ *  const handleChange = (event, newValue) => {
+ *      setOpen(true);
+ *  }
+ */
 const App = () => {
-    // const navigate = useNavigate();
-    // const [open, setOpen] = useState(false);
-    // let  routeChange= () => {
-    //     navigate('/Home');
-    // }
-
-    // const handleChange = (event, newValue) => {
-    //     setOpen(true);
-    // }
 
     return(
         <>
             <Navbar/>
-            {/* <div id={"Greeting"}>
-                <h3>Welcome to Calendearly by StackOverflowers Studios!</h3>
-                <button id={"SignUp"} onClick={routeChange}>Sign Up/Log In</button>
-            </div> */}
             <Segment placeholder>
-
             <Grid columns={2} relaxed='very' stackable>
                 <Grid.Column>
                     <div className="container">
@@ -46,4 +43,14 @@ const App = () => {
     );
 }
 
+const debug = true;
+let url = "";
+if(debug){
+    url = "http://localhost:8080";
+}
+else {
+    url = "https://bs-stackoverflowers-backend.herokuapp.com";
+}
+
+export const BackendURL = url;
 export default App;

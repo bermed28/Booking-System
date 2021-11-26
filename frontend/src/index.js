@@ -10,11 +10,6 @@ import Dashboard from "./Dashboard";
 import App from './App';
 import Signup from "./Signup";
 
-//
-// window.debug = true;
-//
-// if(window.debug) window.url = "http://localhost:8080";
-// else window.url = "htpps://bs-stackoverflowers-backend.herokuapp.com";
 
 ReactDOM.render(
     <BrowserRouter>

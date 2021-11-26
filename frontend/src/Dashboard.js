@@ -6,9 +6,10 @@ import {Button, Card, Container, Modal} from "semantic-ui-react";
 import {Bar, BarChart, CartesianGrid, Legend, Tooltip, XAxis, YAxis, ResponsiveContainer} from "recharts";
 import Navbar from "./components/Navbar";
 import axios from 'axios';
+const app = require("./App");
 
 const api = axios.create({
-    baseURL : 'http://localhost:8080'//window.url
+    baseURL : app.BackendURL //'http://localhost:8080'
 })
 
 function BookMeeting(){
