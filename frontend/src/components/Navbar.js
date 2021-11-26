@@ -41,7 +41,7 @@ const Navbar = () => {
                 </ul>
                 <div>
                     { loggedIn === false &&
-                        <Button text="Sign Up" path="/Home"/>
+                        <Button text="Sign Up" path="/Signup"/>
                     }
                     { loggedIn === false &&
                         <Button text="Sign In" path="/Home"/>
