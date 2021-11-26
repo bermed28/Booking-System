@@ -87,19 +87,23 @@ function BookMeeting(){
             { loggedIn === true &&
                 <Container style={{ height: 100 }}>
                 <h2>The room you've used the most is:</h2>
-                <h3>{mostUsedRoom.rname + " in the " + mostUsedRoom.rbuildname + " building."}</h3>
+                <ul>
+                    <li><h3>{mostUsedRoom.rname + " in the " + mostUsedRoom.rbuildname + " building."}</h3></li>
+                </ul>
             </Container>
             }
             { loggedIn === true &&
                 <Container style={{ height: 100 }}>
                 <h2>The user you've been booked with the most is:</h2>
-                <h3>{mostLoggedWith.username + "."}</h3>
+                <ul>
+                    <li><h3>{mostLoggedWith.username + "."}</h3></li>
+                </ul>
             </Container>
             }
             <br/>
             <Container style={{ height: 350 }}>
                 <h2>Most Used Rooms</h2>
-                <BarChart width={830} height={250} data={rooms}>
+                <BarChart width={1030} height={250} data={rooms}>
                     <CartesianGrid strokeDasharray="3 3" />
                     <XAxis dataKey="rname" />
                     <YAxis />
@@ -108,17 +112,6 @@ function BookMeeting(){
                     <Bar dataKey="times_used" fill="#8884d8" />
                 </BarChart>
             </Container>
-            {/* <Container style={{ height: 350 }}>
-                <h2>Most Booked Users</h2>
-                <BarChart width={730} height={250} data={users}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="username"/>
-                    <YAxis />
-                    <Tooltip />
-                    <Legend />
-                    <Bar dataKey="times_booked" fill="#8884d8" />
-                </BarChart>
-            </Container> */}
             <Container style={{ height: 350 }}>
                 <h2>Most Booked Users</h2>
                 <BarChart width={1030} height={250} data={users}>
@@ -132,7 +125,7 @@ function BookMeeting(){
             </Container>
             <Container style={{ height: 350 }}>
                 <h2>Busiest Time Slots</h2>
-                <BarChart width={830} height={250} data={timeSlots}>
+                <BarChart width={1030} height={250} data={timeSlots}>
                     <CartesianGrid strokeDasharray="3 3" />
                     <XAxis dataKey="tstarttime" />
                     <YAxis />
