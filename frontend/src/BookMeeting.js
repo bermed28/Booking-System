@@ -4,6 +4,8 @@ import 'react-big-calendar/lib/css/react-big-calendar.css';
 import moment from 'moment';
 import {Button, Card, Container, Form, Grid, Modal} from "semantic-ui-react";
 import Navbar from "./components/Navbar";
+import axios from "axios";
+import * as app from "./App";
 
 
 // Event {
@@ -35,26 +37,35 @@ function BookMeeting(){
      * const numbers = [2,3,4,4,2,3,3,4,4,5,5,6,6,7,5,32,3,4,5]
      * console.log([...new Set(numbers)]) // [2, 3, 4, 5, 6, 7, 32]
      */
-    const [room, setRoom] = useState("");
-    const [emailReg, setEmailReg] = useState("");
-    const [passwordReg, setPasswordReg] = useState("");
+    const [room, setRoom] = useState(""); // hardcoded *fix*
     const [meetingName, setMeetingName] = useState("");
-    const [permissionReg, setPermissionReg] = useState("Student");
-    const [signupMessage, setSignupMessage] = useState("Not submitted yet");
 
-    // if(meetingInformation !== undefined) {
-    //     console.log(meetingInformation[0].start.getHours() + ":" + meetingInformation[0].start.getMinutes());
-    //     console.log("Starting TID: " + getTID(meetingInformation[0].start.getHours(), meetingInformation[0].start.getMinutes()));
-    //     console.log("Ending TID: " + (getTID(meetingInformation[0].end.getHours(), meetingInformation[0].end.getMinutes()) - 1));
-    //
-    //     let startTID = getTID(meetingInformation[0].start.getHours(), meetingInformation[0].start.getMinutes());
-    //     let endTID = getTID(meetingInformation[0].end.getHours(), meetingInformation[0].end.getMinutes()) - 1;
-    //
-    //
-    //     for (let i = startTID; i <= endTID; i++) {
-    //         console.log(i);
-    //     }
-    // }
+    const bookMeeting = () => {
+        var tempData = localStorage.getItem("login-data");
+        const userData = JSON.parse(tempData)
+
+        let date = meetingInformation[0].start.getFullYear()+'-'+(meetingInformation[0].start.getMonth()+1)+'-'+ meetingInformation[0].start.getDate();
+
+        let startTID = getTID(meetingInformation[0].start.getHours(), meetingInformation[0].start.getMinutes());
+        let endTID = getTID(meetingInformation[0].end.getHours(), meetingInformation[0].end.getMinutes()) - 1;
+
+        let timeSlot =[];
+        for (let i = startTID; i <= endTID; i++) {
+            timeSlot.push(i);
+        }
+
+        let data = {resday: date, resname: meetingName, rid: 21, uid: userData.uid, members: [], time_slots: timeSlot};
+        console.log(data);
+
+        axios.post(`${app.BackendURL}/StackOverflowersStudios/reservations`,
+            data,
+            {headers: {'Content-Type': 'application/json'}}//text/plain //application/json
+        ).then((response) => {
+            console.log(response);
+        },(error) => {
+            console.log(error);
+        });
+    }
 
 
     return (
@@ -73,7 +84,6 @@ function BookMeeting(){
                     'end': new Date(selected.end)
                 }] ) } }
             >
-
             </Calendar>
                 <Modal centered={false} open={open} onClose={() => setOpen(false)} onOpen={() => setOpen(true)}>
                     <Modal.Header>Book New Meeting</Modal.Header>
@@ -84,55 +94,24 @@ function BookMeeting(){
                                     <Form.Input onChange={(e) => {
                                         setMeetingName(e.target.value)
                                     }}
-                                                icon='name'
+                                                icon='user'
                                                 iconPosition='left'
                                                 label='Meeting Name'
                                                 type='name' />
-
-                                    <div>
-                                        <h4>Time </h4>
-                                    </div>
-
                                     <Form.Input onChange={(e) => {
                                         setRoom(e.target.value)
                                     }}
-                                                icon='user'
+                                                icon='room'
                                                 iconPosition='left'
                                                 label='Room'
                                                 type='room'
                                                 placeholder='Room' />
-                                    {/*<Form.Input onChange={(e) => {*/}
-                                    {/*    setEmailReg(e.target.value)*/}
-                                    {/*}}*/}
-                                    {/*            icon='user'*/}
-                                    {/*            iconPosition='left'*/}
-                                    {/*            label='Email'*/}
-                                    {/*            placeholder='Email' />*/}
-                                    {/*<Form.Input onChange={(e) => {*/}
-                                    {/*    setPasswordReg(e.target.value)*/}
-                                    {/*}}*/}
-                                    {/*            icon='lock'*/}
-                                    {/*            iconPosition='left'*/}
-                                    {/*            label='Password'*/}
-                                    {/*            type='password'*/}
-                                    {/*            placeholder='Password'/>*/}
-                                    {/*<div align='center'>*/}
-                                    {/*    <div style={{paddingRight: "140px", margin: "5px"}} >*/}
-                                    {/*        <h5><strong>Permission</strong></h5>*/}
-                                    {/*    </div>*/}
-                                    {/*    <select style={{width: "210px", textAlign: "center"}} onChange={(e) => {setPermissionReg(e.target.value)}}>*/}
-                                    {/*        <option selected value="Student">Student</option>*/}
-                                    {/*        <option value="Department Staff">Department Staff</option>*/}
-                                    {/*    </select>*/}
-                                    {/*    <br/>*/}
-                                    {/*</div>*/}
-
                                 </Form>
                             </Grid.Column>
                         </Modal.Description>
                     </Modal.Content>
                     <Modal.Actions>
-                        <Button onClick={() => setOpen(false)}>Save</Button>
+                        <Button onClick={bookMeeting}>Submit</Button>
                     </Modal.Actions>
                 </Modal>
                 <Container fluid>
