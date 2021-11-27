@@ -1,6 +1,6 @@
 import Navbar from "./components/Navbar";
 import {Button, Divider, Form, Grid, Header, Modal, Segment, Tab} from 'semantic-ui-react';
-import {useNavigate, useState} from "react-router-dom"
+import {Link, useNavigate, useState} from "react-router-dom"
 import "./App.css"
 
 /**
@@ -32,12 +32,13 @@ const App = () => {
                         <p>Set up important meetings and reservations with your colleagues, <br/> or simply reserve a space to meet
                             with your friends and loved ones. <br/> All from one place.
                         </p>
-                        <Button content='Get started' icon='calendar' size='big' color="violet" />
+                        <Link to="Signup">
+                                <Button content='Get started' icon='calendar' size='big' color="violet" />
+                        </Link>
                     </div>
                 </Grid.Column>
             </Grid>
-
-            <Divider></Divider>
+            <Divider> </Divider>
         </Segment>
         </>
     );
@@ -51,6 +52,5 @@ if(debug){
 else {
     url = "https://bs-stackoverflowers-backend.herokuapp.com";
 }
-
 export const BackendURL = url;
 export default App;

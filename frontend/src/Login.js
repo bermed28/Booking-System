@@ -1,10 +1,14 @@
 import React, {Component, useEffect, useRef, useState} from 'react';
-import {Button, Divider, Form, Grid, GridColumn, Header, Modal, Segment, Tab} from 'semantic-ui-react';
+import {Divider, Form, Grid, GridColumn, Header, Modal, Segment, Tab} from 'semantic-ui-react';
 import Navbar from "./components/Navbar";
 import axios from "axios";
-
+import Button from "./components/Button";
+import "./components/Button.css";
+import {Link} from "react-router-dom";
+import * as Icons from "react-icons/bi"
 const app = require('./App');
-function HomePage() {
+
+function Login() {
     const [open, setOpen] = useState(false);
     const handleChange = (event, newValue) => {
         setOpen(true);
@@ -33,10 +37,10 @@ function HomePage() {
     }
     useEffect(() => {
         const login_data = localStorage.getItem("login-data");
-            if (login_data) {
-                setloginStatus(true);
-            }
-      }, []);
+        if (login_data) {
+            setloginStatus(true);
+        }
+    }, []);
 
 
     return (
@@ -55,8 +59,8 @@ function HomePage() {
                     </Modal.Actions>
                 </Modal>
                 <Segment placeholder>
-                        <Grid.Column>
-                            <Form>
+                    <Grid.Column>
+                        <Form>
                         <Form.Input onChange={(e) => {
                             setEmailReg(e.target.value)
                         }}
@@ -72,15 +76,18 @@ function HomePage() {
                             iconPosition='left'
                             label='Password'
                             type='password' />
-                        <Button content='Login' onClick={login} color="violet" />
+                        <div style={{display: "flex", justifyContent: "center"}}>
+                            <Link to={"/"} style={{color: "white"}}>
+                                <button className="btn-submit" onClick={login}><Icons.BiLogIn/> Login</button>
+                            </Link>
+                        </div>
 
                     </Form>
-                        </Grid.Column>
-                    {loginMessage}
+                </Grid.Column>
                 </Segment>
             </Segment>
         </>
     )
 }
 
-export default HomePage;
+export default Login;

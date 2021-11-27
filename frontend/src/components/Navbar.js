@@ -14,14 +14,16 @@ const Navbar = () => {
     const handleLogout = () => {
         // localStorage.clear();
         localStorage.removeItem("login-data");
-        window.location.reload(false);
+        if(window.location.pathname === "/"){
+            window.location.reload(false);
+        }
     }
     React.useEffect(() => {
-            const data = localStorage.getItem("login-data");
-            if(data){
-                setLoggedIn(true);
-             }
-        },[])
+        const data = localStorage.getItem("login-data");
+        if(data){
+            setLoggedIn(true);
+        }
+    },[])
     return (
         <>
             <nav className="navbar">
@@ -29,25 +31,25 @@ const Navbar = () => {
                 <ul className="nav-items">
                     {navItems.map(item => {
                         return (
-                        <li key={item.id} className={item.cName}>
-                            { loggedIn === false && item.title != "Statistics" &&
-                                <Link to={"/Home"}>{item.title}</Link>
-                            }
-                            { (loggedIn === true || item.title === "Statistics") &&
+                            <li key={item.id} className={item.cName}>
+                                { loggedIn === false && item.title != "Statistics" && item.title != "Home" &&
+                                <Link to={"/Login"}>{item.title}</Link>
+                                }
+                                { (loggedIn === true || item.title === "Statistics" || item.title === "Home") &&
                                 <Link to={item.path}>{item.title}</Link>
-                            }
-                        </li>
-                    )})}
+                                }
+                            </li>
+                        )})}
                 </ul>
                 <div>
                     { loggedIn === false &&
-                        <Button text="Sign Up" path="/Signup"/>
+                    <Button text="Sign Up" path="/Signup"/>
                     }
                     { loggedIn === false &&
-                        <Button text="Sign In" path="/Home"/>
+                    <Button text="Sign In" path="/Login"/>
                     }
                     { loggedIn === true &&
-                        <Button text="Logout" path="/Home" primary onClick={handleLogout}/>
+                    <Button text="Logout" path="/" primary onClick={handleLogout}/>
                     }
                 </div>
             </nav>

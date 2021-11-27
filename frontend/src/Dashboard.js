@@ -41,7 +41,7 @@ function BookMeeting(){
         })
     }
 
-    
+
 
     const [loggedIn, setLoggedIn]= React.useState(false);
     var tempData = localStorage.getItem("login-data");
@@ -51,42 +51,42 @@ function BookMeeting(){
         getUsers();
         getTimeSlots();
         tempData = localStorage.getItem("login-data");
-            if(tempData) {
-                setLoggedIn(true);
-                getMostLoggedWith();
-                getMostUsedRoom();
+        if(tempData) {
+            setLoggedIn(true);
+            getMostLoggedWith();
+            getMostUsedRoom();
+        }
+    }, []);
+
+    const data = JSON.parse(tempData)
+
+    const [mostUsedRoom, setMostUsedRoom] = useState("");
+
+    const getMostUsedRoom = async () => {
+        api.get("/StackOverflowersStudios/user/mostusedroom/" + data.uid).then(res => {
+            console.log(res);
+            if(res.data.rname === undefined){
+                setMostUsedRoom("User has not used any rooms.");
+            }else{
+                setMostUsedRoom(res.data.rname + " in the " + res.data.rbuildname + " building.");
             }
-      }, []);
+        })
+    }
 
-      const data = JSON.parse(tempData)
+    const [mostLoggedWith, setMostLoggedWith] = useState("");
 
-      const [mostUsedRoom, setMostUsedRoom] = useState("");
+    const getMostLoggedWith = async () => {
+        api.get("/StackOverflowersStudios/user/mostbookedwith/" + data.uid).then(res => {
+            console.log(res);
+            if(res.data.username === undefined){
+                setMostLoggedWith("User has not been booked with anyone.");
+            }else{
+                setMostLoggedWith(res.data.username + ".");
+            }
+        })
+    }
 
-      const getMostUsedRoom = async () => {
-          api.get("/StackOverflowersStudios/user/mostusedroom/" + data.uid).then(res => {
-              console.log(res);
-              if(res.data.rname === undefined){
-                  setMostUsedRoom("User has not used any rooms.");
-              }else{
-              setMostUsedRoom(res.data.rname + " in the " + res.data.rbuildname + " building.");
-              }
-          })
-      }
-  
-      const [mostLoggedWith, setMostLoggedWith] = useState("");
-  
-      const getMostLoggedWith = async () => {
-          api.get("/StackOverflowersStudios/user/mostbookedwith/" + data.uid).then(res => {
-              console.log(res);
-              if(res.data.username === undefined){
-                  setMostLoggedWith("User has not been booked with anyone.");
-              }else{
-              setMostLoggedWith(res.data.username + ".");
-              }
-          })
-      }
-    
-    
+
     // console.log(data.uid);
     // console.log(loggedIn);
     return(
@@ -94,10 +94,10 @@ function BookMeeting(){
             <Navbar/>
             <br/>
             { loggedIn === true &&
-                <h1 style={{textAlign: "center"}}>Your Statistics:</h1>
+            <h1 style={{textAlign: "center"}}>Your Statistics:</h1>
             }
             { loggedIn === true &&
-                <Container style={{ height: 100 }}>
+            <Container style={{ height: 100 }}>
                 <h2>The room you've used the most is:</h2>
 
                 <ul>
@@ -107,7 +107,7 @@ function BookMeeting(){
             </Container>
             }
             { loggedIn === true &&
-                <Container style={{ height: 100 }}>
+            <Container style={{ height: 100 }}>
                 <h2>The user you've been booked with the most is:</h2>
                 <ul>
                     <li><h3>{mostLoggedWith}</h3></li>

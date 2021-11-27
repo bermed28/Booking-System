@@ -15,3 +15,15 @@
     color: #9067C6;
     background-color: white;
 }
+
+.btn-submit {
+    color: white;
+    border-color: #6435c9;
+    background-color: #6435c9;
+    border: 5px;
+    font-size: 1.3rem;
+    padding: 16px 26px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-right: 1rem;
+}
