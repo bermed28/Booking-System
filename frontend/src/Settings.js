@@ -12,6 +12,7 @@ const api = axios.create({
 
 
 function SettingsPage() {
+    const [open, setOpen] = useState(false);
     const [userReg, setUserReg] = useState("");
     const [emailReg, setEmailReg] = useState("");
     const [passwordReg, setPasswordReg] = useState("");
@@ -80,6 +81,7 @@ function SettingsPage() {
         if(userData !==null){
             uid = userData.uid;
         }
+        console.log("About to end your whole career");
         api.delete("/StackOverflowersStudios/users/" + uid).then((response) => {
             setloginStatus(false);
             localStorage.removeItem("login-data");
@@ -93,6 +95,13 @@ function SettingsPage() {
     return (
         <>
             <Navbar/>
+            <Modal open={open} onClose={() => setOpen(false)} onOpen={() => setOpen(true)}>
+                <Modal.Header> Confirm (*This cannot be reversed*) <Button color={"blue"} content='Cancel' onClick={() => {setOpen(false)}}/> </Modal.Header>
+                <Modal.Content>
+                    <Modal.Description></Modal.Description>
+                    <Modal.Actions> Are you sure you want to delete your account? <Button color={"red"} content='Delete' onClick={deleteAccount} /> </Modal.Actions>
+                </Modal.Content>
+            </Modal>
             <Segment><Header dividing textAlign="center" size="huge">Account Settings</Header>
                 <Segment placeholder>
                     <Grid.Column>
@@ -141,7 +150,7 @@ function SettingsPage() {
                             <Button content='Update' primary onClick={updateSettings} />
                         </Form>
                         <br/>
-                        <Button content='Delete' primary onClick={deleteAccount} />
+                        <Button content='Delete' color={"red"} onClick={() => {setOpen(true)}} />
                     </Grid.Column>
                     <h3>{statusMessage}</h3>
                 </Segment>
