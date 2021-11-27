@@ -41,6 +41,7 @@ function BookMeeting(){
     const [room, setRoom] = useState(""); // hardcoded *fix*
     const [rooms, setRooms] = useState([]);
     const [meetingName, setMeetingName] = useState("");
+    const [errorMessage, setErrorMessage] = useState("");
 
     const getRooms = () => {
         axios.get(`${app.BackendURL}/StackOverflowersStudios/rooms`).then(res => {
@@ -53,7 +54,8 @@ function BookMeeting(){
     }, []);
 
     const bookMeeting = () => {
-        if(room != 0) {
+        if(room !== 0 && meetingName !== "") {
+            setErrorMessage("");
             var tempData = localStorage.getItem("login-data");
             const userData = JSON.parse(tempData)
 
@@ -61,6 +63,7 @@ function BookMeeting(){
 
             let startTID = getTID(meetingInformation[0].start.getHours(), meetingInformation[0].start.getMinutes());
             let endTID = getTID(meetingInformation[0].end.getHours(), meetingInformation[0].end.getMinutes()) - 1;
+
 
             let timeSlot =[];
             for (let i = startTID; i <= endTID; i++) {
@@ -78,9 +81,27 @@ function BookMeeting(){
             },(error) => {
                 console.log(error);
             });
+        } else {
+            setErrorMessage("Empty Fields");
         }
     }
-
+    function formatTime(hours, minutes){
+        console.log(hours + " " + minutes)
+        let pastNoonIndicator = "";
+        if(hours < 12){
+            if(hours === 0) hours = 12;
+            pastNoonIndicator = "AM";
+        }
+        else {
+            if(hours > 12) hours -= 12;
+            pastNoonIndicator = "PM";
+        }
+        if(minutes === 0){
+            return `${hours}:00 ${pastNoonIndicator}`;
+        } else {
+            return`${hours}:${minutes} ${pastNoonIndicator}`;
+        }
+    }
 
     return (
         <>
@@ -95,7 +116,9 @@ function BookMeeting(){
                 onSelecting = {(selected) =>{ setMeetingInformation([{
                     'title': 'New Meeting',
                     'start': new Date(selected.start),
-                    'end': new Date(selected.end)
+                    'end': new Date(selected.end),
+                    'startTimeDisplay' : formatTime(selected.start.getHours(), selected.start.getMinutes()),
+                    'endTimeDisplay' : formatTime(selected.end.getHours(), selected.end.getMinutes()),
                 }] ) } }
             >
             </Calendar>
@@ -112,24 +135,41 @@ function BookMeeting(){
                                                 iconPosition='left'
                                                 label='Meeting Name'
                                                 type='name' />
+
+                                    <h5 style={{paddingTop: "5px"}}>Meeting Time</h5>
+
+                                    {
+                                        meetingInformation[0] !== undefined &&
+                                        <p style={{paddingBottom: "5px"}}>{`${meetingInformation[0].startTimeDisplay} - ${meetingInformation[0].endTimeDisplay}`}</p>
+                                    }
                                     <Form.Input label='Room'>
                                         <select defaultValue={"0"} style={{textAlign: "center"}} onChange={(e) => {setRoom(e.target.value); {console.log(e.target.value)}}}>
-                                            <option key={0} value={"0"}>Select room</option>
+                                            <option key={0} value={"0"}>Select Room</option>
                                             {rooms.map(item => {
-                                                return (
-                                                    <option key={item.rid} value={item.rid}>{item.rname}</option>
-                                                )})})}
+                                                var tempData = localStorage.getItem("login-data");
+                                                const userData = JSON.parse(tempData)
+                                                if(userData.upermission === "Student") {
+                                                    if(item.rpermission === "Student") return (<option key={item.rid} value={item.rid}>{item.rname}</option>)
+                                                }else return (<option key={item.rid} value={item.rid}>{item.rname}</option>)
+                                            })})}
                                         </select>
                                     </Form.Input>
                                 </Form>
-                                { room == 0 &&
+                                { room === 0 &&
                                 <h3 style={{color: "red"}}>**Please select a valid room.</h3>
                                 }
                             </Grid.Column>
                         </Modal.Description>
                     </Modal.Content>
                     <Modal.Actions>
-                        <Button onClick={bookMeeting}>Submit</Button>
+                        <div style={{display: 'flex',  justifyContent:'center', alignItems:'center'}}>
+                            <Button onClick={bookMeeting} style={{display: 'flex',  justifyContent:'center', alignItems:'center'}}>Book</Button>
+                        </div>
+                        <br/>
+                        <div style={{display: 'flex',  justifyContent:'center', alignItems:'center'}}>
+                            {errorMessage !== "" && <h3 style={{color: "red"}}>Please fill out the empty fields</h3>}
+                        </div>
+
                     </Modal.Actions>
                 </Modal>
                 <Container fluid>

@@ -18,23 +18,25 @@ function HomePage() {
     const [permissionReg, setPermissionReg] = useState("Student");
     const [signupMessage, setSignupMessage] = useState("Not submitted yet");
 
-    console.log(emailReg);
     const signup = () => {
-        if(userReg==="" || emailReg==="" || passwordReg==="" || firstNameReg==="" || lastNameReg===""){
+        if(userReg==="" || emailReg==="" || passwordReg==="" || firstNameReg==="" || lastNameReg==="" || permissionReg === "Select Permission"){
             console.log("Empty Field")
-            setSignupMessage("empty Field or invalid field");
+            setSignupMessage("Empty Field or Invalid Field");
+        } else {
+            let data = {
+                username: userReg, uemail: emailReg, upassword: passwordReg,
+                ufirstname: firstNameReg, ulastname: lastNameReg, upermission: permissionReg
+            };
+            console.log(data);
+            axios.post(`${app.BackendURL}/StackOverflowersStudios/users`,
+                data,
+                {headers: {'Content-Type': 'application/json'}}//text/plain //application/json
+            ).then((response) => {
+                console.log(response);
+            }, (error) => {
+                console.log(error);
+            });
         }
-        let data = {username: userReg, uemail: emailReg, upassword: passwordReg,
-            ufirstname: firstNameReg, ulastname: lastNameReg, upermission: permissionReg};
-        console.log(data);
-        axios.post(`${app.BackendURL}/StackOverflowersStudios/users`,
-            data,
-            {headers: {'Content-Type': 'application/json'}}//text/plain //application/json
-        ).then((response) => {
-            console.log(response);
-        },(error) => {
-            console.log(error);
-        });
     }
 
     return (
@@ -99,8 +101,9 @@ function HomePage() {
                             <div style={{paddingRight: "140px", margin: "5px"}} >
                                 <h5><strong>Permission</strong></h5>
                             </div>
-                            <select style={{width: "210px", textAlign: "center"}} onChange={(e) => {setPermissionReg(e.target.value)}}>
-                                <option selected value="Student">Student</option>
+                            <select defaultValue={"Select Permission"} style={{width: "210px", textAlign: "center"}} onChange={(e) => {setPermissionReg(e.target.value)}}>
+                                <option value={"Select Permission"}>Select Permission</option>
+                                <option value="Student">Student</option>
                                 <option value="Department Staff">Department Staff</option>
                             </select>
                             <br/>
@@ -108,6 +111,7 @@ function HomePage() {
 
                         <Button content='Signup' primary onClick={signup} />
                     </Form>
+                        { permissionReg === "Select Permission" &&  <h3 style={{color: "red"}}>**Please select a permission for your account.</h3>}
                         </Grid.Column>
                 </Segment>
             </Segment>
