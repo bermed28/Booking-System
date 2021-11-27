@@ -9,10 +9,6 @@ import * as Icons from "react-icons/bi"
 const app = require('./App');
 
 function Login() {
-    const [open, setOpen] = useState(false);
-    const handleChange = (event, newValue) => {
-        setOpen(true);
-    }
     const [emailReg, setEmailReg] = useState("");
     const [passwordReg, setPasswordReg] = useState("");
     const [loginStatus, setloginStatus] = useState(false);
@@ -47,17 +43,6 @@ function Login() {
         <>
             <Navbar/>
             <Segment><Header dividing textAlign="center" size="huge">Sign in to use Calendearly</Header>
-                <Modal centered={false} open={open} onClose={() => setOpen(false)} onOpen={() => setOpen(true)}>
-                    <Modal.Header>Needs changing!</Modal.Header>
-                    <Modal.Content>
-                        <Modal.Description>
-                            This is a modal but it serves to show how buttons and functions can be implemented.
-                        </Modal.Description>
-                    </Modal.Content>
-                    <Modal.Actions>
-                        <Button onClick={() => setOpen(false)}>OK</Button>
-                    </Modal.Actions>
-                </Modal>
                 <Segment placeholder>
                     <Grid.Column>
                         <Form>

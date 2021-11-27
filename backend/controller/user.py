@@ -77,7 +77,7 @@ class BaseUser:
     def deleteUser(self, uid):
         dao = UserDAO()
         if dao.getAllUserInvolvements(uid):
-            return jsonify("You erase your account because you have pending reservations."), 400
+            return jsonify("You can't erase your account because you have pending reservations."), 400
         result = dao.deleteUser(uid)
         if result:
             return jsonify("DELETED"), 200
