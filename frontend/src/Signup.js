@@ -2,6 +2,7 @@ import React, {Component, useEffect, useRef, useState} from 'react';
 import {Button, Divider, Form, Grid, GridColumn, Header, Modal, Segment, Tab} from 'semantic-ui-react';
 import Navbar from "./components/Navbar";
 import axios from "axios";
+import {useNavigate} from "react-router-dom";
 const app = require("./App");
 
 function HomePage() {
@@ -37,6 +38,20 @@ function HomePage() {
                 console.log(error);
             });
         }
+    }
+
+    const [loginStatus, setloginStatus] = useState(false);
+    var tempData = localStorage.getItem("login-data");
+    useEffect(() => {
+        tempData = localStorage.getItem("login-data");
+        if(tempData) {
+            setloginStatus(true);
+        }
+    }, []);
+
+    let navigator = useNavigate();
+    if(loginStatus) {
+        navigator("/");
     }
 
     return (

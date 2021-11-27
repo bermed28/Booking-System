@@ -114,4 +114,13 @@ class BaseUser:
         user = dao.getMostBookedWith(uid)
         return jsonify(user)
 
-
+    def getRequestedIds(self, json):
+        dao = UserDAO()
+        usernames = json['memberNames']
+        uids = []
+        for username in usernames:
+            uid = dao.getUidbyUsername(username)
+            if uid != -1:
+                uids.append(uid)
+        result = {"memberIds": uids}
+        return result

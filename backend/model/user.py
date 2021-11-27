@@ -145,6 +145,7 @@ class UserDAO:
         result['ulastname'] = row[5]
         result['upermission'] = row[6]
         result['times booked together'] = row[7]
+        cursor.close()
         return result
 
     def getAllUserInvolvements(self, uid):
@@ -155,5 +156,15 @@ class UserDAO:
         result = []
         for row in cursor:
             result.append(row)
+        cursor.close()
+        return result
+
+    def getUidbyUsername(self, username):
+        cursor = self.conn.cursor()
+        query = "select uid from public.user where username = %s;"
+        cursor.execute(query, (username,))
+        if cursor.rowcount <= 0:
+            return -1
+        result = cursor.fetchone()[0]
         cursor.close()
         return result
