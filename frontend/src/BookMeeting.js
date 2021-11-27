@@ -17,6 +17,10 @@ import {Link} from "react-router-dom";
 //     resource?: any,
 // }
 
+const api = axios.create({
+    baseURL : app.BackendURL //'http://localhost:8080'
+})
+
 function BookMeeting(){
     const [meetingInformation, setMeetingInformation] = useState([]);
     const [open, setOpen] = useState(false);
@@ -49,7 +53,7 @@ function BookMeeting(){
     const [errorMessage, setErrorMessage] = useState("");
 
     const getRooms = () => {
-        axios.get(`${app.BackendURL}/StackOverflowersStudios/rooms`).then(res => {
+        api.get("/StackOverflowersStudios/rooms").then(res => {
             // console.log(res.data);
             setRooms(res.data);
         })
@@ -83,25 +87,34 @@ function BookMeeting(){
             }
 
             let memberData = {memberNames: meetingMemberNames.split(", ")};
-            // let Ids = []
+            let Ids = [];
+            // let id = 0;
             // console.log(memberData);
 
-            axios.post(`${app.BackendURL}/StackOverflowersStudios/users/usernames`,
+            api.post("/StackOverflowersStudios/users/usernames",
                 memberData,
                 {headers: {'Content-Type': 'application/json'}}//text/plain //application/json
             ).then((response) => {
-                console.log(response.data);
-                setMeetingMemberIds(response.data);
-                console.log(meetingMemberIds);
+                for(let i = 0; i < response.data.memberIds.length; i++) {
+                    Ids.push(String(response.data.memberIds[i]));
+                    // console.log(id);
+                    // console.log(typeof id);
+                }
+                // response.data.memberIds;
+                // console.log(temp);
+                setMeetingMemberIds(Ids);
             },(error) => {
                 console.log(error);
-                console.log("No cogió un carajo");
             });
 
             let data = {resday: date, resname: meetingName, rid: parseInt(room), uid: userData.uid, members: meetingMemberIds, time_slots: timeSlot};
             console.log(data);
 
-            // axios.post(`${app.BackendURL}/StackOverflowersStudios/reservations`,
+            // console.log(typeof Ids[0]);
+            // console.log(typeof meetingMemberIds[0]);
+            console.log(meetingMemberIds);
+            // console.log(typeof timeSlot[0]);
+            // api.post("/StackOverflowersStudios/reservations",
             //     data,
             //     {headers: {'Content-Type': 'application/json'}}//text/plain //application/json
             // ).then((response) => {

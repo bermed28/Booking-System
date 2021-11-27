@@ -138,6 +138,7 @@ class BaseReservation:
         us_dao = UserScheduleDAO()
         reserv_dao = ReservationScheduleDAO()
         for member in json['members']:
+            member = int(member)
             if member != uid:
                 members_dao.insertMember(member, resid)
             for time_slot in time_slots:
