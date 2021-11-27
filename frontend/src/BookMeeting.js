@@ -1,4 +1,4 @@
-import React, {Component, useState} from 'react';
+import React, {Component, useState, useEffect} from 'react';
 import {Calendar, momentLocalizer, Views } from 'react-big-calendar';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import moment from 'moment';
@@ -6,6 +6,7 @@ import {Button, Card, Container, Form, Grid, Modal} from "semantic-ui-react";
 import Navbar from "./components/Navbar";
 import axios from "axios";
 import * as app from "./App";
+import {Link} from "react-router-dom";
 
 
 // Event {
@@ -38,33 +39,46 @@ function BookMeeting(){
      * console.log([...new Set(numbers)]) // [2, 3, 4, 5, 6, 7, 32]
      */
     const [room, setRoom] = useState(""); // hardcoded *fix*
+    const [rooms, setRooms] = useState([]);
     const [meetingName, setMeetingName] = useState("");
 
+    const getRooms = () => {
+        axios.get(`${app.BackendURL}/StackOverflowersStudios/rooms`).then(res => {
+            // console.log(res.data);
+            setRooms(res.data);
+        })
+    }
+    useEffect(() => {
+        getRooms();
+    }, []);
+
     const bookMeeting = () => {
-        var tempData = localStorage.getItem("login-data");
-        const userData = JSON.parse(tempData)
+        if(room != 0) {
+            var tempData = localStorage.getItem("login-data");
+            const userData = JSON.parse(tempData)
 
-        let date = meetingInformation[0].start.getFullYear()+'-'+(meetingInformation[0].start.getMonth()+1)+'-'+ meetingInformation[0].start.getDate();
+            let date = meetingInformation[0].start.getFullYear()+'-'+(meetingInformation[0].start.getMonth()+1)+'-'+ meetingInformation[0].start.getDate();
 
-        let startTID = getTID(meetingInformation[0].start.getHours(), meetingInformation[0].start.getMinutes());
-        let endTID = getTID(meetingInformation[0].end.getHours(), meetingInformation[0].end.getMinutes()) - 1;
+            let startTID = getTID(meetingInformation[0].start.getHours(), meetingInformation[0].start.getMinutes());
+            let endTID = getTID(meetingInformation[0].end.getHours(), meetingInformation[0].end.getMinutes()) - 1;
 
-        let timeSlot =[];
-        for (let i = startTID; i <= endTID; i++) {
-            timeSlot.push(i);
+            let timeSlot =[];
+            for (let i = startTID; i <= endTID; i++) {
+                timeSlot.push(i);
+            }
+
+            let data = {resday: date, resname: meetingName, rid: parseInt(room), uid: userData.uid, members: [], time_slots: timeSlot};
+            console.log(data);
+
+            axios.post(`${app.BackendURL}/StackOverflowersStudios/reservations`,
+                data,
+                {headers: {'Content-Type': 'application/json'}}//text/plain //application/json
+            ).then((response) => {
+                console.log(response);
+            },(error) => {
+                console.log(error);
+            });
         }
-
-        let data = {resday: date, resname: meetingName, rid: 21, uid: userData.uid, members: [], time_slots: timeSlot};
-        console.log(data);
-
-        axios.post(`${app.BackendURL}/StackOverflowersStudios/reservations`,
-            data,
-            {headers: {'Content-Type': 'application/json'}}//text/plain //application/json
-        ).then((response) => {
-            console.log(response);
-        },(error) => {
-            console.log(error);
-        });
     }
 
 
@@ -98,15 +112,19 @@ function BookMeeting(){
                                                 iconPosition='left'
                                                 label='Meeting Name'
                                                 type='name' />
-                                    <Form.Input onChange={(e) => {
-                                        setRoom(e.target.value)
-                                    }}
-                                                icon='room'
-                                                iconPosition='left'
-                                                label='Room'
-                                                type='room'
-                                                placeholder='Room' />
+                                    <Form.Input label='Room'>
+                                        <select defaultValue={"0"} style={{textAlign: "center"}} onChange={(e) => {setRoom(e.target.value); {console.log(e.target.value)}}}>
+                                            <option key={0} value={"0"}>Select room</option>
+                                            {rooms.map(item => {
+                                                return (
+                                                    <option key={item.rid} value={item.rid}>{item.rname}</option>
+                                                )})})}
+                                        </select>
+                                    </Form.Input>
                                 </Form>
+                                { room == 0 &&
+                                <h3 style={{color: "red"}}>**Please select a valid room.</h3>
+                                }
                             </Grid.Column>
                         </Modal.Description>
                     </Modal.Content>

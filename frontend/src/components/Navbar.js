@@ -32,7 +32,7 @@ const Navbar = () => {
                     {navItems.map(item => {
                         return (
                             <li key={item.id} className={item.cName}>
-                                { loggedIn === false && item.title != "Statistics" && item.title != "Home" &&
+                                { loggedIn === false && item.title !== "Statistics" && item.title !== "Home" &&
                                 <Link to={"/Login"}>{item.title}</Link>
                                 }
                                 { (loggedIn === true || item.title === "Statistics" || item.title === "Home") &&
