@@ -54,7 +54,7 @@ function BookMeeting(){
     }, []);
 
     const bookMeeting = () => {
-        if(room !== 0 && meetingName !== "") {
+        if(room != 0 && meetingName !== "") {
             setErrorMessage("");
             var tempData = localStorage.getItem("login-data");
             const userData = JSON.parse(tempData)
@@ -155,7 +155,7 @@ function BookMeeting(){
                                         </select>
                                     </Form.Input>
                                 </Form>
-                                { room === 0 &&
+                                { room == 0 &&
                                 <h3 style={{color: "red"}}>**Please select a valid room.</h3>
                                 }
                             </Grid.Column>
@@ -167,9 +167,8 @@ function BookMeeting(){
                         </div>
                         <br/>
                         <div style={{display: 'flex',  justifyContent:'center', alignItems:'center'}}>
-                            {errorMessage !== "" && <h3 style={{color: "red"}}>Please fill out the empty fields</h3>}
+                            {errorMessage !== "" && <h3 style={{color: "red"}}>**Please fill out the empty fields</h3>}
                         </div>
-
                     </Modal.Actions>
                 </Modal>
                 <Container fluid>
