@@ -116,13 +116,16 @@ function Schedule(){
     return (
         <>
             <Container style={{ height: 800, margin: "50px"}}>
-                <Calendar localizer={localizer}
+                <Calendar selectable //change for user mark unavailable
+                          localizer={localizer}
                           startAccessor="start"
                           events={meetings}
                           endAccessor="end"
                           views={["month", "day"]}
                           defaultDate={Date.now()}
+
                 />
+                <Button fluid onClick={() => {setOpen(true)}}> Mark as unavailable</Button>
             </Container>
         </>
     );
