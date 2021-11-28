@@ -4,7 +4,7 @@ import Navbar from "./components/Navbar";
 import axios from "axios";
 const app = require("./App");
 
-function HomePage() {
+function Signup() {
 
     const [open, setOpen] = useState(false);
     const handleChange = (event, newValue) => {
@@ -119,4 +119,4 @@ function HomePage() {
     )
 }
 
-export default HomePage;
+export default Signup;

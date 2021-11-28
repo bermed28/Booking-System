@@ -7,14 +7,14 @@ export const navItems = [
     },
     {
       id: 2,
-      title: "Create Meeting",
+      title: "My Meeting",
       path: "/UserView",
       cName: "nav-item",
     },
     {
       id: 3,
-      title: "My Meetings",
-      path: "/UserView",
+      title: "Room Management",
+      path: "/RoomManagement",
       cName: "nav-item",
     },
     {

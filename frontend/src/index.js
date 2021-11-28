@@ -9,6 +9,7 @@ import UserView from "./UserView";
 import Dashboard from "./Dashboard";
 import App from './App';
 import Signup from "./Signup";
+import RoomManagement from "./RoomManagement";
 
 
 ReactDOM.render(
@@ -19,6 +20,7 @@ ReactDOM.render(
             <Route exact path="/UserView" element={<UserView/>} />
             <Route exact path="/Dashboard" element={<Dashboard/>} />
             <Route exact path="/Signup" element={<Signup/>} />
+            <Route exact path="/RoomManagement" element={<RoomManagement/>} />
         </Routes>
     </BrowserRouter>,
     document.getElementById('root')
