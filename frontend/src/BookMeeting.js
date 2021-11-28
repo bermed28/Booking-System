@@ -69,7 +69,7 @@ function BookMeeting(){
     }
 
     const bookMeeting = () => {
-        if(room != 0 && meetingName !== "") {
+        if(room !== 0 && meetingName !== "") {
             setInProgress(true);
             setErrorMessage("");
             var tempData = localStorage.getItem("login-data");
@@ -80,52 +80,45 @@ function BookMeeting(){
             let startTID = getTID(meetingInformation[0].start.getHours(), meetingInformation[0].start.getMinutes());
             let endTID = getTID(meetingInformation[0].end.getHours(), meetingInformation[0].end.getMinutes()) - 1;
 
-
             let timeSlot =[];
             for (let i = startTID; i <= endTID; i++) {
                 timeSlot.push(i);
             }
 
             let memberData = {memberNames: meetingMemberNames.split(", ")};
-            let Ids = [];
-            // let id = 0;
-            // console.log(memberData);
+            let membersIds =[];
 
             api.post("/StackOverflowersStudios/users/usernames",
                 memberData,
                 {headers: {'Content-Type': 'application/json'}}//text/plain //application/json
             ).then((response) => {
-                for(let i = 0; i < response.data.memberIds.length; i++) {
-                    Ids.push(String(response.data.memberIds[i]));
-                    // console.log(id);
-                    // console.log(typeof id);
+                let res = response.data.memberIds;
+
+                for(let i = 0; i < res.length; i++) {
+                    membersIds.push(res[i]);
                 }
-                // response.data.memberIds;
-                // console.log(temp);
-                setMeetingMemberIds(Ids);
+
+                //Create json to send to API (Ids would become empty if not done inside previous axios post variable would be blank)
+                let data = {resday: date, resname: meetingName, rid: parseInt(room), uid: userData.uid, members: membersIds, time_slots: timeSlot};
+                console.log(data);
+
+                //Create reservation
+                api.post("/StackOverflowersStudios/reservations",
+                    data,
+                    {headers: {'Content-Type': 'application/json'}}//text/plain //application/json
+                ).then((response) => {
+                    console.log(response);
+                    setInProgress(false);
+                    setCompleted(true);
+                },(error) => {
+                    console.log(error);
+                    setInProgress(false);
+                    setErrorOccurred(true);
+                });
             },(error) => {
                 console.log(error);
             });
 
-            let data = {resday: date, resname: meetingName, rid: parseInt(room), uid: userData.uid, members: meetingMemberIds, time_slots: timeSlot};
-            console.log(data);
-
-            // console.log(typeof Ids[0]);
-            // console.log(typeof meetingMemberIds[0]);
-            console.log(meetingMemberIds);
-            // console.log(typeof timeSlot[0]);
-            // api.post("/StackOverflowersStudios/reservations",
-            //     data,
-            //     {headers: {'Content-Type': 'application/json'}}//text/plain //application/json
-            // ).then((response) => {
-            //     console.log(response);
-            //     setInProgress(false);
-            //     setCompleted(true);
-            // },(error) => {
-            //     console.log(error);
-            //     setInProgress(false);
-            //     setErrorOccurred(true);
-            // });
         } else {
             setErrorMessage("Empty Fields");
         }

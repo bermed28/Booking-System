@@ -123,4 +123,4 @@ class BaseUser:
             if uid != -1:
                 uids.append(uid)
         result = {"memberIds": uids}
-        return result
+        return jsonify(result)
