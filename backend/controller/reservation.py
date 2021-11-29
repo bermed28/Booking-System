@@ -316,6 +316,12 @@ class BaseReservation:
 
         return jsonify(result)
 
-
+    def changeResName(self, json):
+        newResname = json['resname']
+        resid = json['resid']
+        dao = ReservationDAO()
+        if not dao.changeResName(resid, newResname):
+            return jsonify("Could not change meeting name, no such meeting exists.")
+        return jsonify("Successfully changed meeting name."), 200
 
 

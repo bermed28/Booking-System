@@ -168,3 +168,13 @@ class ReservationDAO:
             result.append(row[0])
         cursor.close()
         return result
+
+    def changeResName(self, resid, newResName):
+        cursor = self.conn.cursor()
+        query = "update public.reservation set resname = %s where resid = %s;"
+        cursor.execute(query, (newResName, resid))
+        if cursor.rowcount <= 0:
+            return False
+        self.conn.commit()
+        cursor.close()
+        return True

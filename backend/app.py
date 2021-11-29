@@ -80,6 +80,10 @@ def handleReservationbyId(resid):
     elif request.method == 'DELETE':
         return BaseReservation().deleteReservation(resid, request.json)
 
+@app.route('/StackOverflowersStudios/reservations/updateName', methods=['PUT'])
+def handleReservationNameChange():
+    return BaseReservation().changeResName(request.json)
+
 @app.route('/StackOverflowersStudios/members', methods=['GET', 'POST'])
 def handleMembers():
     if request.method == 'POST':
