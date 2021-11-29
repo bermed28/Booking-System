@@ -5,12 +5,8 @@ import axios from "axios";
 import {useNavigate} from "react-router-dom";
 const app = require("./App");
 
-function HomePage() {
+function SignupPage() {
 
-    const [open, setOpen] = useState(false);
-    const handleChange = (event, newValue) => {
-        setOpen(true);
-    }
     const [userReg, setUserReg] = useState("");
     const [emailReg, setEmailReg] = useState("");
     const [passwordReg, setPasswordReg] = useState("");
@@ -58,17 +54,6 @@ function HomePage() {
         <>
             <Navbar/>
             <Segment><Header dividing textAlign="center" size="huge">Sign Up for Calendearly</Header>
-                <Modal centered={false} open={open} onClose={() => setOpen(false)} onOpen={() => setOpen(true)}>
-                    <Modal.Header>Needs changing!</Modal.Header>
-                    <Modal.Content>
-                        <Modal.Description>
-                            This is a modal but it serves to show how buttons and functions can be implemented.
-                        </Modal.Description>
-                    </Modal.Content>
-                    <Modal.Actions>
-                        <Button onClick={() => setOpen(false)}>OK</Button>
-                    </Modal.Actions>
-                </Modal>
                 <Segment placeholder>
                         <Grid.Column>
                             <Form>
@@ -134,4 +119,4 @@ function HomePage() {
     )
 }
 
-export default HomePage;
+export default SignupPage;
