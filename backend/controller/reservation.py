@@ -85,6 +85,7 @@ class BaseReservation:
                 json['resid'] = tup[0]
                 json['resname'] = tup[1]
                 json['resday'] = tup[2]
+                json['uid'] = tup[3]
                 reservations.append(json)
 
             reservations = list(map(dict, set(tuple(r.items()) for r in reservations)))

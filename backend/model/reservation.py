@@ -36,7 +36,7 @@ class ReservationDAO:
         query = "with involved_reservations as (select resid from " \
                 "((select uid, resid from reservation where uid = %s) " \
                 "union (select uid, resid from members where uid = %s)) as temp) " \
-                "select resid, resname, resday from reservation natural inner join reservation_schedule " \
+                "select resid, resname, resday, reservation.uid from reservation natural inner join reservation_schedule " \
                 "where resid in (select resid from involved_reservations);"
         cursor.execute(query, (uid, uid))
         result = []
