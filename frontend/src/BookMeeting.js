@@ -17,6 +17,10 @@ import {Link} from "react-router-dom";
 //     resource?: any,
 // }
 
+const api = axios.create({
+    baseURL : app.BackendURL //'http://localhost:8080'
+})
+
 function BookMeeting(){
     const [meetingInformation, setMeetingInformation] = useState([]);
     const [open, setOpen] = useState(false);
@@ -41,10 +45,15 @@ function BookMeeting(){
     const [room, setRoom] = useState(""); // hardcoded *fix*
     const [rooms, setRooms] = useState([]);
     const [meetingName, setMeetingName] = useState("");
+    const [meetingMemberNames, setMeetingMemberNames] = useState("");
+    const [meetingMemberIds, setMeetingMemberIds] = useState([]);
+    const [errorOccurred, setErrorOccurred] = useState(false);
+    const [inProgress, setInProgress] = useState(false);
+    const [completed, setCompleted] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
 
     const getRooms = () => {
-        axios.get(`${app.BackendURL}/StackOverflowersStudios/rooms`).then(res => {
+        api.get("/StackOverflowersStudios/rooms").then(res => {
             // console.log(res.data);
             setRooms(res.data);
         })
@@ -53,8 +62,15 @@ function BookMeeting(){
         getRooms();
     }, []);
 
+    const reset = () => {
+        setErrorOccurred(false);
+        setInProgress(false);
+        setCompleted(false);
+    }
+
     const bookMeeting = () => {
-        if(room != 0 && meetingName !== "") {
+        if(room !== 0 && meetingName !== "") {
+            setInProgress(true);
             setErrorMessage("");
             var tempData = localStorage.getItem("login-data");
             const userData = JSON.parse(tempData)
@@ -64,23 +80,45 @@ function BookMeeting(){
             let startTID = getTID(meetingInformation[0].start.getHours(), meetingInformation[0].start.getMinutes());
             let endTID = getTID(meetingInformation[0].end.getHours(), meetingInformation[0].end.getMinutes()) - 1;
 
-
             let timeSlot =[];
             for (let i = startTID; i <= endTID; i++) {
                 timeSlot.push(i);
             }
 
-            let data = {resday: date, resname: meetingName, rid: parseInt(room), uid: userData.uid, members: [], time_slots: timeSlot};
-            console.log(data);
+            let memberData = {memberNames: meetingMemberNames.split(", ")};
+            let membersIds =[];
 
-            axios.post(`${app.BackendURL}/StackOverflowersStudios/reservations`,
-                data,
+            api.post("/StackOverflowersStudios/users/usernames",
+                memberData,
                 {headers: {'Content-Type': 'application/json'}}//text/plain //application/json
             ).then((response) => {
-                console.log(response);
+                let res = response.data.memberIds;
+
+                for(let i = 0; i < res.length; i++) {
+                    membersIds.push(res[i]);
+                }
+
+                //Create json to send to API (Ids would become empty if not done inside previous axios post variable would be blank)
+                let data = {resday: date, resname: meetingName, rid: parseInt(room), uid: userData.uid, members: membersIds, time_slots: timeSlot};
+                console.log(data);
+
+                //Create reservation
+                api.post("/StackOverflowersStudios/reservations",
+                    data,
+                    {headers: {'Content-Type': 'application/json'}}//text/plain //application/json
+                ).then((response) => {
+                    console.log(response);
+                    setInProgress(false);
+                    setCompleted(true);
+                },(error) => {
+                    console.log(error);
+                    setInProgress(false);
+                    setErrorOccurred(true);
+                });
             },(error) => {
                 console.log(error);
             });
+
         } else {
             setErrorMessage("Empty Fields");
         }
@@ -122,7 +160,7 @@ function BookMeeting(){
                 }] ) } }
             >
             </Calendar>
-                <Modal centered={false} open={open} onClose={() => setOpen(false)} onOpen={() => setOpen(true)}>
+                <Modal centered={false} open={open} onClose={() => {setOpen(false); {reset()}}} onOpen={() => setOpen(true)}>
                     <Modal.Header>Book New Meeting</Modal.Header>
                     <Modal.Content>
                         <Modal.Description>
@@ -136,12 +174,19 @@ function BookMeeting(){
                                                 label='Meeting Name'
                                                 type='name' />
 
+                                    <Form.Input onChange={(e) => {
+                                        setMeetingMemberNames(e.target.value);
+                                        // {console.log(e.target.value.split(", "))}
+                                    }}
+                                                label='Meeting Members'
+                                                type='name' />
+                                    <p>**Please enter member usernames separated by a comma and a space.</p>
                                     <h5 style={{paddingTop: "5px"}}>Meeting Time</h5>
-
                                     {
                                         meetingInformation[0] !== undefined &&
                                         <p style={{paddingBottom: "5px"}}>{`${meetingInformation[0].startTimeDisplay} - ${meetingInformation[0].endTimeDisplay}`}</p>
                                     }
+
                                     <Form.Input label='Room'>
                                         <select defaultValue={"0"} style={{textAlign: "center"}} onChange={(e) => {setRoom(e.target.value); {console.log(e.target.value)}}}>
                                             <option key={0} value={"0"}>Select Room</option>
@@ -168,6 +213,17 @@ function BookMeeting(){
                         <br/>
                         <div style={{display: 'flex',  justifyContent:'center', alignItems:'center'}}>
                             {errorMessage !== "" && <h3 style={{color: "red"}}>**Please fill out the empty fields</h3>}
+                        </div>
+                        <div style={{display: 'flex',  justifyContent:'center', alignItems:'center'}}>
+                            {errorOccurred &&
+                            <h3 style={{color: "red"}}>**An error occurred while creating the reservation.</h3>
+                            }
+                            {inProgress &&
+                            <h3 style={{color: "orange"}}>**Creating your meeting...</h3>
+                            }
+                            {completed &&
+                            <h3 style={{color: "green"}}>**Successfully created your meeting.</h3>
+                            }
                         </div>
                     </Modal.Actions>
                 </Modal>

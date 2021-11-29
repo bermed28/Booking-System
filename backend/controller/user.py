@@ -77,7 +77,7 @@ class BaseUser:
     def deleteUser(self, uid):
         dao = UserDAO()
         if dao.getAllUserInvolvements(uid):
-            return jsonify("You erase your account because you have pending reservations."), 400
+            return jsonify("You can't erase your account because you have pending reservations."), 400
         result = dao.deleteUser(uid)
         if result:
             return jsonify("DELETED"), 200
@@ -114,4 +114,13 @@ class BaseUser:
         user = dao.getMostBookedWith(uid)
         return jsonify(user)
 
-
+    def getRequestedIds(self, json):
+        dao = UserDAO()
+        usernames = json['memberNames']
+        uids = []
+        for username in usernames:
+            uid = dao.getUidbyUsername(username)
+            if uid != -1:
+                uids.append(uid)
+        result = {"memberIds": uids}
+        return jsonify(result)

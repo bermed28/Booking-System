@@ -2,14 +2,11 @@ import React, {Component, useEffect, useRef, useState} from 'react';
 import {Button, Divider, Form, Grid, GridColumn, Header, Modal, Segment, Tab} from 'semantic-ui-react';
 import Navbar from "./components/Navbar";
 import axios from "axios";
+import {useNavigate} from "react-router-dom";
 const app = require("./App");
 
-function Signup() {
+function SignupPage() {
 
-    const [open, setOpen] = useState(false);
-    const handleChange = (event, newValue) => {
-        setOpen(true);
-    }
     const [userReg, setUserReg] = useState("");
     const [emailReg, setEmailReg] = useState("");
     const [passwordReg, setPasswordReg] = useState("");
@@ -39,21 +36,24 @@ function Signup() {
         }
     }
 
+    const [loginStatus, setloginStatus] = useState(false);
+    var tempData = localStorage.getItem("login-data");
+    useEffect(() => {
+        tempData = localStorage.getItem("login-data");
+        if(tempData) {
+            setloginStatus(true);
+        }
+    }, []);
+
+    let navigator = useNavigate();
+    if(loginStatus) {
+        navigator("/");
+    }
+
     return (
         <>
             <Navbar/>
             <Segment><Header dividing textAlign="center" size="huge">Sign Up for Calendearly</Header>
-                <Modal centered={false} open={open} onClose={() => setOpen(false)} onOpen={() => setOpen(true)}>
-                    <Modal.Header>Needs changing!</Modal.Header>
-                    <Modal.Content>
-                        <Modal.Description>
-                            This is a modal but it serves to show how buttons and functions can be implemented.
-                        </Modal.Description>
-                    </Modal.Content>
-                    <Modal.Actions>
-                        <Button onClick={() => setOpen(false)}>OK</Button>
-                    </Modal.Actions>
-                </Modal>
                 <Segment placeholder>
                         <Grid.Column>
                             <Form>
@@ -119,4 +119,4 @@ function Signup() {
     )
 }
 
-export default Signup;
+export default SignupPage;

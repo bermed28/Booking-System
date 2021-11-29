@@ -51,6 +51,9 @@ const Navbar = () => {
                     { loggedIn === true &&
                     <Button text="Logout" path="/" primary onClick={handleLogout}/>
                     }
+                    { loggedIn === true &&
+                    <Button text="Settings" path="/Settings"/>
+                    }
                 </div>
             </nav>
         </>

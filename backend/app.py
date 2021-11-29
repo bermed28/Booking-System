@@ -1,5 +1,6 @@
 from flask import Flask, request
 from flask_cors import CORS
+from flask_cors import cross_origin
 from controller.user import BaseUser
 from controller.user_schedule import BaseUserSchedule
 from controller.room import BaseRoom
@@ -41,6 +42,11 @@ def handleUsersbyId(uid):
     elif request.method == 'DELETE':
         return BaseUser().deleteUser(uid)
 
+@app.route('/StackOverflowersStudios/users/usernames', methods=['POST'])
+def handleUsernames():
+    if request.method == 'POST':
+        return BaseUser().getRequestedIds(request.json)
+
 @app.route('/StackOverflowersStudios/rooms', methods=['GET', 'POST'])
 def handleRooms():
     if request.method == 'POST':
@@ -58,6 +64,7 @@ def handleRoomsbyId(rid):
         return BaseRoom().deleteRoom(rid)
 
 @app.route('/StackOverflowersStudios/reservations', methods=['GET', 'POST'])
+@cross_origin()
 def handleReservations():
     if request.method == 'POST':
         return BaseReservation().addNewReservation(request.json)
