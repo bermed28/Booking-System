@@ -133,7 +133,6 @@ function Schedule() {
                 let temp = selected.members;
                 const idx = temp.indexOf(data.username);
                 temp.splice(idx, 1);
-                setOpenUserDelete(false);
                 window.location.reload(false);
             }, (error) =>{
                 console.log("Error Occurred", error);
