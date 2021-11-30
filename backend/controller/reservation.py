@@ -233,10 +233,10 @@ class BaseReservation:
         """
         Delete from Reservation, Reservation/User/Room Schedule, Members
         """
-        reservationdDAO, membersDAO = ReservationDAO(), MembersDAO()
+        reservationDAO, membersDAO = ReservationDAO(), MembersDAO()
         roomSchedDAO, userSchedDAO, resSchedDAO = RoomScheduleDAO(), UserScheduleDAO(), ReservationScheduleDAO()
 
-        reservationInfo = reservationdDAO.getReservationById(resid)
+        reservationInfo = reservationDAO.getReservationById(resid)
         if json['uid'] != reservationInfo[4]:
             return jsonify("You cannot delete this reservation because you are not its creator."), 403
         memberList = membersDAO.getMembersByReservationId(resid)

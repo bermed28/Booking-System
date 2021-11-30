@@ -72,6 +72,7 @@ def handleReservations():
         return BaseReservation().getAllReservations()
 
 @app.route('/StackOverflowersStudios/reservations/<int:resid>', methods=['GET', 'PUT', 'DELETE'])
+@cross_origin()
 def handleReservationbyId(resid):
     if request.method == 'GET':
         return BaseReservation().getReservationById(resid)

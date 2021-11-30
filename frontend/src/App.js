@@ -1,6 +1,6 @@
 import Navbar from "./components/Navbar";
-import {Button, Divider, Form, Grid, Header, Modal, Segment, Tab} from 'semantic-ui-react';
-import {Link, useNavigate, useState} from "react-router-dom"
+import {Button, Divider, Grid, Segment} from 'semantic-ui-react';
+import {Link} from "react-router-dom"
 import "./App.css"
 
 /**
@@ -23,7 +23,7 @@ const App = () => {
             <Grid columns={2} relaxed='very' stackable>
                 <Grid.Column>
                     <div className="container">
-                        <img src={require("./Assets/mini-calendar-2022-printable-planner-cards-04-01.jpg").default}/>
+                        <img src={require("./Assets/mini-calendar-2022-printable-planner-cards-04-01.jpg").default} alt=""/>
                     </div>
                 </Grid.Column>
                 <Grid.Column verticalAlign='middle'>

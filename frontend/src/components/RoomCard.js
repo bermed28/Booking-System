@@ -2,7 +2,7 @@ import {Button, Form, Modal} from "semantic-ui-react";
 import React, {useEffect, useState} from "react";
 import {Card, CardHeader, CardContent, IconButton, Typography} from "@material-ui/core";
 import {Grid} from 'semantic-ui-react';
-import {DeleteOutlined, Edit, EditOutlined, MoreHoriz, MoreHorizOutlined} from "@material-ui/icons";
+import {EditOutlined, MoreHorizOutlined} from "@material-ui/icons";
 import axios from "axios";
 const app = require("../App");
 
@@ -135,6 +135,7 @@ function RoomCard(props) {
                     />
                 }
                 <CardContent>
+
                     <Typography variant="body2" color="textSecondary">Capacity: {props.capacity}</Typography>
                     <Typography variant="body2" color="textSecondary">Permission: {props.permission}</Typography>
                 </CardContent>

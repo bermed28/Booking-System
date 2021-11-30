@@ -1,9 +1,8 @@
-import React, {Component, useState, useEffect, useCallback} from 'react';
-import {Calendar, momentLocalizer, Views } from 'react-big-calendar';
+import React, {useState, useEffect} from 'react';
+import {Calendar, momentLocalizer} from 'react-big-calendar';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import moment from 'moment';
-import {Button, Card, Container, Modal} from "semantic-ui-react";
-import Navbar from "./components/Navbar";
+import {Button, Container, Form, Grid, Modal} from "semantic-ui-react";
 import axios from "axios";
 const app = require("./App");
 
@@ -66,12 +65,70 @@ const months = {
  *    resource?: any
  *  }
  */
-function Schedule(){
+
+
+function Schedule() {
     const [open, setOpen] = useState(false);
-    const[meetings, setMeetings] = useState([]);
+    const [deleteAction, setDeleteAction] = useState(false);
+    const [meetings, setMeetings] = useState([]);
+    const [selected, setSelected] = useState({});
+    const [editedMeetingName, setEditedMeetingName] = useState("");
     const localizer = momentLocalizer(moment)
     const loginData = localStorage.getItem('login-data');
     const data = JSON.parse(loginData);
+
+    const handleSelected = (event) => {
+        setSelected(event);
+        if(data.uid === event.creator) {
+            setOpen(true);
+            console.info(selected);
+        } else console.log("You are not the meeting creator")
+    };
+
+
+
+    const updateMeeting = () => {
+        if(editedMeetingName === ""){
+            console.log("No changes")
+        }else {
+            let data = {resname: editedMeetingName, resid: selected.meetingID};
+            axios.put(`${app.BackendURL}/StackOverflowersStudios/reservations/updateName`, data, {headers: {'Content-Type': 'application/json'}})//text/plain //application/json)
+                .then((response) => {
+                    console.log(response);
+                    window.location.reload(false);
+                }, (error) => {
+                    console.log(error);
+                });
+        }
+    }
+
+    const deleteMeeting = () => {
+
+        console.log(data.uid);
+        const token = localStorage.getItem('token');
+        const request = axios.create({
+            headers: {
+                Authorization: token
+            }
+        });
+        request.delete(`${app.BackendURL}/StackOverflowersStudios/reservations/${selected.meetingID}`, { data: {uid: data.uid} }).then(
+            (r) => {
+                console.log("Meeting Deleted", r);
+                window.location.reload(false);
+            }, (error) =>{
+
+                console.log("Error Occurred", error);
+            }
+        );
+
+        // axios.delete(`${app.BackendURL}/StackOverflowersStudios/reservation/${selected.meetingID}`, {data: data.uid, headers: {'Content-Type': 'application/json'}})
+        //     .then(r =>{
+        //         console.log("Meeting Deleted", r);
+        //         window.location.reload(false);
+        //     }, (error) =>{
+        //         console.log(error);
+        //     });
+    }
 
     const fetchData = async () =>{
         axios.get(`${app.BackendURL}/StackOverflowersStudios/userReservations/${data.uid}`, {
@@ -85,20 +142,20 @@ function Schedule(){
                         const tempStart = timeSlots[0].split(":");
                         const tempEnd = timeSlots[1].split(":");
                         const startDate = new Date(tempDate[2],
-                                        months[tempDate[1]] - 1,
-                                        tempDate[0],
-                                        parseInt(tempStart[0]),
-                                        parseInt(tempStart[1]),
-                                        parseInt(tempStart[2]));
+                            months[tempDate[1]] - 1,
+                            tempDate[0],
+                            parseInt(tempStart[0]),
+                            parseInt(tempStart[1]),
+                            parseInt(tempStart[2]));
 
                         const endDate = new Date(tempDate[2],
-                                        months[tempDate[1]] - 1,
-                                        tempDate[0],
-                                        parseInt(tempEnd[0]),
-                                        parseInt(tempEnd[1]),
-                                        parseInt(tempEnd[2]));
+                            months[tempDate[1]] - 1,
+                            tempDate[0],
+                            parseInt(tempEnd[0]),
+                            parseInt(tempEnd[1]),
+                            parseInt(tempEnd[2]));
 
-                        const temp = {title: meeting.resname, start: startDate, end: endDate};
+                        const temp = {title: meeting.resname, start: startDate, end: endDate, creator: meeting.uid, meetingID: meeting.resid};
                         fetchedMeetings.push(temp)
                     }
                     setMeetings(fetchedMeetings);
@@ -110,26 +167,75 @@ function Schedule(){
     }
 
     useEffect(() => {
-        fetchData()
+        fetchData();
     }, [])
 
     return (
         <>
             <Container style={{ height: 800, margin: "50px"}}>
-                <Calendar selectable //change for user mark unavailable
+                <Calendar //selectable //change for user mark unavailable
                           localizer={localizer}
                           startAccessor="start"
                           events={meetings}
                           endAccessor="end"
                           views={["month", "day"]}
                           defaultDate={Date.now()}
-
+                          onSelectEvent={handleSelected}
                 />
                 <Button fluid onClick={() => {setOpen(true)}}> Mark as unavailable</Button>
             </Container>
+
+            <Modal centered={false} open={open} onClose={() => {setOpen(false);}} onOpen={() => {setOpen(true); setDeleteAction(false)}}>
+
+                { !deleteAction &&
+                    <Modal.Header>
+                        Edit Meeting: {selected.title}
+                    </Modal.Header>
+                }
+                { deleteAction &&
+                    <Modal.Header> Delete Meeting: {selected.title}</Modal.Header>
+                }
+                <Modal.Content>
+                    { !deleteAction &&
+                        <Modal.Description>
+                            <Grid.Column>
+                                <Form>
+                                    <Form.Input>
+                                        <Form.Input onChange={(e) => {
+                                            setEditedMeetingName(e.target.value)
+                                        }}
+                                                    label='Meeting Name'
+                                                    type='name'
+                                        />
+                                    </Form.Input>
+                                </Form>
+                            </Grid.Column>
+                            <br/>
+                            <Button content='Delete' color={"red"} onClick={() => {setDeleteAction(true);}} />
+                        </Modal.Description>
+                    }
+                    { deleteAction &&
+                        <Modal.Description></Modal.Description> &&
+                        <Modal.Actions>
+                            Are you sure you want to delete your account?
+                            <Button color={"red"} content="Yes I'm sure, delete this meeting" onClick={deleteMeeting} />
+                        </Modal.Actions>
+                    }
+
+                </Modal.Content>
+                <Modal.Actions>
+                    { !deleteAction &&
+                        <Button content='Update' primary onClick={updateMeeting}/>
+                    }
+
+                    { deleteAction &&
+                        <Button content='Cancel' primary onClick={() => setDeleteAction(false)} />
+
+                    }
+                </Modal.Actions>
+
+            </Modal>
         </>
     );
-
-
 }
 export default Schedule;

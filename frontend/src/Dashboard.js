@@ -1,9 +1,7 @@
-import React, {Component, useState, useEffect} from 'react';
-import {Calendar, momentLocalizer, Views } from 'react-big-calendar';
+import React, {useState, useEffect} from 'react';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
-import moment from 'moment';
-import {Button, Card, Container, Modal} from "semantic-ui-react";
-import {Bar, BarChart, CartesianGrid, Legend, Tooltip, XAxis, YAxis, ResponsiveContainer} from "recharts";
+import {Container} from "semantic-ui-react";
+import {Bar, BarChart, CartesianGrid, Legend, Tooltip, XAxis, YAxis} from "recharts";
 import Navbar from "./components/Navbar";
 import axios from 'axios';
 const app = require("./App");
@@ -12,7 +10,7 @@ const api = axios.create({
     baseURL : app.BackendURL //'http://localhost:8080'
 })
 
-function BookMeeting(){
+function Dashboard(){
 
     const [rooms, setRooms] = useState([]);
 
@@ -154,4 +152,4 @@ function BookMeeting(){
 
 
 }
-export default BookMeeting;
+export default Dashboard;
