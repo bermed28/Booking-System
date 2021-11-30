@@ -178,3 +178,13 @@ class ReservationDAO:
         self.conn.commit()
         cursor.close()
         return True
+
+    def removeUserByUsername(self, username, resid):
+        cursor = self.conn.cursor()
+        query = "with id_from_username as (select uid from public.user where username = %s) \
+        delete from public.members where resid=%s and uid in (select uid from id_from_username);"
+        cursor.execute(query, (username, resid))
+        affected_rows = cursor.rowcount
+        self.conn.commit()
+        cursor.close()
+        return affected_rows != 0

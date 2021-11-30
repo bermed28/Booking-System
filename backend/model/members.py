@@ -79,5 +79,14 @@ class MembersDAO:
         cursor.close()
         return affected_rows != 0
 
+    def getUsersInReservation(self, resid):
+        cursor = self.conn.cursor()
+        query = "select username from public.user natural inner join members where resid = %s;"
+        cursor.execute(query, (resid,))
+        result = []
+        for user in cursor:
+            result.append(user[0])
+        return result
+
     def __del__(self):
         self.conn.close()

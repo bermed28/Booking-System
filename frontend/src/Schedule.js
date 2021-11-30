@@ -1,9 +1,11 @@
 import React, {useState, useEffect} from 'react';
 import {Calendar, momentLocalizer} from 'react-big-calendar';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
+import {Card, CardHeader, CardContent, IconButton, Typography} from "@material-ui/core";
 import moment from 'moment';
-import {Button, Container, Form, Grid, Modal} from "semantic-ui-react";
+import {Button, Container, Form, Grid, Modal, ModalDescription, ModalHeader} from "semantic-ui-react";
 import axios from "axios";
+import {EditOutlined, MoreHorizOutlined} from "@material-ui/icons";
 const app = require("./App");
 
 const dummyEvents = [
@@ -69,9 +71,12 @@ const months = {
 
 function Schedule() {
     const [open, setOpen] = useState(false);
+    const [openUserDelete, setOpenUserDelete] = useState(false);
+    const [userToDelete, setUserToDelete] = useState("");
     const [deleteAction, setDeleteAction] = useState(false);
     const [meetings, setMeetings] = useState([]);
-    const [selected, setSelected] = useState({});
+    const [members, setMembers] = useState([]);
+    const [selected, setSelected] = useState({members: []});
     const [editedMeetingName, setEditedMeetingName] = useState("");
     const localizer = momentLocalizer(moment)
     const loginData = localStorage.getItem('login-data');
@@ -84,8 +89,6 @@ function Schedule() {
             console.info(selected);
         } else console.log("You are not the meeting creator")
     };
-
-
 
     const updateMeeting = () => {
         if(editedMeetingName === ""){
@@ -100,6 +103,42 @@ function Schedule() {
                     console.log(error);
                 });
         }
+    }
+
+    const getMemberNames = async (resid) => {
+        axios.get(`${app.BackendURL}/StackOverflowersStudios/memberNames/${resid}`, {
+            headers: {'Content-Type': 'application/json' }})
+            .then(
+                (response) => {
+                    // console.log(response.data.members)
+                    const members = response.data.members;
+                    setMembers(response.data.members);
+                }, (error) => {
+                    console.log(error);
+                }
+            );
+    }
+
+    const deleteUserFromMeeting = (username, resid) => {
+        console.log(data.uid);
+        const token = localStorage.getItem('token');
+        const request = axios.create({
+            headers: {
+                Authorization: token
+            }
+        });
+        request.delete(`${app.BackendURL}/StackOverflowersStudios/removeMember/`, { data: {resid: resid, username: username} }).then(
+            (r) => {
+                console.log("Member Deleted", r);
+                let temp = selected.members;
+                const idx = temp.indexOf(data.username);
+                temp.splice(idx, 1);
+                setOpenUserDelete(false);
+                window.location.reload(false);
+            }, (error) =>{
+                console.log("Error Occurred", error);
+            }
+        );
     }
 
     const deleteMeeting = () => {
@@ -155,7 +194,22 @@ function Schedule() {
                             parseInt(tempEnd[1]),
                             parseInt(tempEnd[2]));
 
-                        const temp = {title: meeting.resname, start: startDate, end: endDate, creator: meeting.uid, meetingID: meeting.resid};
+                        let tempArray = []
+
+                        axios.get(`${app.BackendURL}/StackOverflowersStudios/memberNames/${meeting.resid}`, {
+                            headers: {'Content-Type': 'application/json' }})
+                            .then(
+                                (response) => {
+                                    for(let i = 0; i < response.data.members.length; i++) {
+                                        tempArray.push(response.data.members[i]);
+                                    }
+                                }, (error) => {
+                                    console.log(error);
+                                }
+                            );
+
+                        const temp = {title: meeting.resname, start: startDate, end: endDate, creator: meeting.uid, meetingID: meeting.resid, members: tempArray};
+                        console.log(temp);
                         fetchedMeetings.push(temp)
                     }
                     setMeetings(fetchedMeetings);
@@ -174,13 +228,13 @@ function Schedule() {
         <>
             <Container style={{ height: 800, margin: "50px"}}>
                 <Calendar //selectable //change for user mark unavailable
-                          localizer={localizer}
-                          startAccessor="start"
-                          events={meetings}
-                          endAccessor="end"
-                          views={["month", "day"]}
-                          defaultDate={Date.now()}
-                          onSelectEvent={handleSelected}
+                    localizer={localizer}
+                    startAccessor="start"
+                    events={meetings}
+                    endAccessor="end"
+                    views={["month", "day"]}
+                    defaultDate={Date.now()}
+                    onSelectEvent={handleSelected}
                 />
                 <Button fluid onClick={() => {setOpen(true)}}> Mark as unavailable</Button>
             </Container>
@@ -188,52 +242,70 @@ function Schedule() {
             <Modal centered={false} open={open} onClose={() => {setOpen(false);}} onOpen={() => {setOpen(true); setDeleteAction(false)}}>
 
                 { !deleteAction &&
-                    <Modal.Header>
-                        Edit Meeting: {selected.title}
-                    </Modal.Header>
+                <Modal.Header>
+                    Edit Meeting: {selected.title}
+                </Modal.Header>
                 }
                 { deleteAction &&
-                    <Modal.Header> Delete Meeting: {selected.title}</Modal.Header>
+                <Modal.Header> Delete Meeting: {selected.title}</Modal.Header>
                 }
                 <Modal.Content>
                     { !deleteAction &&
-                        <Modal.Description>
-                            <Grid.Column>
-                                <Form>
-                                    <Form.Input>
-                                        <Form.Input onChange={(e) => {
-                                            setEditedMeetingName(e.target.value)
-                                        }}
-                                                    label='Meeting Name'
-                                                    type='name'
-                                        />
-                                    </Form.Input>
-                                </Form>
-                            </Grid.Column>
-                            <br/>
-                            <Button content='Delete' color={"red"} onClick={() => {setDeleteAction(true);}} />
-                        </Modal.Description>
+                    <Modal.Description>
+                        <Grid.Column>
+                            <Form>
+                                <Form.Input>
+                                    <Form.Input onChange={(e) => {
+                                        setEditedMeetingName(e.target.value)
+                                    }}
+                                                label='Meeting Name'
+                                                type='name'
+                                    />
+                                </Form.Input>
+                            </Form>
+                            <h4>Members</h4>
+                            {
+                                selected.members.map(item => {
+                                    return(<Card style={{width: "50%"}} variant="outlined"><CardHeader title={item} action={
+                                        <IconButton onClick={() => {setOpenUserDelete(true); setUserToDelete(item)}}><MoreHorizOutlined/></IconButton>
+                                    }/></Card>)
+                                })
+                            }
+                        </Grid.Column>
+                        <br/>
+                        <Button content='Delete' color={"red"} onClick={() => {setDeleteAction(true);}} />
+                    </Modal.Description>
                     }
                     { deleteAction &&
-                        <Modal.Description></Modal.Description> &&
-                        <Modal.Actions>
-                            Are you sure you want to delete your account?
-                            <Button color={"red"} content="Yes I'm sure, delete this meeting" onClick={deleteMeeting} />
-                        </Modal.Actions>
+                    <Modal.Description> </Modal.Description> &&
+                    <Modal.Actions>
+                        Are you sure you want to delete your account?
+                        <Button color={"red"} content="Yes I'm sure, delete this meeting" onClick={deleteMeeting} />
+                    </Modal.Actions>
                     }
 
                 </Modal.Content>
                 <Modal.Actions>
                     { !deleteAction &&
-                        <Button content='Update' primary onClick={updateMeeting}/>
+                    <Button content='Update' primary onClick={updateMeeting}/>
                     }
 
                     { deleteAction &&
-                        <Button content='Cancel' primary onClick={() => setDeleteAction(false)} />
+                    <Button content='Cancel' primary onClick={() => setDeleteAction(false)} />
 
                     }
                 </Modal.Actions>
 
+            </Modal>
+
+            <Modal centered={false} open={openUserDelete} onClose={() => setOpenUserDelete(false)} onOpen={() => setOpenUserDelete(true)}>
+                <ModalHeader>Delete User: Are you sure you want to remove this user from the meeting?</ModalHeader>
+                <ul>
+                    <li><h3>{userToDelete}</h3></li>
+                </ul>
+                <Modal.Actions>
+                    <Button color={"red"} content={`Yes I'm sure, remove ${userToDelete}.`} onClick={() => {deleteUserFromMeeting(userToDelete, selected.meetingID)}} />
+                </Modal.Actions>
             </Modal>
         </>
     );

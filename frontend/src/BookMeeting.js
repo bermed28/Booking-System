@@ -19,7 +19,7 @@ const api = axios.create({
     baseURL : app.BackendURL //'http://localhost:8080'
 })
 
-function BookMeeting(){
+function BookMeeting() {
     const [meetingInformation, setMeetingInformation] = useState([]);
     const [open, setOpen] = useState(false);
     const localizer = momentLocalizer(moment)
