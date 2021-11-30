@@ -119,11 +119,19 @@ class UserDAO:
 
     def getAllOccupiedUserSchedule(self, uid):
         cursor = self.conn.cursor()
-        query = "select tid, usday from user_schedule where uid = %s"
-        cursor.execute(query, (uid,))
-        result = []
+        # query = "select tid, usday from user_schedule where uid = %s"
+        query = "with involved_reservations as (select resid from ((select uid, resid from reservation where uid = %s) \
+        union (select uid, resid from members where uid = %s)) as temp), \
+        time_slots_to_meet as (select tid, resday from reservation_schedule natural inner join reservation where resid in (select resid from involved_reservations)) \
+        select tid, usday from user_schedule where ROW(tid, usday) not in (select tid, resday as usday from time_slots_to_meet) and uid=%s;"
+
+        cursor.execute(query, (uid, uid, uid))
+        result = {}
         for row in cursor:
-            result.append({"tid": row[0], "usday": row[1]})
+            if str(row[1]) not in result:
+                result[str(row[1])] = [row[0]]
+            else:
+                result[str(row[1])].append(row[0])
         cursor.close()
         return result
 

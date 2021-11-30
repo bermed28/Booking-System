@@ -69,10 +69,15 @@ const months = {
 
 function Schedule() {
     const [open, setOpen] = useState(false);
+    const [openUnavailabilityUser, setOpenUnavailabilityUser] = useState(false);
     const [deleteAction, setDeleteAction] = useState(false);
     const [meetings, setMeetings] = useState([]);
+    const [unavailableTimeSlots, setUnavailableTimeSlots] = useState([]);
     const [selected, setSelected] = useState({});
+    const [selectedUnavailable, setSelectedUnavailable] = useState(false);
+    const [selectedUserTimeSlot, setSelectedUserTimeSlot] = useState([]);
     const [editedMeetingName, setEditedMeetingName] = useState("");
+    const [time, setTime] = useState([new Date(), new Date()])
     const localizer = momentLocalizer(moment)
     const loginData = localStorage.getItem('login-data');
     const data = JSON.parse(loginData);
@@ -121,13 +126,35 @@ function Schedule() {
             }
         );
 
-        // axios.delete(`${app.BackendURL}/StackOverflowersStudios/reservation/${selected.meetingID}`, {data: data.uid, headers: {'Content-Type': 'application/json'}})
-        //     .then(r =>{
-        //         console.log("Meeting Deleted", r);
-        //         window.location.reload(false);
-        //     }, (error) =>{
-        //         console.log(error);
-        //     });
+    }
+
+    const fetchUnavailabletimeSlots = async () => {
+        axios.get(`${app.BackendURL}/StackOverflowersStudios/user/allOccupiedSchedule/${data.uid}`, {
+            headers: {'Content-Type': 'application/json' }})
+            .then(
+                (response) => {
+                    let unavailableTS = []
+                    console.log(response.data)
+                    const days = Object.keys(response.data)
+                    for(let day of days){ // day: [ [timeBlock1], [timeBlock2], [...] ]
+                        for(let block of response.data[day]){
+                            let tempDate = day.split('-');
+                            const blockStart = block[0].split(":");
+                            const blockEnd = block[1].split(":");
+
+                            const startDate = new Date(tempDate[0], tempDate[1] - 1, tempDate[2], parseInt(blockStart[0]), parseInt(blockStart[1]), parseInt(blockStart[2]));
+                            const endDate = new Date(tempDate[0], tempDate[1] - 1, tempDate[2], parseInt(blockEnd[0]), parseInt(blockEnd[1]), parseInt(blockEnd[2]));
+
+                            const timeSlot = {title: `Unavailable`, start: startDate, end: endDate}
+                            unavailableTS.push(timeSlot)
+                        }
+                    }
+
+                    setUnavailableTimeSlots(unavailableTS);
+                    console.log(unavailableTimeSlots)
+                }
+            );
+
     }
 
     const fetchData = async () =>{
@@ -168,22 +195,90 @@ function Schedule() {
 
     useEffect(() => {
         fetchData();
+        fetchUnavailabletimeSlots();
     }, [])
+
+    function formatTime(hours, minutes){
+        console.log(hours + " " + minutes)
+        let pastNoonIndicator = "";
+        if(hours < 12){
+            if(hours === 0) hours = 12;
+            pastNoonIndicator = "AM";
+        }
+        else {
+            if(hours > 12) hours -= 12;
+            pastNoonIndicator = "PM";
+        }
+        if(minutes === 0){
+            return `${hours}:00 ${pastNoonIndicator}`;
+        } else {
+            return`${hours}:${minutes} ${pastNoonIndicator}`;
+        }
+    }
+
+    function getTID(hours, minutes){
+        if(minutes === 30) return hours * 2 + 2;
+        else return hours * 2 + 1;
+    }
+
+    function markUnavailable(){
+        console.log(selectedUserTimeSlot);
+
+        let startTID = getTID(selectedUserTimeSlot[0].start.getHours(), selectedUserTimeSlot[0].start.getMinutes());
+        let endTID = getTID(selectedUserTimeSlot[0].end.getHours(), selectedUserTimeSlot[0].end.getMinutes()) - 1;
+
+        let usday = `${selectedUserTimeSlot[0].start.getFullYear()}-${selectedUserTimeSlot[0].start.getMonth() + 1}-${selectedUserTimeSlot[0].start.getDate()}`;
+        for (let i = startTID; i <= endTID; i++) {
+            axios.post(`${app.BackendURL}/StackOverflowersStudios/user-schedule/markunavailable`, {tid: i, uid: data.uid, usday: usday}).then(
+                (response) => console.log(`TID ${i} marked unavailable`), (error) => console.log(error)
+            )
+        }
+    }
 
     return (
         <>
-            <Container style={{ height: 800, margin: "50px"}}>
-                <Calendar //selectable //change for user mark unavailable
+            <Container style={{ height: 800, margin: "25px"}}>
+                <Calendar selectable
                           localizer={localizer}
                           startAccessor="start"
-                          events={meetings}
+                          events={[...meetings, ...selectedUserTimeSlot, ...unavailableTimeSlots]}
                           endAccessor="end"
                           views={["month", "day"]}
                           defaultDate={Date.now()}
+                          onSelecting = {
+                              (selected) => {
+                                  setSelectedUserTimeSlot([
+                                      {
+                                          'title' : `${data.username} is unavailable`,
+                                          'start': new Date(selected.start),
+                                          'end': new Date(selected.end)
+                                      }
+                                  ]);
+                                  setSelectedUnavailable(true);
+                                  setTime([new Date(selected.start), new Date(selected.end)])
+                              }
+                          }
                           onSelectEvent={handleSelected}
                 />
-                <Button fluid onClick={() => {setOpen(true)}}> Mark as unavailable</Button>
+                <Container fluid>
+                    <Button fluid onClick={() => {if(selectedUnavailable) setOpenUnavailabilityUser(true);}}> Mark as unavailable</Button>
+                </Container>
             </Container>
+
+            <Modal centered={false} open={openUnavailabilityUser} onClose={() => {setOpenUnavailabilityUser(false);}} onOpen={() => {setOpenUnavailabilityUser(true);}}>
+                <Modal.Header>Mark Unavailable Time Slot</Modal.Header>
+                <Modal.Content>
+                    <Modal.Description>
+                        Selected Time Slot: &nbsp;
+                        {formatTime(time[0].getHours(), time[0].getMinutes())}
+                        - {formatTime(time[1].getHours(), time[1].getMinutes())} <br/>
+                        Are you sure you wish to mark this time slot as unavailable? You will not be able to book any meetings nor be invited to any meetings at this time slot if you proceed
+                    </Modal.Description>
+                </Modal.Content>
+                <Modal.Actions>
+                    <Button content='Yes, mark as unavailable' primary onClick={() => {{markUnavailable()} window.location.reload();}}/>
+                </Modal.Actions>
+            </Modal>
 
             <Modal centered={false} open={open} onClose={() => {setOpen(false);}} onOpen={() => {setOpen(true); setDeleteAction(false)}}>
 
