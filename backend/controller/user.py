@@ -105,6 +105,11 @@ class BaseUser:
 
         return jsonify(timeslots)
 
+    def getAllOccupiedUserSchedule(self, uid):
+        dao = UserDAO()
+        occupiedTid = dao.getAllOccupiedUserSchedule(uid)
+        return jsonify(occupiedTid)
+
     def checkPermission(self, uid):
         dao = UserDAO()
         return jsonify(dao.checkPermission(uid))

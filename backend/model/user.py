@@ -117,6 +117,16 @@ class UserDAO:
         cursor.close()
         return result
 
+    def getAllOccupiedUserSchedule(self, uid):
+        cursor = self.conn.cursor()
+        query = "select tid, usday from user_schedule where uid = %s"
+        cursor.execute(query, (uid,))
+        result = []
+        for row in cursor:
+            result.append({"tid": row[0], "usday": row[1]})
+        cursor.close()
+        return result
+
     def checkPermission(self, uid):
         cursor = self.conn.cursor()
         query = "select upermission from public.user where uid = %s"

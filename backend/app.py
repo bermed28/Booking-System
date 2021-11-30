@@ -168,6 +168,10 @@ def handleMostBookedWith(uid):
 def handleAllDayUserSchedule():
     return BaseUser().getAllDayUserSchedule(request.json)
 
+@app.route('/StackOverflowersStudios/user/allOccupiedSchedule/<int:uid>', methods=['GET'])
+def handleAllOccupiedUserSchedule(uid):
+    return BaseUser().getAllOccupiedUserSchedule(uid)
+
 @app.route('/StackOverflowersStudios/room/alldayschedule', methods=['GET'])
 def handleAllDayRoomSchedule():
     return BaseRoom().getAllDayRoomSchedule(request.json)
