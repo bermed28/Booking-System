@@ -7,7 +7,7 @@ export const navItems = [
     },
     {
       id: 2,
-      title: "My Meeting",
+      title: "My Meetings",
       path: "/UserView",
       cName: "nav-item",
     },

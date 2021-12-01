@@ -331,7 +331,15 @@ class BaseReservation:
         username = json['username']
         resid = json['resid']
         dao = ReservationDAO()
-        if dao.removeUserByUsername(username, resid):
+        user_dao = UserDAO()
+        user_schedule_dao = UserScheduleDAO()
+        tid_list = dao.getInUseTids(resid)
+        removed_from_members = dao.removeUserByUsername(username, resid)
+        uid = user_dao.getUidbyUsername(username)
+        resday = dao.getReservationById(resid)[2]
+        for tid in tid_list:
+            user_schedule_dao.deleteUserSchedulebyTimeIDAndDay(uid, tid, resday)
+        if removed_from_members:
             return jsonify("Successfully removed user from the meeting."), 200
         else:
             return jsonify("Could not remove user from the meeting."), 500
