@@ -80,5 +80,20 @@ class RoomScheduleDAO:
         cursor.close()
         return boolean
 
+    def getUnavailableTimeSlots(self, rid):
+        cursor = self.conn.cursor()
+        query = "select tid, rsday from room_schedule where rid=%s"
+        cursor.execute(query, (rid,))
+        result = {}
+        for row in cursor:
+            if str(row[1]) not in result:
+                result[str(row[1])] = [row[0]]
+            else:
+                result[str(row[1])].append(row[0])
+        cursor.close()
+        return result
+
+
+
     def __del__(self):
         self.conn.close()

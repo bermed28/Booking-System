@@ -176,6 +176,10 @@ def handleAllOccupiedUserSchedule(uid):
 def handleAllDayRoomSchedule():
     return BaseRoom().getAllDayRoomSchedule(request.json)
 
+@app.route('/StackOverflowersStudios/room/unavailableTimeSlots/<int:rid>', methods=['GET'])
+def handleUnavailableTimeSlots(rid):
+    return BaseRoomSchedule().getUnavailableTimeSlots(rid)
+
 """""""""""""""""MISCELLANEOUS OPERATIONS"""""""""""""""
 @app.route('/StackOverflowersStudios/reservation/whoAppointed', methods=['GET'])
 def handlegetWhoAppointedRoomAtTime():

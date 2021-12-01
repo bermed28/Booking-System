@@ -18,7 +18,11 @@ function RoomCard(props) {
     const [editMessage, setEditMessage] = useState("");
     const [deleteMessage, setDeleteMessage] = useState("");
     const [roomData, setRoomData] = useState({});
+    const [unavailabilityModalOpen, setUnavailabilityModalOpen] = useState(false);
+    const [unavailableTimeSlots, setUnavailableTimeSlots] = useState({});
     const roomID = props.id;
+
+    console.log(unavailableTimeSlots)
 
     function createRoom(){
         if(roomName==="" || roomCapacity < 0 || roomBuilding==="" || roomPermission==="0"){
@@ -44,6 +48,7 @@ function RoomCard(props) {
     }
 
     function getRoomData(){
+        console.log("Entered!")
         axios.get(`${app.BackendURL}/StackOverflowersStudios/rooms/${roomID}`, {
             headers: {'Content-Type': 'application/json' }}).then((response) => {
                 setRoomData(response.data);
@@ -54,7 +59,10 @@ function RoomCard(props) {
     }
 
     useEffect(() => {
-        getRoomData();
+        if(typeof roomID !== "undefined") {
+            getRoomData();
+            fetchUnavailableTimeSlots();
+        }
     }, []);
 
     function editRoom() {
@@ -109,6 +117,18 @@ function RoomCard(props) {
             }
         );
     }
+
+    function fetchUnavailableTimeSlots(){
+        console.log("entred2")
+        axios.get(`${app.BackendURL}/StackOverflowersStudios/room/unavailableTimeSlots/${roomID}`, {
+            headers: {'Content-Type': 'application/json' }})
+            .then(
+                (response) => {
+                    setUnavailableTimeSlots(response.data);
+                }
+            );
+    }
+
     return (
 
         <div>
@@ -142,7 +162,10 @@ function RoomCard(props) {
             </Card>
             <Modal centered={false} open={open} onClose={() => setOpen(false)} onOpen={() => setOpen(true)}>
                 {props.type === "create" &&<Modal.Header>Create New Room</Modal.Header>}
-                {props.type === "edit" &&<Modal.Header>Edit Room</Modal.Header>}
+                {props.type === "edit" && !unavailabilityModalOpen && <Modal.Header>Edit Room <br/> <Button onClick={() => setUnavailabilityModalOpen(true)} style={{marginTop: "15px"}}>Mark as Unavailable</Button></Modal.Header>}
+                {props.type === "edit" && unavailabilityModalOpen && <Modal.Header>Mark {props.roomName} as unavailable</Modal.Header>}
+
+
                 <Modal.Content>
                     {
                         props.type === "create" &&
@@ -178,7 +201,7 @@ function RoomCard(props) {
                     }
 
                     {
-                        props.type === "edit" &&
+                        props.type === "edit" && !unavailabilityModalOpen &&
                         <Modal.Description>
                             <Grid.Column>
                                 <Form>
@@ -207,15 +230,28 @@ function RoomCard(props) {
                             </Grid.Column>
                         </Modal.Description>
                     }
-                    {props.type === "edit" && <Button onClick={deleteRoom} style={{marginTop: "15px"}}>Delete</Button>}
+
+                    {
+                        props.type === "edit" && unavailabilityModalOpen &&
+                            <Modal.Description>
+                                This room is not available at the following time slots:
+                                <br/><br/>
+                                Are you sure you want to mark this room as unavailable in the chosen time slots? You will not be able to book any meetings with this room at this time if marked
+                            </Modal.Description>
+                    }
+
+                    {props.type === "edit" && !unavailabilityModalOpen && <Button onClick={deleteRoom} style={{marginTop: "15px"}}>Delete</Button>}
+                    {props.type === "edit" && unavailabilityModalOpen && <Button onClick={() => setUnavailabilityModalOpen(false)} style={{marginTop: "15px"}}>Cancel</Button>}
+
+
+
                 </Modal.Content>
 
                 <Modal.Actions>
                     {props.type === "create" && <Button onClick={createRoom}>Save</Button>}
-                    {
-                        props.type === "edit" &&
-                        <Button onClick={editRoom}>Save</Button>
-                    }
+                    {props.type === "edit" && !unavailabilityModalOpen && <Button onClick={editRoom}>Save</Button>}
+
+                    {props.type === "edit" && unavailabilityModalOpen && <Button onClick={editRoom}>Mark As Unavailable</Button>}
                 </Modal.Actions>
             </Modal>
         </div>
