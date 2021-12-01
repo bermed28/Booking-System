@@ -22,6 +22,9 @@ function RoomCard(props) {
     const [roomData, setRoomData] = useState({});
     const [unavailabilityModalOpen, setUnavailabilityModalOpen] = useState(false);
     const [unavailableTimeSlot, setUnavailableTimeSlot] = useState(new Date());
+    const [unavailableTimeSlots, setUnavailableTimeSlots] = useState([]);
+    const [toMarkAvailable, setToMarkAvailable] = useState(new Date())
+    const [invalidTimeSlot, setInvalidTimeSlot] = useState(false)
     const roomID = props.id;
 
 
@@ -132,12 +135,49 @@ function RoomCard(props) {
         },(error) => {
             console.log(error);
         });
+    }
+
+    function markRoomAvailable(){
+        console.log(toMarkAvailable)
+        let day = `${toMarkAvailable.getFullYear()}-${toMarkAvailable.getMonth() + 1}-${toMarkAvailable.getDate()}`;
+        const json = {rid: roomID, rsday: day, tid:getTID(toMarkAvailable.getHours(), toMarkAvailable.getMinutes())};
+        axios.delete(`${app.BackendURL}/StackOverflowersStudios/room-schedule/markavailable`, { data: json, headers: {'Content-Type': 'application/json'}}//text/plain //application/json
+        ).then((response) => {
+            console.log(response);
+            window.location.reload(false);
+        },(error) => {
+            console.log(error);
+        });
 
     }
 
     function handleChange(date){
         setUnavailableTimeSlot(date)
         console.log(unavailableTimeSlot)
+    }
+
+    function fetchUnavailableTimeSlots(){
+        console.log("Entered");
+        const url = `${app.BackendURL}/StackOverflowersStudios/room/allOccupiedSchedule/${roomID}`;
+        axios.get(url, {
+            headers: {'Content-Type': 'application/json' }})
+            .then(
+                (response) => {
+                    console.log(`Time Slot fetched for ${roomID}: `, JSON.stringify(response.data))
+                    let unavailableTS = []
+                    console.log("Response: ", response.data)
+                    const days = Object.keys(response.data)
+                    for(let day of days){ // day: [ {timeBlock1}, {timeBlock2}, {...} ]
+                        let tempDate = day.split('-');
+                        const blockStart = response.data[day][0].start.split(":");
+                        const startDate = new Date(tempDate[0], tempDate[1] - 1, tempDate[2], parseInt(blockStart[0]), parseInt(blockStart[1]), parseInt(blockStart[2]));
+                        unavailableTS.push(startDate)
+                    }
+
+                    setUnavailableTimeSlots(unavailableTS);
+                    console.log(unavailableTimeSlots)
+                }
+            );
     }
 
     return (
@@ -173,8 +213,8 @@ function RoomCard(props) {
             </Card>
             <Modal centered={false} open={open} onClose={() => setOpen(false)} onOpen={() => setOpen(true)}>
                 {props.type === "create" &&<Modal.Header>Create New Room</Modal.Header>}
-                {props.type === "edit" && !unavailabilityModalOpen && <Modal.Header>Edit Room <br/> <Button onClick={() => setUnavailabilityModalOpen(true)} style={{marginTop: "15px"}}>Mark as Unavailable</Button></Modal.Header>}
-                {props.type === "edit" && unavailabilityModalOpen && <Modal.Header>Mark {props.roomName} as unavailable</Modal.Header>}
+                {props.type === "edit" && !unavailabilityModalOpen && <Modal.Header>Edit Room <br/> <Button onClick={() => {fetchUnavailableTimeSlots(); setUnavailabilityModalOpen(true); }} style={{marginTop: "15px"}}>Change Availability</Button></Modal.Header>}
+                {props.type === "edit" && unavailabilityModalOpen && <Modal.Header>Change availability for {props.roomName}</Modal.Header>}
 
 
                 <Modal.Content>
@@ -245,19 +285,45 @@ function RoomCard(props) {
                     {
                         props.type === "edit" && unavailabilityModalOpen &&
                         <Modal.Description>
-                            Select Time Slot: <br/>
+                            Select Time Slot to mark unavailable: &nbsp;
                             <DateTimePicker
                                 onChange={(e) => handleChange(e)}
                                 value={unavailableTimeSlot}
                             />
                             <br/>
-
                             Are you sure you want to mark this room as unavailable in the chosen time slot? You will not be able to book any meetings with this room at this time if marked
+                            <br/>{<Button onClick={markRoom}>Mark As Unavailable</Button>}
+                            <br/><br/>
+                            Or select Time Slot to mark available, keep in mind that these time slots are of <strong>30 minutes</strong> in duration <br/>
+                            {unavailableTimeSlots.length > 0 &&
+                            <select defaultValue={"0"} style={{textAlign: "center"}} onChange={(e) => {
+                                if (e.target.value != 0) {
+                                    setToMarkAvailable(new Date(e.target.value));
+                                    setInvalidTimeSlot(false);
+                                    {
+                                        console.log(e.target.value)
+                                    }
+                                } else setInvalidTimeSlot(true)
+                            }}>
+                                <option key={0} value={"0"}>Select Time Slot</option>
+                                {Array.from(Array(unavailableTimeSlots.length)).map((_, i) => (
+                                    <option>{`${unavailableTimeSlots[i].toDateString()}, ${unavailableTimeSlots[i].toLocaleTimeString()}`}</option>
+                                ))}
+                            </select>
+                            }
+                            {unavailableTimeSlots.length === 0 && <p style={{fontSize:"1em"}}>This Room has no time slots marked as unavailable</p>}
+                            {invalidTimeSlot && <div style={{color: "red"}}> Please select a time slot</div>}
+                            <br/>
+                            { unavailableTimeSlots.length > 0 &&
+                                <p style={{fontSize: "1em"}}>Are you sure you want to mark this room as available in the chosen time slot? Anyone will be able to book any meetings with this room at this time if marked</p>
+                            }
+
                         </Modal.Description>
                     }
 
                     {props.type === "edit" && !unavailabilityModalOpen && <Button onClick={deleteRoom} style={{marginTop: "15px"}}>Delete</Button>}
-                    {props.type === "edit" && unavailabilityModalOpen && <Button onClick={() => setUnavailabilityModalOpen(false)} style={{marginTop: "15px"}}>Cancel</Button>}
+                    {props.type === "edit" && unavailabilityModalOpen  && unavailableTimeSlots.length > 0 && <Button onClick={markRoomAvailable}>Mark As Available</Button>}
+
 
 
 
@@ -266,7 +332,8 @@ function RoomCard(props) {
                 <Modal.Actions>
                     {props.type === "create" && <Button onClick={createRoom}>Save</Button>}
                     {props.type === "edit" && !unavailabilityModalOpen && <Button onClick={editRoom}>Save</Button>}
-                    {props.type === "edit" && unavailabilityModalOpen && <Button onClick={markRoom}>Mark As Unavailable</Button>}
+                    {props.type === "edit" && unavailabilityModalOpen && <Button onClick={() => setUnavailabilityModalOpen(false)} style={{marginTop: "15px"}}>Cancel</Button>}
+
                 </Modal.Actions>
             </Modal>
         </div>
