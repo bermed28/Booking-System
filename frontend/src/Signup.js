@@ -14,6 +14,7 @@ function SignupPage() {
     const [lastNameReg, setLastNameReg] = useState("");
     const [permissionReg, setPermissionReg] = useState("Student");
     const [signupMessage, setSignupMessage] = useState("Not submitted yet");
+    const [signupStatus, setSignupStatus] = useState(false);
 
     const signup = () => {
         if(userReg==="" || emailReg==="" || passwordReg==="" || firstNameReg==="" || lastNameReg==="" || permissionReg === "Select Permission"){
@@ -30,6 +31,7 @@ function SignupPage() {
                 {headers: {'Content-Type': 'application/json'}}//text/plain //application/json
             ).then((response) => {
                 console.log(response);
+                setSignupStatus(true);
             }, (error) => {
                 console.log(error);
             });
@@ -46,7 +48,7 @@ function SignupPage() {
     }, []);
 
     let navigator = useNavigate();
-    if(loginStatus) {
+    if(loginStatus || signupStatus) {
         navigator("/");
     }
 
@@ -112,6 +114,9 @@ function SignupPage() {
                         <Button content='Signup' primary onClick={signup} />
                     </Form>
                         { permissionReg === "Select Permission" &&  <h3 style={{color: "red"}}>**Please select a permission for your account.</h3>}
+                        { !signupStatus &&
+                            <h3 style={{color: "red"}}>{signupMessage}</h3>
+                            }
                         </Grid.Column>
                 </Segment>
             </Segment>
