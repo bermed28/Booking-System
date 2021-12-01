@@ -1,6 +1,7 @@
 from flask import jsonify
 from model.room_schedule import RoomScheduleDAO
 from model.user import UserDAO
+from model.time_slot import TimeSlotDAO
 
 
 class BaseRoomSchedule:
@@ -38,6 +39,17 @@ class BaseRoomSchedule:
         else:
             result = self.build_map_dict(room_schedule_tuple)
             return jsonify(result), 200
+
+    def getUnavailableTimeSlots(self, rid):
+        dao = RoomScheduleDAO()
+        tsDAO = TimeSlotDAO()
+        timeSlots = dao.getUnavailableTimeSlots(rid)
+        for day, tids in timeSlots.items():
+            for i in range(len(tids)):
+                time = tsDAO.getTimeSlotByTimeSlotId(tids[i])
+                tids[i] = {"start": time[1], "end": time[2]}
+
+        return jsonify(timeSlots), 200
 
     def addNewRoomSchedule(self, json):
         rid = json['rid']

@@ -142,7 +142,7 @@ function BookMeeting() {
 
     return (
         <>
-            <Container style={{ height: 800 }}><Calendar
+            <Container style={{ height: 800, margin: "25px" }}><Calendar
                 selectable
                 localizer={localizer}
                 startAccessor="start"

@@ -1,5 +1,6 @@
 from flask import jsonify
 from model.user import UserDAO
+from model.time_slot import TimeSlotDAO
 
 class BaseUser:
 
@@ -105,6 +106,22 @@ class BaseUser:
 
         return jsonify(timeslots)
 
+    def getAllOccupiedUserSchedule(self, uid):
+        dao, tsDAO = UserDAO(), TimeSlotDAO()
+        occupiedTidDict = dao.getAllOccupiedUserSchedule(uid)
+        for day, tids in occupiedTidDict.items():
+
+            timeBlocks = self.getTimeBlocks(tids)
+
+            for i in range(len(timeBlocks)):
+                startTime = tsDAO.getTimeSlotByTimeSlotId(timeBlocks[i][0])
+                endTime = tsDAO.getTimeSlotByTimeSlotId(timeBlocks[i][-1])
+                timeBlocks[i] = [startTime[1], endTime[2]]
+
+            occupiedTidDict[day] = timeBlocks
+
+        return jsonify(occupiedTidDict)
+
     def checkPermission(self, uid):
         dao = UserDAO()
         return jsonify(dao.checkPermission(uid))
@@ -124,3 +141,21 @@ class BaseUser:
                 uids.append(uid)
         result = {"memberIds": uids}
         return jsonify(result)
+
+    def getTimeBlocks(self, tids):
+        tids.sort()
+        timeBlocks, i, j = [], 0, 0
+
+        while j < len(tids):
+            if j == len(tids) - 1:
+                timeBlocks.append(tids[i:j+1])
+                break
+            else:
+                if tids[j + 1] - tids[j] > 1:
+                    timeBlocks.append(tids[i:j+1])
+                    j += 1
+                    i = j
+                else:
+                    j += 1
+
+        return timeBlocks
