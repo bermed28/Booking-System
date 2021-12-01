@@ -58,6 +58,7 @@ function RoomCard(props) {
         );
     }
 
+
     useEffect(() => {
         if(typeof roomID !== "undefined") {
             getRoomData();
