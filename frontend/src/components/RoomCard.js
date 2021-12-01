@@ -4,6 +4,8 @@ import {Card, CardHeader, CardContent, IconButton, Typography} from "@material-u
 import {Grid} from 'semantic-ui-react';
 import {EditOutlined, MoreHorizOutlined} from "@material-ui/icons";
 import axios from "axios";
+import DateTimePicker from 'react-datetime-picker';
+
 const app = require("../App");
 
 
@@ -19,10 +21,9 @@ function RoomCard(props) {
     const [deleteMessage, setDeleteMessage] = useState("");
     const [roomData, setRoomData] = useState({});
     const [unavailabilityModalOpen, setUnavailabilityModalOpen] = useState(false);
-    const [unavailableTimeSlots, setUnavailableTimeSlots] = useState({});
+    const [unavailableTimeSlot, setUnavailableTimeSlot] = useState(new Date());
     const roomID = props.id;
 
-    console.log(unavailableTimeSlots)
 
     function createRoom(){
         if(roomName==="" || roomCapacity < 0 || roomBuilding==="" || roomPermission==="0"){
@@ -48,7 +49,6 @@ function RoomCard(props) {
     }
 
     function getRoomData(){
-        console.log("Entered!")
         axios.get(`${app.BackendURL}/StackOverflowersStudios/rooms/${roomID}`, {
             headers: {'Content-Type': 'application/json' }}).then((response) => {
                 setRoomData(response.data);
@@ -62,7 +62,6 @@ function RoomCard(props) {
     useEffect(() => {
         if(typeof roomID !== "undefined") {
             getRoomData();
-            fetchUnavailableTimeSlots();
         }
     }, []);
 
@@ -86,8 +85,6 @@ function RoomCard(props) {
                 data.rpermission = roomData.rpermission;
             }
 
-            console.log(data)
-            console.log(roomData.rid);
             axios.put(`${app.BackendURL}/StackOverflowersStudios/rooms/${roomID}`,
                 data,
                 {headers: {'Content-Type': 'application/json'}}//text/plain //application/json
@@ -119,15 +116,28 @@ function RoomCard(props) {
         );
     }
 
-    function fetchUnavailableTimeSlots(){
-        console.log("entred2")
-        axios.get(`${app.BackendURL}/StackOverflowersStudios/room/unavailableTimeSlots/${roomID}`, {
-            headers: {'Content-Type': 'application/json' }})
-            .then(
-                (response) => {
-                    setUnavailableTimeSlots(response.data);
-                }
-            );
+    function getTID(hours, minutes){
+        if(minutes === 30) return hours * 2 + 2;
+        else return hours * 2 + 1;
+    }
+
+    function markRoom(){
+
+        let day = `${unavailableTimeSlot.getFullYear()}-${unavailableTimeSlot.getMonth() + 1}-${unavailableTimeSlot.getDate()}`;
+        const json = {rid: roomID, rsday: day, tid:getTID(unavailableTimeSlot.getHours(), unavailableTimeSlot.getMinutes()), uid: JSON.parse(localStorage.getItem('login-data')).uid};
+        axios.post(`${app.BackendURL}/StackOverflowersStudios/room-schedule/markunavailable`, json, {headers: {'Content-Type': 'application/json'}}//text/plain //application/json
+        ).then((response) => {
+            console.log(response);
+            window.location.reload(false);
+        },(error) => {
+            console.log(error);
+        });
+
+    }
+
+    function handleChange(date){
+        setUnavailableTimeSlot(date)
+        console.log(unavailableTimeSlot)
     }
 
     return (
@@ -234,11 +244,16 @@ function RoomCard(props) {
 
                     {
                         props.type === "edit" && unavailabilityModalOpen &&
-                            <Modal.Description>
-                                This room is not available at the following time slots:
-                                <br/><br/>
-                                Are you sure you want to mark this room as unavailable in the chosen time slots? You will not be able to book any meetings with this room at this time if marked
-                            </Modal.Description>
+                        <Modal.Description>
+                            Select Time Slot: <br/>
+                            <DateTimePicker
+                                onChange={(e) => handleChange(e)}
+                                value={unavailableTimeSlot}
+                            />
+                            <br/>
+
+                            Are you sure you want to mark this room as unavailable in the chosen time slot? You will not be able to book any meetings with this room at this time if marked
+                        </Modal.Description>
                     }
 
                     {props.type === "edit" && !unavailabilityModalOpen && <Button onClick={deleteRoom} style={{marginTop: "15px"}}>Delete</Button>}
@@ -251,8 +266,7 @@ function RoomCard(props) {
                 <Modal.Actions>
                     {props.type === "create" && <Button onClick={createRoom}>Save</Button>}
                     {props.type === "edit" && !unavailabilityModalOpen && <Button onClick={editRoom}>Save</Button>}
-
-                    {props.type === "edit" && unavailabilityModalOpen && <Button onClick={editRoom}>Mark As Unavailable</Button>}
+                    {props.type === "edit" && unavailabilityModalOpen && <Button onClick={markRoom}>Mark As Unavailable</Button>}
                 </Modal.Actions>
             </Modal>
         </div>

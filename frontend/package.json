@@ -21,7 +21,8 @@
     "react-scripts": "4.0.3",
     "recharts": "^2.1.6",
     "semantic-ui-css": "^2.4.1",
-    "web-vitals": "^1.1.2"
+    "web-vitals": "^1.1.2",
+    "react-datetime-picker": "^3.4.3"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -49,6 +50,8 @@
   "devDependencies": {
     "@material-ui/core": "^4.12.3",
     "@material-ui/icons": "^4.11.2",
+    "@mui/lab": "^5.0.0-alpha.58",
+    "@mui/material": "^5.2.2",
     "semantic-ui-react": "^2.0.4"
   }
 }
