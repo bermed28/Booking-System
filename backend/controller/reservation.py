@@ -258,6 +258,8 @@ class BaseReservation:
         delMembers = membersDAO.deleteReservationMembers(resid)
         delResSched = resSchedDAO.deleteReservationSchedule(resid)
 
+        if not reservationDAO.checkIfMembers(resid):
+            delMembers = True
 
         delRes = reservationDAO.deleteReservation(resid)
 
