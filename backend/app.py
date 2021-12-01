@@ -213,10 +213,10 @@ def handlemarkUserUnavailable():
 @app.route('/StackOverflowersStudios/room-schedule/markunavailable', methods=['POST'])
 def handlemarkRoomUnavailable():
     return BaseRoomSchedule().addNewRoomSchedule(request.json)
-
-@app.route('/StackOverflowersStudios/room-schedule/markavailable/<int:rsid>', methods=['DELETE'])
-def handlemarkRoomAvailable(rsid):
-    return BaseRoomSchedule().deleteRoomSchedule(rsid, request.json)
+#New------------
+@app.route('/StackOverflowersStudios/room-schedule/markavailable', methods=['DELETE'])
+def handlemarkRoomAvailable():
+    return BaseRoomSchedule().markAvailable(request.json)
 
 @app.route('/StackOverflowersStudios/login', methods=['POST'])
 def handleSignInInformation():

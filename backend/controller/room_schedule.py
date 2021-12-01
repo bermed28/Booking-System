@@ -92,3 +92,15 @@ class BaseRoomSchedule:
                 return jsonify("NOT FOUND"), 404
         else:
             return jsonify("This user does not have permission"), 403
+
+    def markAvailable(self, json):
+        rid = json['rid']
+        tid = json['tid']
+        rsday = json['rsday']
+        dao = RoomScheduleDAO()
+        result = dao.deleteRoomScheduleByTimeAndDay(rid, tid, rsday)
+        if result:
+            return jsonify("DELETED"), 200
+        else:
+            return jsonify("NOT FOUND"), 404
+
