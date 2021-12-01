@@ -80,10 +80,7 @@ function Schedule() {
     const [selected, setSelected] = useState({members: []});
 
     const [openUnavailabilityUser, setOpenUnavailabilityUser] = useState(false);
-    const [deleteAction, setDeleteAction] = useState(false);
-    const [meetings, setMeetings] = useState([]);
     const [unavailableTimeSlots, setUnavailableTimeSlots] = useState([]);
-    const [selected, setSelected] = useState({});
     const [selectedUnavailable, setSelectedUnavailable] = useState(false);
     const [selectedUserTimeSlot, setSelectedUserTimeSlot] = useState([]);
 
