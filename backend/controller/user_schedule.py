@@ -65,3 +65,15 @@ class BaseUserSchedule:
             return jsonify("DELETED"), 200
         else:
             return jsonify("NOT FOUND"), 404
+
+    def markAvailable(self, json):
+        uid = json['uid']
+        tid = json['tid']
+        usday = json['usday']
+        dao = UserScheduleDAO()
+        result = dao.deleteUserSchedulebyTimeIDAndDay(uid, tid, usday)
+        if result:
+            return jsonify("DELETED"), 200
+        else:
+            return jsonify("NOT FOUND"), 404
+

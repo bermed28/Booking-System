@@ -68,9 +68,15 @@ const months = {
  *  }
  */
 
+function getTID(hours, minutes){
+        if(minutes === 30) return hours * 2 + 2;
+        else return hours * 2 + 1;
+    }
+
 
 function Schedule() {
     const [open, setOpen] = useState(false);
+    const [openAvailable, setOpenAvailable] = useState(false);
 
     const [openUserDelete, setOpenUserDelete] = useState(false);
     const [userToDelete, setUserToDelete] = useState("");
@@ -95,7 +101,16 @@ function Schedule() {
         if(data.uid === event.creator) {
             setOpen(true);
             console.info(selected);
-        } else console.log("You are not the meeting creator")
+            console.log(event);
+        }
+        else if(event.title === 'Unavailable') {
+            setOpenAvailable(true);
+            console.log(event);
+        }
+        else {
+            console.log("You are not the meeting creator");
+            console.log(event);
+        }
     };
 
     const updateMeeting = () => {
@@ -148,8 +163,25 @@ function Schedule() {
         );
     }
 
-    const deleteMeeting = () => {
+    const markAvailable = () => {
+        console.log(selected);
+        const day = selected.start.getDate();
+        const year = selected.start.getFullYear();
+        const month = selected.start.getMonth() + 1;
+        let usday = String(year) + "-" + String(month) + "-" + String(day);
+        console.log(usday);
+        let startTID = getTID(selected.start.getHours(), selected.start.getMinutes());
+        let endTID = getTID(selected.end.getHours(), selected.end.getMinutes()) - 1;
 
+        for (let i = startTID; i <= endTID; i++) {
+            axios.delete(`${app.BackendURL}/StackOverflowersStudios/user-schedule/markavailable`, { data: {uid: data.uid, tid: i, usday: usday}}).then(
+                (response) => console.log(`TID ${i} marked available`), (error) => console.log(error)
+            )
+        }
+        window.location.reload(false);
+    }
+
+    const deleteMeeting = () => {
         console.log(data.uid);
         const token = localStorage.getItem('token');
         const request = axios.create({
@@ -371,6 +403,7 @@ function Schedule() {
                             </Form>
                             <h4>Members</h4>
                             {
+                                selected.title !== 'Unavailable' &&
                                 selected.members.map(item => {
                                     return(<Card style={{width: "50%"}} variant="outlined"><CardHeader title={item} action={
                                         <IconButton onClick={() => {setOpenUserDelete(true); setUserToDelete(item)}}><MoreHorizOutlined/></IconButton>
@@ -402,6 +435,22 @@ function Schedule() {
                     }
                 </Modal.Actions>
 
+            </Modal>
+
+            <Modal centered={false} open={openAvailable} onClose={() => {setOpenAvailable(false);}} onOpen={() => {setOpenAvailable(true);}}>
+                <Modal.Header>
+                    Mark as available again?
+                </Modal.Header>
+                <Modal.Content>
+                    <Modal.Actions>
+                        <p style={{fontSize: "l"}}>Are you sure you want to mark yourself as available again?
+                            Other users will be able to add you to meetings they create if you proceed.
+                        </p>
+                    </Modal.Actions>
+                </Modal.Content>
+                <Modal.Actions>
+                    <Button color={"green"} content="Yes I'm sure. Mark as available." onClick={markAvailable} />
+                </Modal.Actions>
             </Modal>
 
             <Modal centered={false} open={openUserDelete} onClose={() => setOpenUserDelete(false)} onOpen={() => setOpenUserDelete(true)}>

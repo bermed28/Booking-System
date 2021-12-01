@@ -210,6 +210,10 @@ def handlemarkUserUnavailable():
     else:
         return BaseUserSchedule().addNewUserSchedule(json.loads(request.data))
 
+@app.route('/StackOverflowersStudios/user-schedule/markavailable', methods=['DELETE'])
+def handlemarkUserAvailable():
+    return BaseUserSchedule().markAvailable(request.json)
+
 @app.route('/StackOverflowersStudios/room-schedule/markunavailable', methods=['POST'])
 def handlemarkRoomUnavailable():
     return BaseRoomSchedule().addNewRoomSchedule(request.json)
