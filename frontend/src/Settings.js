@@ -1,5 +1,5 @@
-import React, {Component, useEffect, useRef, useState} from 'react';
-import {Button, Divider, Form, Grid, GridColumn, Header, Modal, Segment, Tab} from 'semantic-ui-react';
+import React, {useEffect, useState} from 'react';
+import {Button, Form, Grid, Header, Modal, Segment} from 'semantic-ui-react';
 import Navbar from "./components/Navbar";
 import axios from "axios";
 import {useNavigate} from "react-router-dom";

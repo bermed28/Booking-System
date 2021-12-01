@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import {Route, BrowserRouter, Routes} from 'react-router-dom';
 import Login from "./Login";
-import BookMeeting from "./BookMeeting";
 import 'semantic-ui-css/semantic.min.css'
 import UserView from "./UserView";
 import Dashboard from "./Dashboard";

@@ -23,7 +23,7 @@ const App = () => {
             <Grid columns={2} relaxed='very' stackable>
                 <Grid.Column>
                     <div className="container">
-                        <img src={require("./Assets/mini-calendar-2022-printable-planner-cards-04-01.jpg").default}/>
+                        <img alt="Calendar Picture" src={require("./Assets/mini-calendar-2022-printable-planner-cards-04-01.jpg").default}/>
                     </div>
                 </Grid.Column>
                 <Grid.Column verticalAlign='middle'>

@@ -72,6 +72,7 @@ def handleReservations():
         return BaseReservation().getAllReservations()
 
 @app.route('/StackOverflowersStudios/reservations/<int:resid>', methods=['GET', 'PUT', 'DELETE'])
+@cross_origin()
 def handleReservationbyId(resid):
     if request.method == 'GET':
         return BaseReservation().getReservationById(resid)
@@ -208,6 +209,13 @@ def handleSignInInformation():
 def handleGetReservationByUserID(uid):
     return BaseReservation().getReservationByUserId(uid)
 
+@app.route('/StackOverflowersStudios/memberNames/<int:resid>', methods=['GET'])
+def handleGetUsersInReservation(resid):
+    return BaseMembers().getUsersInReservation(resid)
+
+@app.route('/StackOverflowersStudios/removeMember/', methods=['DELETE'])
+def handleRemoveUserFromReservation():
+    return BaseReservation().removeUserByUsername(request.json)
 
 """""""""""""""""MAIN FUNCTION"""""""""""""""
 if __name__ == '__main__':

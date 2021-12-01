@@ -1,10 +1,7 @@
 import React, {useEffect, useState} from "react";
 import Navbar from "./components/Navbar";
-import ButtonOld from "./components/ButtonOld";
 import {Button} from 'semantic-ui-react';
 import {Container, Grid} from '@material-ui/core';
-import {Modal} from 'semantic-ui-react';
-import * as Icons from "react-icons/bi";
 import {Link} from "react-router-dom";
 import RoomCard from "./components/RoomCard";
 import axios from "axios";

@@ -1,12 +1,10 @@
-import React, {Component, useState, useEffect} from 'react';
-import {Calendar, momentLocalizer, Views } from 'react-big-calendar';
+import React, {useState, useEffect} from 'react';
+import {Calendar, momentLocalizer} from 'react-big-calendar';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import moment from 'moment';
-import {Button, Card, Container, Form, Grid, Modal} from "semantic-ui-react";
-import Navbar from "./components/Navbar";
+import {Button, Container, Form, Grid, Modal} from "semantic-ui-react";
 import axios from "axios";
 import * as app from "./App";
-import {Link} from "react-router-dom";
 
 
 // Event {
@@ -21,7 +19,7 @@ const api = axios.create({
     baseURL : app.BackendURL //'http://localhost:8080'
 })
 
-function BookMeeting(){
+function BookMeeting() {
     const [meetingInformation, setMeetingInformation] = useState([]);
     const [open, setOpen] = useState(false);
     const localizer = momentLocalizer(moment)
@@ -46,10 +44,10 @@ function BookMeeting(){
     const [rooms, setRooms] = useState([]);
     const [meetingName, setMeetingName] = useState("");
     const [meetingMemberNames, setMeetingMemberNames] = useState("");
-    const [meetingMemberIds, setMeetingMemberIds] = useState([]);
     const [errorOccurred, setErrorOccurred] = useState(false);
     const [inProgress, setInProgress] = useState(false);
     const [completed, setCompleted] = useState(false);
+    const [selected, setSelected] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
 
     const getRooms = () => {
@@ -110,6 +108,7 @@ function BookMeeting(){
                     console.log(response);
                     setInProgress(false);
                     setCompleted(true);
+                    window.location.reload(false);
                 },(error) => {
                     console.log(error);
                     setInProgress(false);
@@ -157,7 +156,7 @@ function BookMeeting(){
                     'end': new Date(selected.end),
                     'startTimeDisplay' : formatTime(selected.start.getHours(), selected.start.getMinutes()),
                     'endTimeDisplay' : formatTime(selected.end.getHours(), selected.end.getMinutes()),
-                }] ) } }
+                }]); setSelected(true); } }
             >
             </Calendar>
                 <Modal centered={false} open={open} onClose={() => {setOpen(false); {reset()}}} onOpen={() => setOpen(true)}>
@@ -228,7 +227,7 @@ function BookMeeting(){
                     </Modal.Actions>
                 </Modal>
                 <Container fluid>
-                    <Button fluid onClick={() => {setOpen(true)}}> Book Meeting </Button>
+                    <Button fluid onClick={() => {if(selected) setOpen(true)}}> Book Meeting </Button>
                 </Container>
             </Container>
         </>

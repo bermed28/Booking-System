@@ -233,10 +233,10 @@ class BaseReservation:
         """
         Delete from Reservation, Reservation/User/Room Schedule, Members
         """
-        reservationdDAO, membersDAO = ReservationDAO(), MembersDAO()
+        reservationDAO, membersDAO = ReservationDAO(), MembersDAO()
         roomSchedDAO, userSchedDAO, resSchedDAO = RoomScheduleDAO(), UserScheduleDAO(), ReservationScheduleDAO()
 
-        reservationInfo = reservationdDAO.getReservationById(resid)
+        reservationInfo = reservationDAO.getReservationById(resid)
         if json['uid'] != reservationInfo[4]:
             return jsonify("You cannot delete this reservation because you are not its creator."), 403
         memberList = membersDAO.getMembersByReservationId(resid)
@@ -258,7 +258,7 @@ class BaseReservation:
         delMembers = membersDAO.deleteReservationMembers(resid)
         delResSched = resSchedDAO.deleteReservationSchedule(resid)
 
-        delRes = reservationdDAO.deleteReservation(resid)
+        delRes = reservationDAO.deleteReservation(resid)
 
 
         if delRes and delMembers and delUserSched and delRoomSched and delRes:
@@ -324,4 +324,11 @@ class BaseReservation:
             return jsonify("Could not change meeting name, no such meeting exists.")
         return jsonify("Successfully changed meeting name."), 200
 
-
+    def removeUserByUsername(self, json):
+        username = json['username']
+        resid = json['resid']
+        dao = ReservationDAO()
+        if dao.removeUserByUsername(username, resid):
+            return jsonify("Successfully removed user from the meeting."), 200
+        else:
+            return jsonify("Could not remove user from the meeting."), 500
