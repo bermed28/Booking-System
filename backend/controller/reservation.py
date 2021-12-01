@@ -245,24 +245,25 @@ class BaseReservation:
         day, room = reservationInfo[2], reservationInfo[3]
 
         delUserSched, delRoomSched = True, True
+        delMembers = True
 
         for member in memberList:
             for time in timeSlotList:
                 if not userSchedDAO.deleteUserSchedulebyTimeIDAndDay(member[0], time, day):
                     delUserSched = False
 
+        if len(memberList) > 1:  # It has to be bigger than 1 because we add the creator of the reservation
+            delMembers = membersDAO.deleteReservationMembers(resid)
+        else:
+            delMembers = True
+
+
         for time in timeSlotList:
             if not roomSchedDAO.deleteRoomScheduleByTimeAndDay(room, time, day):
                 delRoomSched = False
 
-        delMembers = membersDAO.deleteReservationMembers(resid)
         delResSched = resSchedDAO.deleteReservationSchedule(resid)
-
-        if not reservationDAO.checkIfMembers(resid):
-            delMembers = True
-
         delRes = reservationDAO.deleteReservation(resid)
-
 
         if delRes and delMembers and delUserSched and delRoomSched and delRes:
             return jsonify("DELETED"), 200
