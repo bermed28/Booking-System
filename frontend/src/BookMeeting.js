@@ -15,6 +15,21 @@ import * as app from "./App";
 //     resource?: any,
 // }
 
+const months = {
+    'Jan' : '01',
+    'Feb' : '02',
+    'Mar' : '03',
+    'Apr' : '04',
+    'May' : '05',
+    'Jun' : '06',
+    'Jul' : '07',
+    'Aug' : '08',
+    'Sep' : '09',
+    'Oct' : '10',
+    'Nov' : '11',
+    'Dec' : '12'
+}
+
 const api = axios.create({
     baseURL : app.BackendURL //'http://localhost:8080'
 })
@@ -42,6 +57,8 @@ function BookMeeting() {
      */
     const [room, setRoom] = useState(""); // hardcoded *fix*
     const [rooms, setRooms] = useState([]);
+    const [meetings, setMeetings] = useState([]);
+    const [unavailableTimeSlots, setUnavailableTimeSlots] = useState([]);
     const [meetingName, setMeetingName] = useState("");
     const [meetingMemberNames, setMeetingMemberNames] = useState("");
     const [errorOccurred, setErrorOccurred] = useState(false);
@@ -49,6 +66,9 @@ function BookMeeting() {
     const [completed, setCompleted] = useState(false);
     const [selected, setSelected] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
+    const loginData = localStorage.getItem('login-data');
+    const data = JSON.parse(loginData);
+
 
     const getRooms = () => {
         api.get("/StackOverflowersStudios/rooms").then(res => {
@@ -56,8 +76,91 @@ function BookMeeting() {
             setRooms(res.data);
         })
     }
+
+    const fetchData = async () =>{
+        axios.get(`${app.BackendURL}/StackOverflowersStudios/userReservations/${data.uid}`, {
+            headers: {'Content-Type': 'application/json' }})
+            .then(
+                (response) => {
+                    let fetchedMeetings = []
+                    for(let meeting of response.data){
+                        let tempDate = meeting.resday.split(', ')[1].split(" ");
+                        const timeSlots = meeting.timeSlots;
+                        const tempStart = timeSlots[0].split(":");
+                        const tempEnd = timeSlots[1].split(":");
+                        const startDate = new Date(tempDate[2],
+                            months[tempDate[1]] - 1,
+                            tempDate[0],
+                            parseInt(tempStart[0]),
+                            parseInt(tempStart[1]),
+                            parseInt(tempStart[2]));
+
+                        const endDate = new Date(tempDate[2],
+                            months[tempDate[1]] - 1,
+                            tempDate[0],
+                            parseInt(tempEnd[0]),
+                            parseInt(tempEnd[1]),
+                            parseInt(tempEnd[2]));
+
+                        let tempArray = []
+
+                        axios.get(`${app.BackendURL}/StackOverflowersStudios/memberNames/${meeting.resid}`, {
+                            headers: {'Content-Type': 'application/json' }})
+                            .then(
+                                (response) => {
+                                    for(let i = 0; i < response.data.members.length; i++) {
+                                        tempArray.push(response.data.members[i]);
+                                    }
+                                }, (error) => {
+                                    console.log(error);
+                                }
+                            );
+
+                        const temp = {title: meeting.resname, start: startDate, end: endDate, creator: meeting.uid, meetingID: meeting.resid, members: tempArray};
+                        console.log(temp);
+                        fetchedMeetings.push(temp)
+                    }
+                    setMeetings(fetchedMeetings);
+                    console.log(meetings)
+                }, (error) => {
+                    console.log(error);
+                }
+            );
+    }
+
+    const fetchUnavailabletimeSlots = async () => {
+        axios.get(`${app.BackendURL}/StackOverflowersStudios/user/allOccupiedSchedule/${data.uid}`, {
+            headers: {'Content-Type': 'application/json' }})
+            .then(
+                (response) => {
+                    let unavailableTS = []
+                    console.log(response.data)
+                    const days = Object.keys(response.data)
+                    for(let day of days){ // day: [ [timeBlock1], [timeBlock2], [...] ]
+                        for(let block of response.data[day]){
+                            let tempDate = day.split('-');
+                            const blockStart = block[0].split(":");
+                            const blockEnd = block[1].split(":");
+
+                            const startDate = new Date(tempDate[0], tempDate[1] - 1, tempDate[2], parseInt(blockStart[0]), parseInt(blockStart[1]), parseInt(blockStart[2]));
+                            const endDate = new Date(tempDate[0], tempDate[1] - 1, tempDate[2], parseInt(blockEnd[0]), parseInt(blockEnd[1]), parseInt(blockEnd[2]));
+
+                            const timeSlot = {title: `Unavailable`, start: startDate, end: endDate}
+                            unavailableTS.push(timeSlot)
+                        }
+                    }
+
+                    setUnavailableTimeSlots(unavailableTS);
+                    console.log(unavailableTimeSlots)
+                }
+            );
+
+    }
+
     useEffect(() => {
         getRooms();
+        fetchData();
+        fetchUnavailabletimeSlots();
     }, []);
 
     const reset = () => {
@@ -146,7 +249,7 @@ function BookMeeting() {
                 selectable
                 localizer={localizer}
                 startAccessor="start"
-                events={meetingInformation}
+                events={[...meetings, ...meetingInformation, ...unavailableTimeSlots]}
                 endAccessor="end"
                 views={["month", "day"]}
                 defaultDate={Date.now()}

@@ -285,9 +285,17 @@ function Schedule() {
 
         let usday = `${selectedUserTimeSlot[0].start.getFullYear()}-${selectedUserTimeSlot[0].start.getMonth() + 1}-${selectedUserTimeSlot[0].start.getDate()}`;
         for (let i = startTID; i <= endTID; i++) {
-            axios.post(`${app.BackendURL}/StackOverflowersStudios/user-schedule/markunavailable`, {tid: i, uid: data.uid, usday: usday}).then(
-                (response) => console.log(`TID ${i} marked unavailable`), (error) => console.log(error)
-            )
+            let datita = {tid: i, uid: data.uid, usday: usday};
+            console.log(datita);
+            axios.post(`${app.BackendURL}/StackOverflowersStudios/user-schedule/markunavailable`,
+                datita,
+                {headers: {'Content-Type': 'text/plain'}}//text/plain //application/json
+            ).then((response) => {
+               console.log(`TID ${i} marked unavailable`);
+            },(error) => {
+                console.log(error);
+            });
+
         }
     }
 

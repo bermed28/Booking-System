@@ -199,7 +199,12 @@ def handlegetFreeTime():
 
 @app.route('/StackOverflowersStudios/user-schedule/markunavailable', methods=['POST'])
 def handlemarkUserUnavailable():
-    return BaseUserSchedule().addNewUserSchedule(request.json)
+    print(request.json)
+    print(request.data)
+    if request.json is not None:
+        return BaseUserSchedule().addNewUserSchedule(request.json)
+    else:
+        return BaseUserSchedule().addNewUserSchedule(json.loads(request.data))
 
 @app.route('/StackOverflowersStudios/room-schedule/markunavailable', methods=['POST'])
 def handlemarkRoomUnavailable():
