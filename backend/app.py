@@ -217,6 +217,13 @@ def handleSignInInformation():
 def handleGetReservationByUserID(uid):
     return BaseReservation().getReservationByUserId(uid)
 
+@app.route('/StackOverflowersStudios/memberNames/<int:resid>', methods=['GET'])
+def handleGetUsersInReservation(resid):
+    return BaseMembers().getUsersInReservation(resid)
+
+@app.route('/StackOverflowersStudios/removeMember/', methods=['DELETE'])
+def handleRemoveUserFromReservation():
+    return BaseReservation().removeUserByUsername(request.json)
 
 """""""""""""""""MAIN FUNCTION"""""""""""""""
 if __name__ == '__main__':

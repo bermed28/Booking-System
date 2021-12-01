@@ -52,3 +52,9 @@ class BaseMembers:
             return jsonify("DELETED"), 200
         else:
             return jsonify("NOT FOUND"), 404
+
+    def getUsersInReservation(self, resid):
+        dao = MembersDAO()
+        member_list = dao.getUsersInReservation(resid)
+        result = {"members": member_list}
+        return jsonify(result), 200
