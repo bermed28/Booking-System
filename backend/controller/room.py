@@ -96,6 +96,16 @@ class BaseRoom:
         result = dao.findRoomAtTime(tid, date)
         return jsonify(result)
 
+    def getAllOccupiedRoomSchedule(self, rid):
+        dao, tsDAO = RoomDAO(), TimeSlotDAO()
+        occupiedTidDict = dao.getAllOccupiedRoomSchedule(rid)
+        for day, tids in occupiedTidDict.items():
+            for i in range(len(tids)):
+                time = tsDAO.getTimeSlotByTimeSlotId(tids[i])
+                tids[i] = {"start": time[1], "end": time[2]}
+
+        return jsonify(occupiedTidDict)
+
     def findRoomAppointmentInfo(self, rid, uid):
         roomdao = RoomDAO()
         reservations = roomdao.findRoomReservations(rid)

@@ -170,5 +170,21 @@ class RoomDAO:
         cursor.close()
         return result
 
+    def getAllOccupiedRoomSchedule(self, rid):
+        cursor = self.conn.cursor()
+        query = "with involved_reservations as ( select resid from (select rid, resid from reservation where rid = %s) as temp),\
+        time_slots_to_meet as (select tid, resday, rid from reservation_schedule natural inner join reservation where resid in (select resid from involved_reservations))\
+        select tid, rsday from room_schedule where ROW(tid, rsday) not in (select tid, resday as usday from time_slots_to_meet) and rid = %s;"
+        cursor.execute(query, (rid, rid))
+
+        result = {}
+        for row in cursor:
+            if str(row[1]) not in result:
+                result[str(row[1])] = [row[0]]
+            else:
+                result[str(row[1])].append(row[0])
+        cursor.close()
+        return result
+
     def __del__(self):
         self.conn.close()

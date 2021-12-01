@@ -171,6 +171,10 @@ def handleAllDayUserSchedule():
 @app.route('/StackOverflowersStudios/user/allOccupiedSchedule/<int:uid>', methods=['GET'])
 def handleAllOccupiedUserSchedule(uid):
     return BaseUser().getAllOccupiedUserSchedule(uid)
+#New
+@app.route('/StackOverflowersStudios/room/allOccupiedSchedule/<int:rid>', methods=['GET'])
+def handleAllOccupiedRoomSchedule(rid):
+    return BaseRoom().getAllOccupiedRoomSchedule(rid)
 
 @app.route('/StackOverflowersStudios/room/alldayschedule', methods=['GET'])
 def handleAllDayRoomSchedule():
