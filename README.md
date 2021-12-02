@@ -17,6 +17,6 @@
 
 <h3> Deployed URLs </h3> 
 <ul> 
-    <li> Front End: https://bsy-stackoverflowers-frontend.herokuapp.com/ </li>
-    <li> Back End: https://bsy-stackoverflowers-backend.herokuapp.com/ </li>
+    <li> Front End: https://bs-stackoverflowers-frontend.herokuapp.com/ </li>
+    <li> Back End: https://bs-stackoverflowers-backend.herokuapp.com/ </li>
 </ul>
