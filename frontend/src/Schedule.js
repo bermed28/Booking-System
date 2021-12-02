@@ -156,7 +156,7 @@ function Schedule() {
             ).then((response) => console.log(`TID ${i} marked available`),
                 (error) => console.log(error))
         }
-        delay(2000).then(() => window.location.reload(false));
+        delay(1000).then(() => window.location.reload(false));
     }
 
     const deleteMeeting = () => {
@@ -309,7 +309,7 @@ function Schedule() {
                 console.log(error);
             });
         }
-        delay(2000).then(() => window.location.reload(false));
+        delay(1000).then(() => window.location.reload(false));
     }
 
     return (

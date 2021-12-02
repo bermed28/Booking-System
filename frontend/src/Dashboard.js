@@ -66,7 +66,7 @@ function Dashboard(){
             if(res.data.rname === undefined){
                 setMostUsedRoom("User has not used any rooms.");
             }else{
-                setMostUsedRoom(res.data.rname + " in the " + res.data.rbuildname + " building.");
+                setMostUsedRoom(res.data.rname + " in the " + res.data.rbuildname + " building" + ` (a total of ${res.data.uses} times).`);
             }
         })
     }
@@ -79,7 +79,7 @@ function Dashboard(){
             if(res.data.username === undefined){
                 setMostLoggedWith("User has not been booked with anyone.");
             }else{
-                setMostLoggedWith(res.data.username + ".");
+                setMostLoggedWith(res.data.username + ` (a total of ${res.data.times} times).`);
             }
         })
     }
@@ -116,7 +116,7 @@ function Dashboard(){
                 <h2>Most Used Rooms</h2>
                 <BarChart width={1030} height={250} data={rooms}>
                     <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="rname" />
+                    <XAxis dataKey="rname" tick={{ fontSize: '10px', width: '250px', wordWrap: 'break-word' }} interval={0} />
                     <YAxis />
                     <Tooltip />
                     <Legend verticalAlign="top" />

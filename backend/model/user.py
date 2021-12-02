@@ -162,7 +162,7 @@ class UserDAO:
         result['ufirstname'] = row[4]
         result['ulastname'] = row[5]
         result['upermission'] = row[6]
-        result['times booked together'] = row[7]
+        result['times'] = row[7]
         cursor.close()
         return result
 
