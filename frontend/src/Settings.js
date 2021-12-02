@@ -24,6 +24,7 @@ function SettingsPage() {
 
     var tempData = localStorage.getItem("login-data");
     let navigator = useNavigate();
+    const userData = JSON.parse(tempData);
 
     useEffect(() => {
         tempData = localStorage.getItem("login-data");
@@ -109,19 +110,19 @@ function SettingsPage() {
                             <Form.Input onChange={(e) => {
                                 setFirstNameReg(e.target.value)
                             }}
-                                        icon='name'
+                                        icon='address card'
                                         iconPosition='left'
                                         label='First Name'
                                         type='name'
-                                        placeholder='First Name'/>
+                                        placeholder={userData.ufirstname}/>
                             <Form.Input onChange={(e) => {
                                 setLastNameReg(e.target.value)
                             }}
-                                        icon='name'
+                                        icon='address card outline'
                                         iconPosition='left'
                                         label='Last Name'
                                         type='name'
-                                        placeholder='Last Name' />
+                                        placeholder={userData.ulastname} />
 
                             <Form.Input onChange={(e) => {
                                 setUserReg(e.target.value)
@@ -130,15 +131,15 @@ function SettingsPage() {
                                         iconPosition='left'
                                         label='Username'
                                         type='username'
-                                        placeholder='Username' />
+                                        placeholder={userData.username} />
                             <Form.Input onChange={(e) => {
                                 setEmailReg(e.target.value)
                             }}
-                                        icon='user'
+                                        icon='envelope'
                                         iconPosition='left'
                                         label='Email'
                                         type='email'
-                                        placeholder='Email' />
+                                        placeholder={userData.uemail} />
                             <Form.Input onChange={(e) => {
                                 setPasswordReg(e.target.value)
                             }}

@@ -174,11 +174,13 @@ function Schedule() {
         let endTID = getTID(selected.end.getHours(), selected.end.getMinutes()) - 1;
 
         for (let i = startTID; i <= endTID; i++) {
-            axios.delete(`${app.BackendURL}/StackOverflowersStudios/user-schedule/markavailable`, { data: {uid: data.uid, tid: i, usday: usday}}).then(
-                (response) => console.log(`TID ${i} marked available`), (error) => console.log(error)
+            axios.post(`${app.BackendURL}/StackOverflowersStudios/user-schedule/markavailable`,
+                {uid: data.uid, tid: i, usday: usday},
+                {headers: {'Content-Type': 'application/json'}}).
+            then((response) => console.log(`TID ${i} marked available`), (error) => console.log(error)
             )
         }
-        window.location.reload(false);
+        delay(2000).then(() => window.location.reload(false));
     }
 
     const deleteMeeting = () => {
@@ -308,6 +310,9 @@ function Schedule() {
         if(minutes === 30) return hours * 2 + 2;
         else return hours * 2 + 1;
     }
+    function delay(time) {
+      return new Promise(resolve => setTimeout(resolve, time));
+    }
 
     function markUnavailable(){
         console.log(selectedUserTimeSlot);
@@ -321,14 +326,14 @@ function Schedule() {
             console.log(datita);
             axios.post(`${app.BackendURL}/StackOverflowersStudios/user-schedule/markunavailable`,
                 datita,
-                {headers: {'Content-Type': 'text/plain'}}//text/plain //application/json
+                {headers: {'Content-Type': 'application/json'}}//text/plain //application/json
             ).then((response) => {
                console.log(`TID ${i} marked unavailable`);
             },(error) => {
                 console.log(error);
             });
-
         }
+        delay(2000).then(() => window.location.reload(false));
     }
 
     return (
@@ -373,7 +378,7 @@ function Schedule() {
                     </Modal.Description>
                 </Modal.Content>
                 <Modal.Actions>
-                    <Button content='Yes, mark as unavailable' primary onClick={() => {{markUnavailable()} window.location.reload();}}/>
+                    <Button content='Yes, mark as unavailable' primary onClick={() => {markUnavailable()}}/>
                 </Modal.Actions>
             </Modal>
 

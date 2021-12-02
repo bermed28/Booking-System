@@ -15,9 +15,7 @@ app = Flask(__name__)
 CORS(app)
 cors = CORS(app, resources={
     r"/*": {"origins": "*"}
-})
-
-
+}, supports_credentials=True)
 
 @app.route('/')
 def hello_world():  # put application's code here
@@ -210,9 +208,17 @@ def handlemarkUserUnavailable():
     else:
         return BaseUserSchedule().addNewUserSchedule(json.loads(request.data))
 
-@app.route('/StackOverflowersStudios/user-schedule/markavailable', methods=['DELETE'])
+@app.route('/StackOverflowersStudios/user-schedule/markavailable', methods=['POST'])
 def handlemarkUserAvailable():
     return BaseUserSchedule().markAvailable(request.json)
+
+# @app.after_request
+# def after_request(response):
+#     response.headers.add('Access-Control-Allow-Origin', 'http://localhost:8080')
+#     response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
+#     response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
+#     response.headers.add('Access-Control-Allow-Credentials', 'true')
+#     return response
 
 @app.route('/StackOverflowersStudios/room-schedule/markunavailable', methods=['POST'])
 def handlemarkRoomUnavailable():
