@@ -8,31 +8,6 @@ import axios from "axios";
 import {EditOutlined, MoreHorizOutlined} from "@material-ui/icons";
 const app = require("./App");
 
-const dummyEvents = [
-
-    {
-        title: "CIIC4060",
-        start: new Date(2021, 10, 24),
-        end: new Date(2021, 10, 24),
-        allDay: false,
-    },
-
-    {
-        title: "CIIC4050",
-        start: new Date(2021, 10, 24),
-        end: new Date(2021, 10, 24),
-        allDay: false,
-    },
-
-    {
-        title: "CIIC5045",
-        start: new Date(2021, 11, 24, 12, 30, 0),
-        end: new Date(2021, 11, 24, 13, 45, 0),
-        allDay: false,
-    }
-
-];
-
 const months = {
     'Jan' : '01',
     'Feb' : '02',
@@ -69,9 +44,9 @@ const months = {
  */
 
 function getTID(hours, minutes){
-        if(minutes === 30) return hours * 2 + 2;
-        else return hours * 2 + 1;
-    }
+    if(minutes === 30) return hours * 2 + 2;
+    else return hours * 2 + 1;
+}
 
 
 function Schedule() {
@@ -150,8 +125,9 @@ function Schedule() {
                 Authorization: token
             }
         });
-        request.delete(`${app.BackendURL}/StackOverflowersStudios/removeMember/`, { data: {resid: resid, username: username} }).then(
-            (r) => {
+        request.delete(`${app.BackendURL}/StackOverflowersStudios/removeMember/`, {
+            data: {resid: resid, username: username} }
+        ).then((r) => {
                 console.log("Member Deleted", r);
                 let temp = selected.members;
                 const idx = temp.indexOf(data.username);
@@ -176,9 +152,9 @@ function Schedule() {
         for (let i = startTID; i <= endTID; i++) {
             axios.post(`${app.BackendURL}/StackOverflowersStudios/user-schedule/markavailable`,
                 {uid: data.uid, tid: i, usday: usday},
-                {headers: {'Content-Type': 'application/json'}}).
-            then((response) => console.log(`TID ${i} marked available`), (error) => console.log(error)
-            )
+                {headers: {'Content-Type': 'application/json'}}
+            ).then((response) => console.log(`TID ${i} marked available`),
+                (error) => console.log(error))
         }
         delay(2000).then(() => window.location.reload(false));
     }
@@ -311,7 +287,7 @@ function Schedule() {
         else return hours * 2 + 1;
     }
     function delay(time) {
-      return new Promise(resolve => setTimeout(resolve, time));
+        return new Promise(resolve => setTimeout(resolve, time));
     }
 
     function markUnavailable(){
@@ -328,7 +304,7 @@ function Schedule() {
                 datita,
                 {headers: {'Content-Type': 'application/json'}}//text/plain //application/json
             ).then((response) => {
-               console.log(`TID ${i} marked unavailable`);
+                console.log(`TID ${i} marked unavailable`);
             },(error) => {
                 console.log(error);
             });

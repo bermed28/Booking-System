@@ -74,7 +74,7 @@ function RoomCard(props) {
             setEditMessage("No changes where made");
         } else {
             let data = {rname: roomName, rbuildname: roomBuilding, rcapacity: roomCapacity, rpermission: roomPermission}
-            console.log(data);
+            // console.log(data);
             if (roomName === "") {
                 data.rname = roomData.rname;
             }
@@ -125,10 +125,12 @@ function RoomCard(props) {
     }
 
     function markRoom(){
-
         let day = `${unavailableTimeSlot.getFullYear()}-${unavailableTimeSlot.getMonth() + 1}-${unavailableTimeSlot.getDate()}`;
         const json = {rid: roomID, rsday: day, tid:getTID(unavailableTimeSlot.getHours(), unavailableTimeSlot.getMinutes()), uid: JSON.parse(localStorage.getItem('login-data')).uid};
-        axios.post(`${app.BackendURL}/StackOverflowersStudios/room-schedule/markunavailable`, json, {headers: {'Content-Type': 'application/json'}}//text/plain //application/json
+
+        axios.post(`${app.BackendURL}/StackOverflowersStudios/room-schedule/markunavailable`,
+            json,
+            {headers: {'Content-Type': 'application/json'}}
         ).then((response) => {
             console.log(response);
             window.location.reload(false);
@@ -141,7 +143,9 @@ function RoomCard(props) {
         console.log(toMarkAvailable)
         let day = `${toMarkAvailable.getFullYear()}-${toMarkAvailable.getMonth() + 1}-${toMarkAvailable.getDate()}`;
         const json = {rid: roomID, rsday: day, tid:getTID(toMarkAvailable.getHours(), toMarkAvailable.getMinutes())};
-        axios.delete(`${app.BackendURL}/StackOverflowersStudios/room-schedule/markavailable`, { data: json, headers: {'Content-Type': 'application/json'}}//text/plain //application/json
+        axios.delete(`${app.BackendURL}/StackOverflowersStudios/room-schedule/markavailable`, {
+            data: json,
+            headers: {'Content-Type': 'application/json'}}//text/plain //application/json
         ).then((response) => {
             console.log(response);
             window.location.reload(false);
@@ -153,19 +157,18 @@ function RoomCard(props) {
 
     function handleChange(date){
         setUnavailableTimeSlot(date)
-        console.log(unavailableTimeSlot)
+        // console.log(unavailableTimeSlot)
     }
 
     function fetchUnavailableTimeSlots(){
-        console.log("Entered");
         const url = `${app.BackendURL}/StackOverflowersStudios/room/allOccupiedSchedule/${roomID}`;
         axios.get(url, {
             headers: {'Content-Type': 'application/json' }})
             .then(
                 (response) => {
-                    console.log(`Time Slot fetched for ${roomID}: `, JSON.stringify(response.data))
+                    // console.log(`Time Slot fetched for ${roomID}: `, JSON.stringify(response.data))
                     let unavailableTS = []
-                    console.log("Response: ", response.data)
+                    // console.log("Response: ", response.data)
                     const days = Object.keys(response.data)
                     for(let day of days){ // day: [ {timeBlock1}, {timeBlock2}, {...} ]
                         let tempDate = day.split('-');
@@ -173,9 +176,8 @@ function RoomCard(props) {
                         const startDate = new Date(tempDate[0], tempDate[1] - 1, tempDate[2], parseInt(blockStart[0]), parseInt(blockStart[1]), parseInt(blockStart[2]));
                         unavailableTS.push(startDate)
                     }
-
                     setUnavailableTimeSlots(unavailableTS);
-                    console.log(unavailableTimeSlots)
+                    // console.log(unavailableTimeSlots)
                 }
             );
     }
@@ -315,7 +317,7 @@ function RoomCard(props) {
                             {invalidTimeSlot && <div style={{color: "red"}}> Please select a time slot</div>}
                             <br/>
                             { unavailableTimeSlots.length > 0 &&
-                                <p style={{fontSize: "1em"}}>Are you sure you want to mark this room as available in the chosen time slot? Anyone will be able to book any meetings with this room at this time if marked</p>
+                            <p style={{fontSize: "1em"}}>Are you sure you want to mark this room as available in the chosen time slot? Anyone will be able to book any meetings with this room at this time if marked</p>
                             }
 
                         </Modal.Description>

@@ -12,12 +12,12 @@ function SignupPage() {
     const [passwordReg, setPasswordReg] = useState("");
     const [firstNameReg, setFirstNameReg] = useState("");
     const [lastNameReg, setLastNameReg] = useState("");
-    const [permissionReg, setPermissionReg] = useState("Student");
+    const [permissionReg, setPermissionReg] = useState("");
     const [signupMessage, setSignupMessage] = useState("Not submitted yet");
     const [signupStatus, setSignupStatus] = useState(false);
 
     const signup = () => {
-        if(userReg==="" || emailReg==="" || passwordReg==="" || firstNameReg==="" || lastNameReg==="" || permissionReg === "Select Permission"){
+        if(userReg==="" || emailReg==="" || passwordReg==="" || firstNameReg==="" || lastNameReg==="" || permissionReg === ""){
             console.log("Empty Field")
             setSignupMessage("Empty Field or Invalid Field");
         } else {
@@ -62,7 +62,7 @@ function SignupPage() {
                         <Form.Input onChange={(e) => {
                             setFirstNameReg(e.target.value)
                         }}
-                            icon='name'
+                            icon='address card'
                             iconPosition='left'
                             label='First Name'
                             type='name'
@@ -70,7 +70,7 @@ function SignupPage() {
                         <Form.Input onChange={(e) => {
                             setLastNameReg(e.target.value)
                         }}
-                            icon='name'
+                            icon='address card outline'
                             iconPosition='left'
                             label='Last Name'
                             type='name'
@@ -87,7 +87,7 @@ function SignupPage() {
                         <Form.Input onChange={(e) => {
                             setEmailReg(e.target.value)
                         }}
-                            icon='user'
+                            icon='envelope'
                             iconPosition='left'
                             label='Email'
                             placeholder='Email' />
@@ -113,7 +113,6 @@ function SignupPage() {
 
                         <Button content='Signup' primary onClick={signup} />
                     </Form>
-                        { permissionReg === "Select Permission" &&  <h3 style={{color: "red"}}>**Please select a permission for your account.</h3>}
                         { !signupStatus &&
                             <h3 style={{color: "red"}}>{signupMessage}</h3>
                             }

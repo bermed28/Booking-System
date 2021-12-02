@@ -9,7 +9,6 @@ const app = require('./App');
 
 
 function RoomManagement(){
-    const [open, setOpen] = useState(false);
     const [isAuth, setIsAuth] = useState(false)
     const [rooms, setRooms] = useState([]);
     const data = localStorage.getItem('login-data');
@@ -37,7 +36,6 @@ function RoomManagement(){
 
     if(isAuth) {
         return (
-
             <>
                 <Navbar/>
                 <h1 style={{display: 'flex',  justifyContent:'center', alignItems:'center'}}>Rooms</h1>
@@ -79,9 +77,7 @@ function RoomManagement(){
                 </div>
             </>
         );
-
     }
-
 }
 
 export default RoomManagement;

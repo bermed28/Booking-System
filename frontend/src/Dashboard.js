@@ -7,7 +7,7 @@ import axios from 'axios';
 const app = require("./App");
 
 const api = axios.create({
-    baseURL : app.BackendURL //'http://localhost:8080'
+    baseURL : app.BackendURL
 })
 
 function Dashboard(){
@@ -84,9 +84,6 @@ function Dashboard(){
         })
     }
 
-
-    // console.log(data.uid);
-    // console.log(loggedIn);
     return(
         <>
             <Navbar/>

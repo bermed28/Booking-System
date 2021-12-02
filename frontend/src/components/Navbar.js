@@ -12,7 +12,6 @@ const Navbar = () => {
     }
     const [loggedIn, setLoggedIn]= React.useState(false);
     const handleLogout = () => {
-        // localStorage.clear();
         localStorage.removeItem("login-data");
         if(window.location.pathname === "/"){
             window.location.reload(false);

@@ -37,7 +37,7 @@ const api = axios.create({
 function BookMeeting() {
     const [meetingInformation, setMeetingInformation] = useState([]);
     const [open, setOpen] = useState(false);
-    const localizer = momentLocalizer(moment)
+    const localizer = momentLocalizer(moment);
 
     /**
      * if minutes == 30:
@@ -134,7 +134,7 @@ function BookMeeting() {
             .then(
                 (response) => {
                     let unavailableTS = []
-                    console.log(response.data)
+                    // console.log(response.data)
                     const days = Object.keys(response.data)
                     for(let day of days){ // day: [ [timeBlock1], [timeBlock2], [...] ]
                         for(let block of response.data[day]){
@@ -201,7 +201,7 @@ function BookMeeting() {
 
                 //Create json to send to API (Ids would become empty if not done inside previous axios post variable would be blank)
                 let data = {resday: date, resname: meetingName, rid: parseInt(room), uid: userData.uid, members: membersIds, time_slots: timeSlot};
-                console.log(data);
+                // console.log(data);
 
                 //Create reservation
                 api.post("/StackOverflowersStudios/reservations",
@@ -278,7 +278,6 @@ function BookMeeting() {
 
                                     <Form.Input onChange={(e) => {
                                         setMeetingMemberNames(e.target.value);
-                                        // {console.log(e.target.value.split(", "))}
                                     }}
                                                 label='Meeting Members'
                                                 type='name' />

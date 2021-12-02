@@ -1,6 +1,6 @@
 import Navbar from "./components/Navbar";
-import {Button, Divider, Form, Grid, Header, Modal, Segment, Tab} from 'semantic-ui-react';
-import {Link, useNavigate, useState} from "react-router-dom"
+import {Button, Divider, Grid, Segment} from 'semantic-ui-react';
+import {Link} from "react-router-dom"
 import "./App.css"
 
 /**
