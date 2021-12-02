@@ -15,7 +15,8 @@
     <li> Port: 5432 </li>
 </ul>
 
-<h3> Hosted url for app </h3> 
+<h3> Deployed URLs </h3> 
 <ul> 
-    <li> url: https://booking-system-stackoverflower.herokuapp.com/ </li>
+    <li> Front End: https://bsy-stackoverflowers-frontend.herokuapp.com/ </li>
+    <li> Back End: https://bsy-stackoverflowers-backend.herokuapp.com/ </li>
 </ul>
