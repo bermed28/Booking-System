@@ -14,10 +14,10 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "https://booking-system-stackoverflower.herokuapp.com/StackOverflowersStudios/users",
+							"raw": "https://bs-stackoverflowers-backend.herokuapp.com/StackOverflowersStudios/users",
 							"protocol": "https",
 							"host": [
-								"booking-system-stackoverflower",
+								"bs-stackoverflowers-backend",
 								"herokuapp",
 								"com"
 							],
@@ -35,10 +35,32 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "https://booking-system-stackoverflower.herokuapp.com/StackOverflowersStudios/users/7",
+							"raw": "https://bs-stackoverflowers-backend.herokuapp.com/StackOverflowersStudios/users/7",
 							"protocol": "https",
 							"host": [
-								"booking-system-stackoverflower",
+								"bs-stackoverflowers-backend",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"StackOverflowersStudios",
+								"users",
+								"7"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get user by login info",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://bs-stackoverflowers-backend.herokuapp.com/StackOverflowersStudios/users/7",
+							"protocol": "https",
+							"host": [
+								"bs-stackoverflowers-backend",
 								"herokuapp",
 								"com"
 							],
@@ -66,10 +88,10 @@
 							}
 						},
 						"url": {
-							"raw": "https://booking-system-stackoverflower.herokuapp.com/StackOverflowersStudios/users/5",
+							"raw": "https://bs-stackoverflowers-backend.herokuapp.com/StackOverflowersStudios/users/5",
 							"protocol": "https",
 							"host": [
-								"booking-system-stackoverflower",
+								"bs-stackoverflowers-backend",
 								"herokuapp",
 								"com"
 							],
@@ -97,10 +119,10 @@
 							}
 						},
 						"url": {
-							"raw": "https://booking-system-stackoverflower.herokuapp.com/StackOverflowersStudios/users",
+							"raw": "https://bs-stackoverflowers-backend.herokuapp.com/StackOverflowersStudios/users",
 							"protocol": "https",
 							"host": [
-								"booking-system-stackoverflower",
+								"bs-stackoverflowers-backend",
 								"herokuapp",
 								"com"
 							],
@@ -118,10 +140,10 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "https://booking-system-stackoverflower.herokuapp.com/StackOverflowersStudios/users/53",
+							"raw": "https://bs-stackoverflowers-backend.herokuapp.com/StackOverflowersStudios/users/53",
 							"protocol": "https",
 							"host": [
-								"booking-system-stackoverflower",
+								"bs-stackoverflowers-backend",
 								"herokuapp",
 								"com"
 							],
@@ -140,10 +162,10 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "https://booking-system-stackoverflower.herokuapp.com/StackOverflowersStudios/rooms",
+							"raw": "https://bs-stackoverflowers-backend.herokuapp.com/StackOverflowersStudios/rooms",
 							"protocol": "https",
 							"host": [
-								"booking-system-stackoverflower",
+								"bs-stackoverflowers-backend",
 								"herokuapp",
 								"com"
 							],
@@ -161,10 +183,10 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "https://booking-system-stackoverflower.herokuapp.com/StackOverflowersStudios/rooms/16",
+							"raw": "https://bs-stackoverflowers-backend.herokuapp.com/StackOverflowersStudios/rooms/16",
 							"protocol": "https",
 							"host": [
-								"booking-system-stackoverflower",
+								"bs-stackoverflowers-backend",
 								"herokuapp",
 								"com"
 							],
@@ -192,10 +214,10 @@
 							}
 						},
 						"url": {
-							"raw": "https://booking-system-stackoverflower.herokuapp.com/StackOverflowersStudios/rooms/16",
+							"raw": "https://bs-stackoverflowers-backend.herokuapp.com/StackOverflowersStudios/rooms/16",
 							"protocol": "https",
 							"host": [
-								"booking-system-stackoverflower",
+								"bs-stackoverflowers-backend",
 								"herokuapp",
 								"com"
 							],
@@ -223,10 +245,10 @@
 							}
 						},
 						"url": {
-							"raw": "https://booking-system-stackoverflower.herokuapp.com/StackOverflowersStudios/rooms",
+							"raw": "https://bs-stackoverflowers-backend.herokuapp.com/StackOverflowersStudios/rooms",
 							"protocol": "https",
 							"host": [
-								"booking-system-stackoverflower",
+								"bs-stackoverflowers-backend",
 								"herokuapp",
 								"com"
 							],
@@ -244,10 +266,10 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "https://booking-system-stackoverflower.herokuapp.com/StackOverflowersStudios/rooms/18",
+							"raw": "https://bs-stackoverflowers-backend.herokuapp.com/StackOverflowersStudios/rooms/18",
 							"protocol": "https",
 							"host": [
-								"booking-system-stackoverflower",
+								"bs-stackoverflowers-backend",
 								"herokuapp",
 								"com"
 							],
@@ -266,10 +288,10 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "https://booking-system-stackoverflower.herokuapp.com/StackOverflowersStudios/reservations",
+							"raw": "https://bs-stackoverflowers-backend.herokuapp.com/StackOverflowersStudios/reservations",
 							"protocol": "https",
 							"host": [
-								"booking-system-stackoverflower",
+								"bs-stackoverflowers-backend",
 								"herokuapp",
 								"com"
 							],
@@ -287,17 +309,39 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "https://booking-system-stackoverflower.herokuapp.com/StackOverflowersStudios/reservations/9",
+							"raw": "https://bs-stackoverflowers-backend.herokuapp.com/StackOverflowersStudios/reservations/7",
 							"protocol": "https",
 							"host": [
-								"booking-system-stackoverflower",
+								"bs-stackoverflowers-backend",
 								"herokuapp",
 								"com"
 							],
 							"path": [
 								"StackOverflowersStudios",
 								"reservations",
-								"9"
+								"7"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get reservations by User Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://bs-stackoverflowers-backend.herokuapp.com/StackOverflowersStudios/userReservations/7",
+							"protocol": "https",
+							"host": [
+								"bs-stackoverflowers-backend",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"StackOverflowersStudios",
+								"userReservations",
+								"7"
 							]
 						}
 					},
@@ -318,10 +362,10 @@
 							}
 						},
 						"url": {
-							"raw": "https://booking-system-stackoverflower.herokuapp.com/StackOverflowersStudios/reservations/64",
+							"raw": "https://bs-stackoverflowers-backend.herokuapp.com/StackOverflowersStudios/reservations/64",
 							"protocol": "https",
 							"host": [
-								"booking-system-stackoverflower",
+								"bs-stackoverflowers-backend",
 								"herokuapp",
 								"com"
 							],
@@ -341,7 +385,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n        \"resday\": \"2021-12-25\",\n        \"resname\": \"Updated Size test\",\n        \"rid\": 19,\n        \"uid\": 41,\n        \"members\" : [7],\n        \"time_slots\" : [3,5]\n}",
+							"raw": "{\n        \"resday\": \"2021-12-25\",\n        \"resname\": \"Updated Size test\",\n        \"rid\": 19,\n        \"uid\": 41,\n        \"members\" : [7],\n        \"time_slots\" : [3,4]\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -349,10 +393,10 @@
 							}
 						},
 						"url": {
-							"raw": "https://booking-system-stackoverflower.herokuapp.com/StackOverflowersStudios/reservations",
+							"raw": "https://bs-stackoverflowers-backend.herokuapp.com/StackOverflowersStudios/reservations",
 							"protocol": "https",
 							"host": [
-								"booking-system-stackoverflower",
+								"bs-stackoverflowers-backend",
 								"herokuapp",
 								"com"
 							],
@@ -369,18 +413,27 @@
 					"request": {
 						"method": "DELETE",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n        \"uid\" : 9\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
-							"raw": "https://booking-system-stackoverflower.herokuapp.com/StackOverflowersStudios/reservations/67",
+							"raw": "https://bs-stackoverflowers-backend.herokuapp.com/StackOverflowersStudios/reservations/15",
 							"protocol": "https",
 							"host": [
-								"booking-system-stackoverflower",
+								"bs-stackoverflowers-backend",
 								"herokuapp",
 								"com"
 							],
 							"path": [
 								"StackOverflowersStudios",
 								"reservations",
-								"67"
+								"15"
 							]
 						}
 					},
@@ -392,10 +445,10 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "https://booking-system-stackoverflower.herokuapp.com/StackOverflowersStudios/user-schedule",
+							"raw": "https://bs-stackoverflowers-backend.herokuapp.com/StackOverflowersStudios/user-schedule",
 							"protocol": "https",
 							"host": [
-								"booking-system-stackoverflower",
+								"bs-stackoverflowers-backend",
 								"herokuapp",
 								"com"
 							],
@@ -413,10 +466,10 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "https://booking-system-stackoverflower.herokuapp.com/StackOverflowersStudios/user-schedule/10",
+							"raw": "https://bs-stackoverflowers-backend.herokuapp.com/StackOverflowersStudios/user-schedule/10",
 							"protocol": "https",
 							"host": [
-								"booking-system-stackoverflower",
+								"bs-stackoverflowers-backend",
 								"herokuapp",
 								"com"
 							],
@@ -444,10 +497,10 @@
 							}
 						},
 						"url": {
-							"raw": "https://booking-system-stackoverflower.herokuapp.com/StackOverflowersStudios/user-schedule",
+							"raw": "https://bs-stackoverflowers-backend.herokuapp.com/StackOverflowersStudios/user-schedule",
 							"protocol": "https",
 							"host": [
-								"booking-system-stackoverflower",
+								"bs-stackoverflowers-backend",
 								"herokuapp",
 								"com"
 							],
@@ -474,10 +527,10 @@
 							}
 						},
 						"url": {
-							"raw": "https://booking-system-stackoverflower.herokuapp.com/StackOverflowersStudios/user-schedule/199",
+							"raw": "https://bs-stackoverflowers-backend.herokuapp.com/StackOverflowersStudios/user-schedule/199",
 							"protocol": "https",
 							"host": [
-								"booking-system-stackoverflower",
+								"bs-stackoverflowers-backend",
 								"herokuapp",
 								"com"
 							],
@@ -505,10 +558,10 @@
 							}
 						},
 						"url": {
-							"raw": "https://booking-system-stackoverflower.herokuapp.com/StackOverflowersStudios/user-schedule/201",
+							"raw": "https://bs-stackoverflowers-backend.herokuapp.com/StackOverflowersStudios/user-schedule/201",
 							"protocol": "https",
 							"host": [
-								"booking-system-stackoverflower",
+								"bs-stackoverflowers-backend",
 								"herokuapp",
 								"com"
 							],
@@ -527,10 +580,10 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "https://booking-system-stackoverflower.herokuapp.com/StackOverflowersStudios/room-schedule",
+							"raw": "https://bs-stackoverflowers-backend.herokuapp.com/StackOverflowersStudios/room-schedule",
 							"protocol": "https",
 							"host": [
-								"booking-system-stackoverflower",
+								"bs-stackoverflowers-backend",
 								"herokuapp",
 								"com"
 							],
@@ -548,17 +601,17 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "https://booking-system-stackoverflower.herokuapp.com/StackOverflowersStudios/room-schedule/64",
+							"raw": "https://bs-stackoverflowers-backend.herokuapp.com/StackOverflowersStudios/room-schedule/1",
 							"protocol": "https",
 							"host": [
-								"booking-system-stackoverflower",
+								"bs-stackoverflowers-backend",
 								"herokuapp",
 								"com"
 							],
 							"path": [
 								"StackOverflowersStudios",
 								"room-schedule",
-								"64"
+								"1"
 							]
 						}
 					},
@@ -571,7 +624,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n        \"rid\": 14,\n        \"rsday\": \"2021-11-20\",\n        \"tid\": 3,\n        \"uid\" : 49\n}",
+							"raw": "{\n        \"rid\": 1,\n        \"rsday\": \"2021-11-5\",\n        \"tid\": 4,\n        \"uid\" : 49\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -579,10 +632,10 @@
 							}
 						},
 						"url": {
-							"raw": "https://booking-system-stackoverflower.herokuapp.com/StackOverflowersStudios/room-schedule",
+							"raw": "https://bs-stackoverflowers-backend.herokuapp.com/StackOverflowersStudios/room-schedule",
 							"protocol": "https",
 							"host": [
-								"booking-system-stackoverflower",
+								"bs-stackoverflowers-backend",
 								"herokuapp",
 								"com"
 							],
@@ -609,10 +662,10 @@
 							}
 						},
 						"url": {
-							"raw": "https://booking-system-stackoverflower.herokuapp.com/StackOverflowersStudios/room-schedule/67",
+							"raw": "https://bs-stackoverflowers-backend.herokuapp.com/StackOverflowersStudios/room-schedule/67",
 							"protocol": "https",
 							"host": [
-								"booking-system-stackoverflower",
+								"bs-stackoverflowers-backend",
 								"herokuapp",
 								"com"
 							],
@@ -640,10 +693,10 @@
 							}
 						},
 						"url": {
-							"raw": "https://booking-system-stackoverflower.herokuapp.com/StackOverflowersStudios/room-schedule/75",
+							"raw": "https://bs-stackoverflowers-backend.herokuapp.com/StackOverflowersStudios/room-schedule/75",
 							"protocol": "https",
 							"host": [
-								"booking-system-stackoverflower",
+								"bs-stackoverflowers-backend",
 								"herokuapp",
 								"com"
 							],
@@ -662,10 +715,10 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "https://booking-system-stackoverflower.herokuapp.com/StackOverflowersStudios/timeslots",
+							"raw": "https://bs-stackoverflowers-backend.herokuapp.com/StackOverflowersStudios/timeslots",
 							"protocol": "https",
 							"host": [
-								"booking-system-stackoverflower",
+								"bs-stackoverflowers-backend",
 								"herokuapp",
 								"com"
 							],
@@ -683,10 +736,10 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "https://booking-system-stackoverflower.herokuapp.com/StackOverflowersStudios/timeslots/30",
+							"raw": "https://bs-stackoverflowers-backend.herokuapp.com/StackOverflowersStudios/timeslots/30",
 							"protocol": "https",
 							"host": [
-								"booking-system-stackoverflower",
+								"bs-stackoverflowers-backend",
 								"herokuapp",
 								"com"
 							],
@@ -705,10 +758,10 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "https://booking-system-stackoverflower.herokuapp.com/StackOverflowersStudios/members",
+							"raw": "https://bs-stackoverflowers-backend.herokuapp.com/StackOverflowersStudios/members",
 							"protocol": "https",
 							"host": [
-								"booking-system-stackoverflower",
+								"bs-stackoverflowers-backend",
 								"herokuapp",
 								"com"
 							],
@@ -726,10 +779,10 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://booking-system-stackoverflower.herokuapp.com/StackOverflowersStudios/members/8",
-							"protocol": "http",
+							"raw": "https://bs-stackoverflowers-backend.herokuapp.com/StackOverflowersStudios/members/8",
+							"protocol": "https",
 							"host": [
-								"booking-system-stackoverflower",
+								"bs-stackoverflowers-backend",
 								"herokuapp",
 								"com"
 							],
@@ -757,10 +810,10 @@
 							}
 						},
 						"url": {
-							"raw": "https://booking-system-stackoverflower.herokuapp.com/StackOverflowersStudios/members",
+							"raw": "https://bs-stackoverflowers-backend.herokuapp.com/StackOverflowersStudios/members",
 							"protocol": "https",
 							"host": [
-								"booking-system-stackoverflower",
+								"bs-stackoverflowers-backend",
 								"herokuapp",
 								"com"
 							],
@@ -787,10 +840,10 @@
 							}
 						},
 						"url": {
-							"raw": "http://booking-system-stackoverflower.herokuapp.com/StackOverflowersStudios/members/41",
-							"protocol": "http",
+							"raw": "https://bs-stackoverflowers-backend.herokuapp.com/StackOverflowersStudios/members/41",
+							"protocol": "https",
 							"host": [
-								"booking-system-stackoverflower",
+								"bs-stackoverflowers-backend",
 								"herokuapp",
 								"com"
 							],
@@ -798,6 +851,28 @@
 								"StackOverflowersStudios",
 								"members",
 								"41"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get user by Id Copy",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://bs-stackoverflowers-backend.herokuapp.com/StackOverflowersStudios/users/7",
+							"protocol": "https",
+							"host": [
+								"bs-stackoverflowers-backend",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"StackOverflowersStudios",
+								"users",
+								"7"
 							]
 						}
 					},
@@ -814,10 +889,10 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "https://booking-system-stackoverflower.herokuapp.com/StackOverflowersStudios/user/mostusedroom/41",
+							"raw": "https://bs-stackoverflowers-backend.herokuapp.com/StackOverflowersStudios/user/mostusedroom/7",
 							"protocol": "https",
 							"host": [
-								"booking-system-stackoverflower",
+								"bs-stackoverflowers-backend",
 								"herokuapp",
 								"com"
 							],
@@ -825,7 +900,7 @@
 								"StackOverflowersStudios",
 								"user",
 								"mostusedroom",
-								"41"
+								"7"
 							]
 						}
 					},
@@ -837,10 +912,10 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "https://booking-system-stackoverflower.herokuapp.com/StackOverflowersStudios/user/mostbookedwith/5",
+							"raw": "https://bs-stackoverflowers-backend.herokuapp.com/StackOverflowersStudios/user/mostbookedwith/7",
 							"protocol": "https",
 							"host": [
-								"booking-system-stackoverflower",
+								"bs-stackoverflowers-backend",
 								"herokuapp",
 								"com"
 							],
@@ -848,7 +923,7 @@
 								"StackOverflowersStudios",
 								"user",
 								"mostbookedwith",
-								"5"
+								"7"
 							]
 						}
 					},
@@ -865,10 +940,10 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "https://booking-system-stackoverflower.herokuapp.com/StackOverflowersStudios/reservation/most-used",
+							"raw": "https://bs-stackoverflowers-backend.herokuapp.com/StackOverflowersStudios/reservation/most-used",
 							"protocol": "https",
 							"host": [
-								"booking-system-stackoverflower",
+								"bs-stackoverflowers-backend",
 								"herokuapp",
 								"com"
 							],
@@ -887,10 +962,10 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "https://booking-system-stackoverflower.herokuapp.com/StackOverflowersStudios/reservation/busiest-hours",
+							"raw": "https://bs-stackoverflowers-backend.herokuapp.com/StackOverflowersStudios/reservation/busiest-hours",
 							"protocol": "https",
 							"host": [
-								"booking-system-stackoverflower",
+								"bs-stackoverflowers-backend",
 								"herokuapp",
 								"com"
 							],
@@ -909,10 +984,10 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "https://booking-system-stackoverflower.herokuapp.com/StackOverflowersStudios/reservation/most-booked",
+							"raw": "https://bs-stackoverflowers-backend.herokuapp.com/StackOverflowersStudios/reservation/most-booked",
 							"protocol": "https",
 							"host": [
-								"booking-system-stackoverflower",
+								"bs-stackoverflowers-backend",
 								"herokuapp",
 								"com"
 							],
@@ -948,10 +1023,10 @@
 							}
 						},
 						"url": {
-							"raw": "https://booking-system-stackoverflower.herokuapp.com/StackOverflowersStudios/reservation/getFreeTime",
+							"raw": "https://bs-stackoverflowers-backend.herokuapp.com/StackOverflowersStudios/reservation/getFreeTime",
 							"protocol": "https",
 							"host": [
-								"booking-system-stackoverflower",
+								"bs-stackoverflowers-backend",
 								"herokuapp",
 								"com"
 							],
@@ -974,7 +1049,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"uid\": 50,\r\n    \"usday\" : \"2021-11-16\"\r\n}",
+							"raw": "{\r\n    \"uid\": 7,\r\n    \"usday\" : \"2021-11-19\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -982,10 +1057,10 @@
 							}
 						},
 						"url": {
-							"raw": "https://booking-system-stackoverflower.herokuapp.com/StackOverflowersStudios/user/alldayschedule",
+							"raw": "https://bs-stackoverflowers-backend.herokuapp.com/StackOverflowersStudios/user/alldayschedule",
 							"protocol": "https",
 							"host": [
-								"booking-system-stackoverflower",
+								"bs-stackoverflowers-backend",
 								"herokuapp",
 								"com"
 							],
@@ -1016,15 +1091,13 @@
 							}
 						},
 						"url": {
-							"raw": "http://192.168.1.9:8080/StackOverflowersStudios/room/alldayschedule",
-							"protocol": "http",
+							"raw": "https://bs-stackoverflowers-backend.herokuapp.com/StackOverflowersStudios/room/alldayschedule",
+							"protocol": "https",
 							"host": [
-								"192",
-								"168",
-								"1",
-								"9"
+								"bs-stackoverflowers-backend",
+								"herokuapp",
+								"com"
 							],
-							"port": "8080",
 							"path": [
 								"StackOverflowersStudios",
 								"room",
@@ -1052,10 +1125,10 @@
 							}
 						},
 						"url": {
-							"raw": "https://booking-system-stackoverflower.herokuapp.com/StackOverflowersStudios/reservation/whoAppointed",
+							"raw": "https://bs-stackoverflowers-backend.herokuapp.com/StackOverflowersStudios/reservation/whoAppointed",
 							"protocol": "https",
 							"host": [
-								"booking-system-stackoverflower",
+								"bs-stackoverflowers-backend",
 								"herokuapp",
 								"com"
 							],
@@ -1086,10 +1159,10 @@
 							}
 						},
 						"url": {
-							"raw": "https://booking-system-stackoverflower.herokuapp.com/StackOverflowersStudios/room/findRoomAtTime",
+							"raw": "https://bs-stackoverflowers-backend.herokuapp.com/StackOverflowersStudios/room/findRoomAtTime",
 							"protocol": "https",
 							"host": [
-								"booking-system-stackoverflower",
+								"bs-stackoverflowers-backend",
 								"herokuapp",
 								"com"
 							],
@@ -1108,10 +1181,10 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "https://booking-system-stackoverflower.herokuapp.com/StackOverflowersStudios/room/roomAppointmentInfo/2/41",
+							"raw": "https://bs-stackoverflowers-backend.herokuapp.com/StackOverflowersStudios/room/roomAppointmentInfo/2/41",
 							"protocol": "https",
 							"host": [
-								"booking-system-stackoverflower",
+								"bs-stackoverflowers-backend",
 								"herokuapp",
 								"com"
 							],
@@ -1133,7 +1206,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"tid\": 5,\n    \"uid\": 5,\n    \"usday\": \"2021-11-13\"\n}",
+							"raw": "{\n    \"tid\": 4,\n    \"uid\": 9,\n    \"usday\": \"2021-11-28\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1141,10 +1214,10 @@
 							}
 						},
 						"url": {
-							"raw": "https://booking-system-stackoverflower.herokuapp.com/StackOverflowersStudios/user-schedule/markunavailable",
+							"raw": "https://bs-stackoverflowers-backend.herokuapp.com/StackOverflowersStudios/user-schedule/markunavailable",
 							"protocol": "https",
 							"host": [
-								"booking-system-stackoverflower",
+								"bs-stackoverflowers-backend",
 								"herokuapp",
 								"com"
 							],
@@ -1172,10 +1245,10 @@
 							}
 						},
 						"url": {
-							"raw": "https://booking-system-stackoverflower.herokuapp.com/StackOverflowersStudios/room-schedule/markunavailable",
+							"raw": "https://bs-stackoverflowers-backend.herokuapp.com/StackOverflowersStudios/room-schedule/markunavailable",
 							"protocol": "https",
 							"host": [
-								"booking-system-stackoverflower",
+								"bs-stackoverflowers-backend",
 								"herokuapp",
 								"com"
 							],
@@ -1183,6 +1256,190 @@
 								"StackOverflowersStudios",
 								"room-schedule",
 								"markunavailable"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Mark room time slot as available",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n        \"rid\": 1,\n        \"rsday\": \"2021-12-01\",\n        \"tid\": 4\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://bs-stackoverflowers-backend.herokuapp.com/StackOverflowersStudios/room-schedule/markavailable",
+							"protocol": "https",
+							"host": [
+								"bs-stackoverflowers-backend",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"StackOverflowersStudios",
+								"room-schedule",
+								"markavailable"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get list of uids from list of usernames",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"memberNames\" : [\"christopher.castillo1\", \"anakin.skywalker\", \"El2bleA\"]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://bs-stackoverflowers-backend.herokuapp.com/StackOverflowersStudios/users/usernames",
+							"protocol": "https",
+							"host": [
+								"bs-stackoverflowers-backend",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"StackOverflowersStudios",
+								"users",
+								"usernames"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Change meeting name",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"resname\": \"Putita\",\n    \"resid\": 27\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://bs-stackoverflowers-backend.herokuapp.com/StackOverflowersStudios/reservations/updateName",
+							"protocol": "https",
+							"host": [
+								"bs-stackoverflowers-backend",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"StackOverflowersStudios",
+								"reservations",
+								"updateName"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get usernames of users in meeting",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://bs-stackoverflowers-backend.herokuapp.com/StackOverflowersStudios/memberNames/25",
+							"protocol": "https",
+							"host": [
+								"bs-stackoverflowers-backend",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"StackOverflowersStudios",
+								"memberNames",
+								"25"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all occupied user schedule",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://bs-stackoverflowers-backend.herokuapp.com/StackOverflowersStudios/user/allOccupiedSchedule/7",
+							"protocol": "https",
+							"host": [
+								"bs-stackoverflowers-backend",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"StackOverflowersStudios",
+								"user",
+								"allOccupiedSchedule",
+								"7"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all occupied room schedule",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://bs-stackoverflowers-backend.herokuapp.com/StackOverflowersStudios/room/allOccupiedSchedule/1",
+							"protocol": "https",
+							"host": [
+								"bs-stackoverflowers-backend",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"StackOverflowersStudios",
+								"room",
+								"allOccupiedSchedule",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Room Unavailable Time Slots",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://bs-stackoverflowers-backend.herokuapp.com/StackOverflowersStudios/user/allOccupiedSchedule/7",
+							"protocol": "https",
+							"host": [
+								"bs-stackoverflowers-backend",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"StackOverflowersStudios",
+								"user",
+								"allOccupiedSchedule",
+								"7"
 							]
 						}
 					},
