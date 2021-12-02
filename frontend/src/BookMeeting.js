@@ -271,7 +271,7 @@ function BookMeeting() {
                                     <Form.Input onChange={(e) => {
                                         setMeetingName(e.target.value)
                                     }}
-                                                icon='user'
+                                                icon='address book'
                                                 iconPosition='left'
                                                 label='Meeting Name'
                                                 type='name' />
@@ -279,6 +279,8 @@ function BookMeeting() {
                                     <Form.Input onChange={(e) => {
                                         setMeetingMemberNames(e.target.value);
                                     }}
+                                                icon='address card outline'
+                                                iconPosition='left'
                                                 label='Meeting Members'
                                                 type='name' />
                                     <p>**Please enter member usernames separated by a comma and a space.</p>

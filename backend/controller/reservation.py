@@ -80,12 +80,14 @@ class BaseReservation:
             reservations = []
             rsdao = ReservationScheduleDAO()
             tsDAO = TimeSlotDAO()
+            roomDAO = RoomDAO()
             for tup in reservationTuples:
                 json = {}
                 json['resid'] = tup[0]
                 json['resname'] = tup[1]
                 json['resday'] = tup[2]
                 json['uid'] = tup[3]
+                json['rid'] = tup[4]
                 reservations.append(json)
 
             reservations = list(map(dict, set(tuple(r.items()) for r in reservations)))
@@ -102,6 +104,8 @@ class BaseReservation:
                     times.append(tsDAO.getTimeSlotByTimeSlotId(used_time_slots[-1][1])[2])
 
                 r['timeSlots'] = times
+                r['roomName'] = roomDAO.getRoomById(r['rid'])[3]
+
 
 
             return jsonify(reservations), 200
@@ -117,7 +121,7 @@ class BaseReservation:
         time_slots = json['time_slots']
         room_dao = RoomDAO()
         userdao = UserDAO()
-        if userdao.checkPermission(uid) != room_dao.getRoomById(rid)[4]:
+        if userdao.checkPermission(uid) != room_dao.getRoomById(rid)[4] and userdao.checkPermission(uid) != "Department Staff":
             return jsonify("This reservation cannot be made because you do not have permission to use this room."), 403
         if len(members) + 1 > room_dao.getRoomCapacity(rid):
             return jsonify("This reservation cannot be made because there are too many people for this room."), 400

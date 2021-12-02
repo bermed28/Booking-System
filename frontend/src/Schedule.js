@@ -5,7 +5,7 @@ import {Card, CardHeader, CardContent, IconButton, Typography} from "@material-u
 import moment from 'moment';
 import {Button, Container, Form, Grid, Modal, ModalDescription, ModalHeader} from "semantic-ui-react";
 import axios from "axios";
-import {EditOutlined, MoreHorizOutlined} from "@material-ui/icons";
+import {Delete, EditOutlined, MoreHorizOutlined} from "@material-ui/icons";
 const app = require("./App");
 
 const months = {
@@ -247,7 +247,7 @@ function Schedule() {
                                 }
                             );
 
-                        const temp = {title: meeting.resname, start: startDate, end: endDate, creator: meeting.uid, meetingID: meeting.resid, members: tempArray};
+                        const temp = {title: meeting.resname, start: startDate, end: endDate, creator: meeting.uid, meetingID: meeting.resid, members: tempArray, roomName: meeting.roomName};
                         console.log(temp);
                         fetchedMeetings.push(temp)
                     }
@@ -362,7 +362,8 @@ function Schedule() {
 
                 { !deleteAction &&
                 <Modal.Header>
-                    Edit Meeting: {selected.title}
+                    Edit Meeting: {selected.title} <br/>
+                    Room: {selected.roomName}
                 </Modal.Header>
                 }
                 { deleteAction &&
@@ -387,7 +388,7 @@ function Schedule() {
                                 selected.title !== 'Unavailable' &&
                                 selected.members.map(item => {
                                     return(<Card style={{width: "50%"}} variant="outlined"><CardHeader title={item} action={
-                                        <IconButton onClick={() => {setOpenUserDelete(true); setUserToDelete(item)}}><MoreHorizOutlined/></IconButton>
+                                        <IconButton onClick={() => {setOpenUserDelete(true); setUserToDelete(item)}}><Delete/></IconButton>
                                     }/></Card>)
                                 })
                             }
