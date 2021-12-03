@@ -75,16 +75,16 @@ function Schedule() {
         setSelected(event);
         if(data.uid === event.creator) {
             setOpen(true);
-            console.info(selected);
-            console.log(event);
+            // console.info(selected);
+            console.log("Selected Meeting to Edit: " ,event);
         }
         else if(event.title === 'Unavailable') {
             setOpenAvailable(true);
-            console.log(event);
+            console.log("Unavailable Event:", event);
         }
         else {
-            console.log("You are not the meeting creator");
-            console.log(event);
+            console.log("You are not the meeting creator or you have not marked this time slot as unavailable yet");
+            console.log("Selectd slot:",event);
         }
     };
 
@@ -385,7 +385,7 @@ function Schedule() {
                             </Form>
                             <h4>Members</h4>
                             {
-                                selected.title !== 'Unavailable' &&
+                                selected.title !== 'Unavailable' && selected.title !== `${data.username} is unavailable` &&
                                 selected.members.map(item => {
                                     return(<Card style={{width: "50%"}} variant="outlined"><CardHeader title={item} action={
                                         <IconButton onClick={() => {setOpenUserDelete(true); setUserToDelete(item)}}><Delete/></IconButton>
