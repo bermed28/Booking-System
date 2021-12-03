@@ -103,8 +103,8 @@ function SignupPage() {
                             <div style={{paddingRight: "140px", margin: "5px"}} >
                                 <h5><strong>Permission</strong></h5>
                             </div>
-                            <select defaultValue={"Select Permission"} style={{width: "210px", textAlign: "center"}} onChange={(e) => {setPermissionReg(e.target.value)}}>
-                                <option value={"Select Permission"}>Select Permission</option>
+                            <select defaultValue={""} style={{width: "210px", textAlign: "center"}} onChange={(e) => {setPermissionReg(e.target.value)}}>
+                                <option value={""}>Select Permission</option>
                                 <option value="Student">Student</option>
                                 <option value="Department Staff">Department Staff</option>
                             </select>
