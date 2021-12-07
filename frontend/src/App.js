@@ -44,7 +44,7 @@ const App = () => {
     );
 }
 
-const debug = false;
+const debug = true;
 let url = "";
 if(debug){
     url = "http://localhost:8080";

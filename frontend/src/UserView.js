@@ -4,6 +4,7 @@ import {Tab} from "semantic-ui-react";
 import BookMeeting from "./BookMeeting";
 import Schedule from "./Schedule";
 import Navbar from "./components/Navbar";
+import FreeTime from "./FreeTime";
 
 
 function UserView(){
@@ -14,6 +15,9 @@ function UserView(){
         },
         {
             menuItem: 'Booking', render: () => <BookMeeting/>
+        },
+        {
+            menuItem: 'Get Free Time for Users', render: () => <FreeTime/>
         }
     ]
 
