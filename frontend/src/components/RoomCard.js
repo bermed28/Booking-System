@@ -209,7 +209,7 @@ function RoomCard(props) {
                 const blockEnd = ts.tendtime.split(":");
                 const startDate = new Date(roomSchedule.getFullYear(), roomSchedule.getMonth() + 1, roomSchedule.getDate(), parseInt(blockStart[0]), parseInt(blockStart[1]), parseInt(blockStart[2]));
                 const endDate = new Date(roomSchedule.getFullYear(), roomSchedule.getMonth() + 1, roomSchedule.getDate(), parseInt(blockEnd[0]), parseInt(blockEnd[1]), parseInt(blockEnd[2]));
-                result.push({start: startDate, end: endDate, available: ts.available})
+                result.push({start: startDate, end: endDate, available: ts.available, user: ts.user})
             }
             setallDayRS(result)
         },(error) => {
@@ -415,6 +415,7 @@ function RoomCard(props) {
                                             <th style={{padding:"5px", border: "1px solid black"}} scope={"col"}>Start Time</th>
                                             <th style={{padding:"5px", border: "1px solid black"}} scope={"col"}>End Time</th>
                                             <th style={{padding:"5px", border: "1px solid black"}} scope={"col"}>Available?</th>
+                                            <th style={{padding:"5px", border: "1px solid black"}} scope={"col"}>Who Booked?</th>
                                         </tr>
                                     </thead>
 
@@ -426,6 +427,7 @@ function RoomCard(props) {
                                                         <td style={{padding:"5px", border: "1px solid black"}}>{formatTime(item.start.getHours(), item.start.getMinutes())}</td>
                                                         <td style={{padding:"5px", border: "1px solid black"}}>{formatTime(item.end.getHours(), item.end.getMinutes())}</td>
                                                         <td style={{padding:"5px", border: "1px solid black"}}>{item.available.toString() === "true" ? "Yes" : "No"}</td>
+                                                        <td style={{padding:"5px", border: "1px solid black"}}>{item.user}</td>
                                                     </tr>
                                                 )
                                             }
