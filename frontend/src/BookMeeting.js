@@ -68,6 +68,7 @@ function BookMeeting() {
     const [errorMessage, setErrorMessage] = useState("");
     const loginData = localStorage.getItem('login-data');
     const data = JSON.parse(loginData);
+    const [availRooms, setAvailRooms] = useState([]);
 
 
     const getRooms = () => {
@@ -75,6 +76,28 @@ function BookMeeting() {
             // console.log(res.data);
             setRooms(res.data);
         })
+    }
+
+    const getAvailableRooms = () => {
+        let date = meetingInformation[0].start.getFullYear()+'-'+(meetingInformation[0].start.getMonth()+1)+'-'+ meetingInformation[0].start.getDate();
+
+        let startTID = getTID(meetingInformation[0].start.getHours(), meetingInformation[0].start.getMinutes());
+        let endTID = getTID(meetingInformation[0].end.getHours(), meetingInformation[0].end.getMinutes()) - 1;
+
+        let timeSlot =[];
+        for (let i = startTID; i <= endTID; i++) {
+            timeSlot.push(i);
+        }
+        let inject = {date: date, tids: timeSlot}
+        api.post("/StackOverflowersStudios/room/findRoomsAtTimes",
+            inject,
+            {headers: {'Content-Type': 'application/json'}}//text/plain //application/json
+        ).then((response) => {
+            console.log(response);
+            setAvailRooms(response.data);
+        },(error) => {
+            console.log(error);
+        });
     }
 
     const fetchData = async () =>{
@@ -262,7 +285,7 @@ function BookMeeting() {
                 }]); setSelected(true); } }
             >
             </Calendar>
-                <Modal centered={false} open={open} onClose={() => {setOpen(false); {reset()}}} onOpen={() => setOpen(true)}>
+                <Modal centered={false} open={open} onClose={() => {setOpen(false); {reset()}}} onOpen={() => {setOpen(true);}}>
                     <Modal.Header>Book New Meeting</Modal.Header>
                     <Modal.Content>
                         <Modal.Description>
@@ -293,7 +316,7 @@ function BookMeeting() {
                                     <Form.Input label='Room'>
                                         <select defaultValue={"0"} style={{textAlign: "center"}} onChange={(e) => {setRoom(e.target.value); {console.log(e.target.value)}}}>
                                             <option key={0} value={"0"}>Select Room</option>
-                                            {rooms.map(item => {
+                                            {availRooms.map(item => {
                                                 var tempData = localStorage.getItem("login-data");
                                                 const userData = JSON.parse(tempData)
                                                 if(userData.upermission === "Student") {
@@ -331,7 +354,7 @@ function BookMeeting() {
                     </Modal.Actions>
                 </Modal>
                 <Container fluid>
-                    <Button fluid onClick={() => {if(selected) setOpen(true)}}> Book Meeting </Button>
+                    <Button fluid onClick={() => {if(selected) setOpen(true); getAvailableRooms(); }}> Book Meeting </Button>
                 </Container>
             </Container>
         </>

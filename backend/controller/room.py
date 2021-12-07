@@ -96,6 +96,20 @@ class BaseRoom:
         result = dao.findRoomAtTime(tid, date)
         return jsonify(result)
 
+    def findRoomsAtTimes(self, json):
+        tids = json['tids']
+        date = json['date']
+        dao = RoomDAO()
+        result = dao.findRoomAtTime(tids[0], date)
+        for i in range(1, len(tids)):
+            tempRes = dao.findRoomAtTime(tids[i], date)
+            for room in result:
+                if room in tempRes:
+                    continue
+                else:
+                    result.remove(room)
+        return jsonify(result)
+
     def getAllOccupiedRoomSchedule(self, rid):
         dao, tsDAO = RoomDAO(), TimeSlotDAO()
         occupiedTidDict = dao.getAllOccupiedRoomSchedule(rid)

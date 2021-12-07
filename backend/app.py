@@ -191,6 +191,11 @@ def handlegetWhoAppointedRoomAtTime():
 def handleFindRoomAtTime():
     return BaseRoom().findRoomAtTime(request.json)
 
+@app.route('/StackOverflowersStudios/room/findRoomsAtTimes', methods=['POST'])
+@cross_origin()
+def handleFindRoomsAtTimes():
+    return BaseRoom().findRoomsAtTimes(request.json)
+
 @app.route('/StackOverflowersStudios/room/roomAppointmentInfo/<int:rid>/<int:uid>', methods=['GET'])
 def handleRoomAppointmentInfo(rid, uid):
     return BaseRoom().findRoomAppointmentInfo(rid, uid)
