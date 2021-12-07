@@ -200,7 +200,8 @@ def handleFindRoomsAtTimes():
 def handleRoomAppointmentInfo(rid, uid):
     return BaseRoom().findRoomAppointmentInfo(rid, uid)
 
-@app.route('/StackOverflowersStudios/reservation/getFreeTime', methods=['GET'])
+@app.route('/StackOverflowersStudios/reservation/getFreeTime', methods=['GET', 'POST'])
+@cross_origin()
 def handlegetFreeTime():
     return BaseReservation().getFreeTime(request.json)
 
