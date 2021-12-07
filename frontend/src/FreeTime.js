@@ -27,10 +27,6 @@ function FreeTime() {
             {headers: {'Content-Type': 'application/json'}}//text/plain //application/json
         ).then((response) => {
             console.log(response.data);
-            // let res = response.data.memberIds;
-            // for(let i = 0; i < res.length; i++) {
-            //     membersIds.push(res[i]);
-            // }
             let membersIds = response.data.memberIds;
             membersIds.push(login_data.uid);
             let data = {uids: membersIds, usday: date};
@@ -47,13 +43,25 @@ function FreeTime() {
         },(error) => {
             console.log(error);
         });
-        // console.log(membersIds);
-        // console.log(date);
     }
 
-    // useEffect(() => {
-    //     const login_data = localStorage.getItem("login-data");
-    // }, []);
+    function formatTime(hours, minutes){
+        console.log(hours + " " + minutes)
+        let pastNoonIndicator = "";
+        if(hours < 12){
+            if(hours === 0) hours = 12;
+            pastNoonIndicator = "AM";
+        }
+        else {
+            if(hours > 12) hours -= 12;
+            pastNoonIndicator = "PM";
+        }
+        if(minutes === 0){
+            return `${hours}:00 ${pastNoonIndicator}`;
+        } else {
+            return`${hours}:${minutes} ${pastNoonIndicator}`;
+        }
+    }
 
 
     return (
@@ -86,36 +94,36 @@ function FreeTime() {
                             </Form>
                             <br/>
                             {   timeSlots.length > 0 &&
-                                <table style={{marginLeft: "auto", marginRight: "auto"}}>
-                                    <thead>
-                                    <tr>
-                                        <th style={{padding: "5px", border: "1px solid black"}} scope={"col"}>Start
-                                            Time
-                                        </th>
-                                        <th style={{padding: "5px", border: "1px solid black"}} scope={"col"}>End Time
-                                        </th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    {
-                                        timeSlots.map(item => {
-                                                return (
-                                                    <tr>
-                                                        <td style={{
-                                                            padding: "5px",
-                                                            border: "1px solid black"
-                                                        }}>{item.tstarttime}</td>
-                                                        <td style={{
-                                                            padding: "5px",
-                                                            border: "1px solid black"
-                                                        }}>{item.tendtime}</td>
-                                                    </tr>
-                                                )
-                                            }
-                                        )
-                                    }
-                                    </tbody>
-                                </table>
+                            <table style={{marginLeft: "auto", marginRight: "auto"}}>
+                                <thead>
+                                <tr>
+                                    <th style={{padding: "5px", border: "1px solid black"}} scope={"col"}>Start
+                                        Time
+                                    </th>
+                                    <th style={{padding: "5px", border: "1px solid black"}} scope={"col"}>End Time
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {
+                                    timeSlots.map(item => {
+                                            return (
+                                                <tr>
+                                                    <td style={{
+                                                        padding: "5px",
+                                                        border: "1px solid black"
+                                                    }}>{formatTime(parseInt(item.tstarttime.split(":")[0]), parseInt(item.tstarttime.split(":")[1]))}</td>
+                                                    <td style={{
+                                                        padding: "5px",
+                                                        border: "1px solid black"
+                                                    }}>{formatTime(parseInt(item.tendtime.split(":")[0]), parseInt(item.tendtime.split(":")[1]))}</td>
+                                                </tr>
+                                            )
+                                        }
+                                    )
+                                }
+                                </tbody>
+                            </table>
                             }
                         </div>
                     </Grid.Column>
