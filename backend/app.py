@@ -174,7 +174,7 @@ def handleAllOccupiedUserSchedule(uid):
 def handleAllOccupiedRoomSchedule(rid):
     return BaseRoom().getAllOccupiedRoomSchedule(rid)
 
-@app.route('/StackOverflowersStudios/room/alldayschedule', methods=['GET'])
+@app.route('/StackOverflowersStudios/room/alldayschedule', methods=['GET', 'POST'])
 def handleAllDayRoomSchedule():
     return BaseRoom().getAllDayRoomSchedule(request.json)
 
