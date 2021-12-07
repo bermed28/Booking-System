@@ -111,7 +111,8 @@ class ReservationDAO:
         natural inner join reservation_schedule natural inner join public.user where tid = %s and rid = %s and reservation.resday = %s"
         cursor.execute(query, (tid, rid, date))
         if cursor.rowcount <= 0:
-            return "No one is using this room at this time."
+            cursor.close()
+            return {'username': "N/A"}
         result = {}
 
         temp = cursor.fetchone()

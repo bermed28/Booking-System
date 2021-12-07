@@ -4,6 +4,7 @@ from model.reservation_schedule import ReservationScheduleDAO
 from model.members import MembersDAO
 from model.user import UserDAO
 from model.time_slot import TimeSlotDAO
+from model.reservation import ReservationDAO
 
 class BaseRoom:
 
@@ -77,15 +78,18 @@ class BaseRoom:
         rid = json['rid']
         rsday = json['rsday']
         dao = RoomDAO()
+        reserDao = ReservationDAO()
         timeslot = dao.getTimeSlot()
         occupiedTid = dao.getRoomOccupiedTimeSlots(rid, rsday)
 
         for time in timeslot:
             if time['tid'] in occupiedTid:
                 time['available'] = False
+                time['user'] = reserDao.getWhoAppointedRoomAtTime(rid, time['tid'], rsday)['username']
 
             if 'available' not in time:
                 time['available'] = True
+                time['user'] = "N/A"
 
         return jsonify(timeslot)
 
