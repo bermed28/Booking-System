@@ -1007,15 +1007,12 @@
 			"item": [
 				{
 					"name": "Find a time that is free for everyone",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
 					"request": {
-						"method": "GET",
+						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"uids\": [5, 9],\n    \"usday\": \"2021-10-21\"\n}",
+							"raw": "{\n    \"uids\": [5, 9],\n    \"usday\": \"2021-12-9\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1083,7 +1080,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"rid\": 8,\r\n    \"rsday\" : \"2021-10-17\"\r\n}",
+							"raw": "{\r\n    \"rid\": 4,\r\n    \"rsday\" : \"2021-12-25\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1170,6 +1167,37 @@
 								"StackOverflowersStudios",
 								"room",
 								"findRoomAtTime"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get free rooms at specific times",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"tids\" : [27,28],\n    \"date\" : \"2021-12-25\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://bs-stackoverflowers-backend.herokuapp.com/StackOverflowersStudios/room/findRoomsAtTimes",
+							"protocol": "https",
+							"host": [
+								"bs-stackoverflowers-backend",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"StackOverflowersStudios",
+								"room",
+								"findRoomsAtTimes"
 							]
 						}
 					},
