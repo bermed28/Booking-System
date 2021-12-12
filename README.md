@@ -6,6 +6,27 @@
     <li> <a href="https://github.com/chris36021">Christopher Castillo Carrero</a> </li>
 </ul>
 
+<h3> Tech Stack </h3> 
+<ul> 
+    <li>
+        Front End:
+        <ol>
+            <li>JavaScript</li>
+            <li>Node.js</li>
+            <li>React.js</li>
+        </ol>
+    </li>
+    <li>
+        Back End:
+        <ol>
+            <li>PostgreSQL</li>
+            <li>Python</li>
+            <li>Flask</li>
+        </ol>
+    </li>
+    <li>Deployment Method: Heroku </li>
+</ul>
+
 <h3> Deployed URLs </h3> 
 <ul> 
     <li> Front End: https://bs-stackoverflowers-frontend.herokuapp.com/ </li>
