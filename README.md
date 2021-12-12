@@ -32,3 +32,5 @@
     <li> Front End: https://bs-stackoverflowers-frontend.herokuapp.com/ </li>
     <li> Back End: https://bs-stackoverflowers-backend.herokuapp.com/ </li>
 </ul>
+<h3>StackOverflowers Studios&copy;, all rights reserved</h3>
+<h3>Cloning, Contribution or Duplication of this repository is PROHIBITED unless authorized by the developers</h3>
